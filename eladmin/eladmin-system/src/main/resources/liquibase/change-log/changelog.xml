@@ -7,4 +7,7 @@
     <changeSet id="1" author="lychee" runOnChange="false ">
         <sqlFile path="liquibase/db/create_test.sql" dbms="mysql" encoding="UTF-8" endDelimiter="" relativeToChangelogFile="false" />
     </changeSet>
+    <changeSet id="2" author="lychee" runOnChange="false">
+        <sqlFile path="liquibase/db/alterTable-20231020.sql" dbms="mysql" encoding="UTF-8" endDelimiter=";" relativeToChangelogFile="false" />
+    </changeSet>
 </databaseChangeLog>
