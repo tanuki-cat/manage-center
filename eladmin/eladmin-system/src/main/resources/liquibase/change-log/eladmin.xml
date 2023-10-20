@@ -1,0 +1,1085 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet author="lychee (generated)" id="1697814297221-1" >
+        <createTable remarks="代码生成字段信息存储" tableName="code_column_config">
+            <column autoIncrement="true" name="column_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="table_name" type="VARCHAR(180)"/>
+            <column name="column_name" type="VARCHAR(255)"/>
+            <column name="column_type" type="VARCHAR(255)"/>
+            <column name="dict_name" type="VARCHAR(255)"/>
+            <column name="extra" type="VARCHAR(255)"/>
+            <column name="form_show" type="BIT(1)"/>
+            <column name="form_type" type="VARCHAR(255)"/>
+            <column name="key_type" type="VARCHAR(255)"/>
+            <column name="list_show" type="BIT(1)"/>
+            <column name="not_null" type="BIT(1)"/>
+            <column name="query_type" type="VARCHAR(255)"/>
+            <column name="remark" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-2">
+        <createTable remarks="代码生成器配置" tableName="code_gen_config">
+            <column autoIncrement="true" name="config_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="table_name" remarks="表名" type="VARCHAR(255)"/>
+            <column name="author" remarks="作者" type="VARCHAR(255)"/>
+            <column name="cover" remarks="是否覆盖" type="BIT(1)"/>
+            <column name="module_name" remarks="模块名称" type="VARCHAR(255)"/>
+            <column name="pack" remarks="至于哪个包下" type="VARCHAR(255)"/>
+            <column name="path" remarks="前端代码生成的路径" type="VARCHAR(255)"/>
+            <column name="api_path" remarks="前端Api文件路径" type="VARCHAR(255)"/>
+            <column name="prefix" remarks="表前缀" type="VARCHAR(255)"/>
+            <column name="api_alias" remarks="接口名称" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-3">
+        <createTable remarks="应用管理" tableName="mnt_app">
+            <column autoIncrement="true" name="app_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" remarks="应用名称" type="VARCHAR(255)"/>
+            <column name="upload_path" remarks="上传目录" type="VARCHAR(255)"/>
+            <column name="deploy_path" remarks="部署路径" type="VARCHAR(255)"/>
+            <column name="backup_path" remarks="备份路径" type="VARCHAR(255)"/>
+            <column name="port" remarks="应用端口" type="INT"/>
+            <column name="start_script" remarks="启动脚本" type="VARCHAR(4000)"/>
+            <column name="deploy_script" remarks="部署脚本" type="VARCHAR(4000)"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(255)"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(255)"/>
+            <column name="create_time" remarks="创建日期" type="datetime"/>
+            <column name="update_time" remarks="更新时间" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-4">
+        <createTable remarks="数据库管理" tableName="mnt_database">
+            <column name="db_id" remarks="ID" type="VARCHAR(50)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" remarks="名称" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="jdbc_url" remarks="jdbc连接" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_name" remarks="账号" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pwd" remarks="密码" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="create_by" remarks="创建者" type="VARCHAR(255)"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(255)"/>
+            <column name="create_time" remarks="创建时间" type="datetime"/>
+            <column name="update_time" remarks="更新时间" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-5">
+        <createTable remarks="部署管理" tableName="mnt_deploy">
+            <column autoIncrement="true" name="deploy_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="app_id" remarks="应用编号" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(255)"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(255)"/>
+            <column name="create_time" type="datetime"/>
+            <column name="update_time" remarks="更新时间" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-6">
+        <createTable remarks="部署历史管理" tableName="mnt_deploy_history">
+            <column name="history_id" remarks="ID" type="VARCHAR(50)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="app_name" remarks="应用名称" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deploy_date" remarks="部署日期" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deploy_user" remarks="部署用户" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ip" remarks="服务器IP" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deploy_id" remarks="部署编号" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-7">
+        <createTable remarks="应用与服务器关联" tableName="mnt_deploy_server">
+            <column name="deploy_id" remarks="部署ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="server_id" remarks="服务ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-8">
+        <createTable remarks="服务器管理" tableName="mnt_server">
+            <column autoIncrement="true" name="server_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="account" remarks="账号" type="VARCHAR(50)"/>
+            <column name="ip" remarks="IP地址" type="VARCHAR(20)"/>
+            <column name="name" remarks="名称" type="VARCHAR(100)"/>
+            <column name="password" remarks="密码" type="VARCHAR(100)"/>
+            <column name="port" remarks="端口" type="INT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(255)"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(255)"/>
+            <column name="create_time" remarks="创建时间" type="datetime"/>
+            <column name="update_time" remarks="更新时间" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-9">
+        <createTable remarks="部门" tableName="sys_dept">
+            <column autoIncrement="true" name="dept_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="pid" remarks="上级部门" type="BIGINT"/>
+            <column defaultValueNumeric="0" name="sub_count" remarks="子部门数目" type="INT"/>
+            <column name="name" remarks="名称" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="999" name="dept_sort" remarks="排序" type="INT"/>
+            <column name="enabled" remarks="状态" type="BIT(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="create_by" remarks="创建者" type="VARCHAR(255)"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(255)"/>
+            <column name="create_time" remarks="创建日期" type="datetime"/>
+            <column name="update_time" remarks="更新时间" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-10">
+        <createTable remarks="数据字典" tableName="sys_dict">
+            <column autoIncrement="true" name="dict_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" remarks="字典名称" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" remarks="描述" type="VARCHAR(255)"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(255)"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(255)"/>
+            <column name="create_time" remarks="创建日期" type="datetime"/>
+            <column name="update_time" remarks="更新时间" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-11">
+        <createTable remarks="数据字典详情" tableName="sys_dict_detail">
+            <column autoIncrement="true" name="detail_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="dict_id" remarks="字典id" type="BIGINT"/>
+            <column name="label" remarks="字典标签" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value" remarks="字典值" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="dict_sort" remarks="排序" type="INT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(255)"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(255)"/>
+            <column name="create_time" remarks="创建日期" type="datetime"/>
+            <column name="update_time" remarks="更新时间" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-12">
+        <createTable remarks="岗位" tableName="sys_job">
+            <column autoIncrement="true" name="job_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" remarks="岗位名称" type="VARCHAR(180)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="enabled" remarks="岗位状态" type="BIT(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="job_sort" remarks="排序" type="INT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(255)"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(255)"/>
+            <column name="create_time" remarks="创建日期" type="datetime"/>
+            <column name="update_time" remarks="更新时间" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-13">
+        <createTable remarks="系统日志" tableName="sys_log">
+            <column autoIncrement="true" name="log_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="log_type" type="VARCHAR(10)"/>
+            <column name="method" type="VARCHAR(255)"/>
+            <column name="params" type="TEXT"/>
+            <column name="request_ip" type="VARCHAR(255)"/>
+            <column name="time" type="BIGINT"/>
+            <column name="username" type="VARCHAR(255)"/>
+            <column name="address" type="VARCHAR(255)"/>
+            <column name="browser" type="VARCHAR(255)"/>
+            <column name="exception_detail" type="TEXT"/>
+            <column name="create_time" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-14">
+        <createTable remarks="系统菜单" tableName="sys_menu">
+            <column autoIncrement="true" name="menu_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="pid" remarks="上级菜单ID" type="BIGINT"/>
+            <column defaultValueNumeric="0" name="sub_count" remarks="子菜单数目" type="INT"/>
+            <column name="type" remarks="菜单类型" type="INT"/>
+            <column name="title" remarks="菜单标题" type="VARCHAR(100)">
+                <constraints unique="true"/>
+            </column>
+            <column name="name" remarks="组件名称" type="VARCHAR(100)">
+                <constraints unique="true"/>
+            </column>
+            <column name="component" remarks="组件" type="VARCHAR(255)"/>
+            <column name="menu_sort" remarks="排序" type="INT"/>
+            <column name="icon" remarks="图标" type="VARCHAR(255)"/>
+            <column name="path" remarks="链接地址" type="VARCHAR(255)"/>
+            <column name="i_frame" remarks="是否外链" type="BIT(1)"/>
+            <column defaultValueBoolean="false" name="cache" remarks="缓存" type="BIT(1)"/>
+            <column defaultValueBoolean="false" name="hidden" remarks="隐藏" type="BIT(1)"/>
+            <column name="permission" remarks="权限" type="VARCHAR(255)"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(255)"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(255)"/>
+            <column name="create_time" remarks="创建日期" type="datetime"/>
+            <column name="update_time" remarks="更新时间" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-15">
+        <createTable remarks="定时任务" tableName="sys_quartz_job">
+            <column autoIncrement="true" name="job_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="bean_name" remarks="Spring Bean名称" type="VARCHAR(255)"/>
+            <column name="cron_expression" remarks="cron 表达式" type="VARCHAR(255)"/>
+            <column name="is_pause" remarks="状态：1暂停、0启用" type="BIT(1)"/>
+            <column name="job_name" remarks="任务名称" type="VARCHAR(255)"/>
+            <column name="method_name" remarks="方法名称" type="VARCHAR(255)"/>
+            <column name="params" remarks="参数" type="VARCHAR(255)"/>
+            <column name="description" remarks="备注" type="VARCHAR(255)"/>
+            <column name="person_in_charge" remarks="负责人" type="VARCHAR(100)"/>
+            <column name="email" remarks="报警邮箱" type="VARCHAR(100)"/>
+            <column name="sub_task" remarks="子任务ID" type="VARCHAR(100)"/>
+            <column name="pause_after_failure" remarks="任务失败后是否暂停" type="BIT(1)"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(255)"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(255)"/>
+            <column name="create_time" remarks="创建日期" type="datetime"/>
+            <column name="update_time" remarks="更新时间" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-16">
+        <createTable remarks="定时任务日志" tableName="sys_quartz_log">
+            <column autoIncrement="true" name="log_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="bean_name" type="VARCHAR(255)"/>
+            <column name="create_time" type="datetime"/>
+            <column name="cron_expression" type="VARCHAR(255)"/>
+            <column name="exception_detail" type="TEXT"/>
+            <column name="is_success" type="BIT(1)"/>
+            <column name="job_name" type="VARCHAR(255)"/>
+            <column name="method_name" type="VARCHAR(255)"/>
+            <column name="params" type="VARCHAR(255)"/>
+            <column name="time" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-17">
+        <createTable remarks="角色表" tableName="sys_role">
+            <column autoIncrement="true" name="role_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" remarks="名称" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="level" remarks="角色级别" type="INT"/>
+            <column name="description" remarks="描述" type="VARCHAR(255)"/>
+            <column name="data_scope" remarks="数据权限" type="VARCHAR(255)"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(255)"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(255)"/>
+            <column name="create_time" remarks="创建日期" type="datetime"/>
+            <column name="update_time" remarks="更新时间" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-18">
+        <createTable remarks="角色部门关联" tableName="sys_roles_depts">
+            <column name="role_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="dept_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-19">
+        <createTable remarks="角色菜单关联" tableName="sys_roles_menus">
+            <column name="menu_id" remarks="菜单ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="role_id" remarks="角色ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-20">
+        <createTable remarks="系统用户" tableName="sys_user">
+            <column autoIncrement="true" name="user_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="dept_id" remarks="部门名称" type="BIGINT"/>
+            <column name="username" remarks="用户名" type="VARCHAR(180)">
+                <constraints unique="true"/>
+            </column>
+            <column name="nick_name" remarks="昵称" type="VARCHAR(255)"/>
+            <column name="gender" remarks="性别" type="VARCHAR(2)"/>
+            <column name="phone" remarks="手机号码" type="VARCHAR(255)"/>
+            <column name="email" remarks="邮箱" type="VARCHAR(180)">
+                <constraints unique="true"/>
+            </column>
+            <column name="avatar_name" remarks="头像地址" type="VARCHAR(255)"/>
+            <column name="avatar_path" remarks="头像真实路径" type="VARCHAR(255)"/>
+            <column name="password" remarks="密码" type="VARCHAR(255)"/>
+            <column defaultValueBoolean="false" name="is_admin" remarks="是否为admin账号" type="BIT(1)"/>
+            <column name="enabled" remarks="状态：1启用、0禁用" type="BIT(1)"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(255)"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(255)"/>
+            <column name="pwd_reset_time" remarks="修改密码的时间" type="datetime"/>
+            <column name="create_time" remarks="创建日期" type="datetime"/>
+            <column name="update_time" remarks="更新时间" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-21">
+        <createTable tableName="sys_users_jobs">
+            <column name="user_id" remarks="用户ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="job_id" remarks="岗位ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-22">
+        <createTable remarks="用户角色关联" tableName="sys_users_roles">
+            <column name="user_id" remarks="用户ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="role_id" remarks="角色ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-23">
+        <createTable remarks="支付宝配置类" tableName="tool_alipay_config">
+            <column name="config_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="app_id" remarks="应用ID" type="VARCHAR(255)"/>
+            <column name="charset" remarks="编码" type="VARCHAR(255)"/>
+            <column name="format" remarks="类型 固定格式json" type="VARCHAR(255)"/>
+            <column name="gateway_url" remarks="网关地址" type="VARCHAR(255)"/>
+            <column name="notify_url" remarks="异步回调" type="VARCHAR(255)"/>
+            <column name="private_key" remarks="私钥" type="TEXT"/>
+            <column name="public_key" remarks="公钥" type="TEXT"/>
+            <column name="return_url" remarks="回调地址" type="VARCHAR(255)"/>
+            <column name="sign_type" remarks="签名方式" type="VARCHAR(255)"/>
+            <column name="sys_service_provider_id" remarks="商户号" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-24">
+        <createTable remarks="邮箱配置" tableName="tool_email_config">
+            <column name="config_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="from_user" remarks="收件人" type="VARCHAR(255)"/>
+            <column name="host" remarks="邮件服务器SMTP地址" type="VARCHAR(255)"/>
+            <column name="pass" remarks="密码" type="VARCHAR(255)"/>
+            <column name="port" remarks="端口" type="VARCHAR(255)"/>
+            <column name="user" remarks="发件者用户名" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-25">
+        <createTable remarks="本地存储" tableName="tool_local_storage">
+            <column autoIncrement="true" name="storage_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="real_name" remarks="文件真实的名称" type="VARCHAR(255)"/>
+            <column name="name" remarks="文件名" type="VARCHAR(255)"/>
+            <column name="suffix" remarks="后缀" type="VARCHAR(255)"/>
+            <column name="path" remarks="路径" type="VARCHAR(255)"/>
+            <column name="type" remarks="类型" type="VARCHAR(255)"/>
+            <column name="size" remarks="大小" type="VARCHAR(100)"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(255)"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(255)"/>
+            <column name="create_time" remarks="创建日期" type="datetime"/>
+            <column name="update_time" remarks="更新时间" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-26">
+        <createTable remarks="七牛云配置" tableName="tool_qiniu_config">
+            <column name="config_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="access_key" remarks="accessKey" type="TEXT"/>
+            <column name="bucket" remarks="Bucket 识别符" type="VARCHAR(255)"/>
+            <column name="host" remarks="外链域名" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="secret_key" remarks="secretKey" type="TEXT"/>
+            <column name="type" remarks="空间类型" type="VARCHAR(255)"/>
+            <column name="zone" remarks="机房" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-27">
+        <createTable remarks="七牛云文件存储" tableName="tool_qiniu_content">
+            <column autoIncrement="true" name="content_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="bucket" remarks="Bucket 识别符" type="VARCHAR(255)"/>
+            <column name="name" remarks="文件名称" type="VARCHAR(180)">
+                <constraints unique="true"/>
+            </column>
+            <column name="size" remarks="文件大小" type="VARCHAR(255)"/>
+            <column name="type" remarks="文件类型：私有或公开" type="VARCHAR(255)"/>
+            <column name="url" remarks="文件url" type="VARCHAR(255)"/>
+            <column name="suffix" remarks="文件后缀" type="VARCHAR(255)"/>
+            <column name="update_time" remarks="上传或同步的时间" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-28">
+        <createIndex indexName="FK5rwmryny6jthaaxkogownknqp" tableName="sys_user">
+            <column name="dept_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-29">
+        <createIndex indexName="FK5tpkputc6d9nboxojdbgnpmyb" tableName="sys_dict_detail">
+            <column name="dict_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-30">
+        <createIndex indexName="FK6sy157pseoxx4fmcqr1vnvvhy" tableName="mnt_deploy">
+            <column name="app_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-31">
+        <createIndex indexName="FK7qg6itn5ajdoa9h9o78v9ksur" tableName="sys_roles_depts">
+            <column name="dept_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-32">
+        <createIndex indexName="FKcngg2qadojhi3a651a5adkvbq" tableName="sys_roles_menus">
+            <column name="role_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-33">
+        <createIndex indexName="FKeaaha7jew9a02b3bk9ghols53" tableName="mnt_deploy_server">
+            <column name="server_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-34">
+        <createIndex indexName="FKq4eq273l04bpu4efj0jd0jb98" tableName="sys_users_roles">
+            <column name="role_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-35">
+        <createIndex indexName="idx_ip" tableName="mnt_server">
+            <column name="ip"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-36">
+        <createIndex indexName="idx_table_name" tableName="code_column_config">
+            <column name="table_name"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-37">
+        <createIndex indexName="idx_table_name" tableName="code_gen_config">
+            <column name="table_name"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-38">
+        <createIndex indexName="inx_enabled" tableName="sys_dept">
+            <column name="enabled"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-39">
+        <createIndex indexName="inx_enabled" tableName="sys_job">
+            <column name="enabled"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-40">
+        <createIndex indexName="inx_enabled" tableName="sys_user">
+            <column name="enabled"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-41">
+        <createIndex indexName="inx_is_pause" tableName="sys_quartz_job">
+            <column name="is_pause"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-42">
+        <createIndex indexName="inx_log_type" tableName="sys_log">
+            <column name="log_type"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-43">
+        <createIndex indexName="inx_pid" tableName="sys_dept">
+            <column name="pid"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-44">
+        <createIndex indexName="inx_pid" tableName="sys_menu">
+            <column name="pid"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814297221-45">
+        <createIndex indexName="log_create_time_index" tableName="sys_log">
+            <column name="create_time"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-1">
+        <createTable remarks="代码生成字段信息存储" tableName="code_column_config">
+            <column autoIncrement="true" name="column_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="table_name" type="VARCHAR(180)"/>
+            <column name="column_name" type="VARCHAR(255)"/>
+            <column name="column_type" type="VARCHAR(255)"/>
+            <column name="dict_name" type="VARCHAR(255)"/>
+            <column name="extra" type="VARCHAR(255)"/>
+            <column name="form_show" type="BIT(1)"/>
+            <column name="form_type" type="VARCHAR(255)"/>
+            <column name="key_type" type="VARCHAR(255)"/>
+            <column name="list_show" type="BIT(1)"/>
+            <column name="not_null" type="BIT(1)"/>
+            <column name="query_type" type="VARCHAR(255)"/>
+            <column name="remark" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-2">
+        <createTable remarks="代码生成器配置" tableName="code_gen_config">
+            <column autoIncrement="true" name="config_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="table_name" remarks="表名" type="VARCHAR(255)"/>
+            <column name="author" remarks="作者" type="VARCHAR(255)"/>
+            <column name="cover" remarks="是否覆盖" type="BIT(1)"/>
+            <column name="module_name" remarks="模块名称" type="VARCHAR(255)"/>
+            <column name="pack" remarks="至于哪个包下" type="VARCHAR(255)"/>
+            <column name="path" remarks="前端代码生成的路径" type="VARCHAR(255)"/>
+            <column name="api_path" remarks="前端Api文件路径" type="VARCHAR(255)"/>
+            <column name="prefix" remarks="表前缀" type="VARCHAR(255)"/>
+            <column name="api_alias" remarks="接口名称" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-3">
+        <createTable remarks="应用管理" tableName="mnt_app">
+            <column autoIncrement="true" name="app_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" remarks="应用名称" type="VARCHAR(255)"/>
+            <column name="upload_path" remarks="上传目录" type="VARCHAR(255)"/>
+            <column name="deploy_path" remarks="部署路径" type="VARCHAR(255)"/>
+            <column name="backup_path" remarks="备份路径" type="VARCHAR(255)"/>
+            <column name="port" remarks="应用端口" type="INT"/>
+            <column name="start_script" remarks="启动脚本" type="VARCHAR(4000)"/>
+            <column name="deploy_script" remarks="部署脚本" type="VARCHAR(4000)"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(255)"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(255)"/>
+            <column name="create_time" remarks="创建日期" type="datetime"/>
+            <column name="update_time" remarks="更新时间" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-4">
+        <createTable remarks="数据库管理" tableName="mnt_database">
+            <column name="db_id" remarks="ID" type="VARCHAR(50)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" remarks="名称" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="jdbc_url" remarks="jdbc连接" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_name" remarks="账号" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pwd" remarks="密码" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="create_by" remarks="创建者" type="VARCHAR(255)"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(255)"/>
+            <column name="create_time" remarks="创建时间" type="datetime"/>
+            <column name="update_time" remarks="更新时间" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-5">
+        <createTable remarks="部署管理" tableName="mnt_deploy">
+            <column autoIncrement="true" name="deploy_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="app_id" remarks="应用编号" type="BIGINT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(255)"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(255)"/>
+            <column name="create_time" type="datetime"/>
+            <column name="update_time" remarks="更新时间" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-6">
+        <createTable remarks="部署历史管理" tableName="mnt_deploy_history">
+            <column name="history_id" remarks="ID" type="VARCHAR(50)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="app_name" remarks="应用名称" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deploy_date" remarks="部署日期" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deploy_user" remarks="部署用户" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ip" remarks="服务器IP" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deploy_id" remarks="部署编号" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-7">
+        <createTable remarks="应用与服务器关联" tableName="mnt_deploy_server">
+            <column name="deploy_id" remarks="部署ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="server_id" remarks="服务ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-8">
+        <createTable remarks="服务器管理" tableName="mnt_server">
+            <column autoIncrement="true" name="server_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="account" remarks="账号" type="VARCHAR(50)"/>
+            <column name="ip" remarks="IP地址" type="VARCHAR(20)"/>
+            <column name="name" remarks="名称" type="VARCHAR(100)"/>
+            <column name="password" remarks="密码" type="VARCHAR(100)"/>
+            <column name="port" remarks="端口" type="INT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(255)"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(255)"/>
+            <column name="create_time" remarks="创建时间" type="datetime"/>
+            <column name="update_time" remarks="更新时间" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-9">
+        <createTable remarks="部门" tableName="sys_dept">
+            <column autoIncrement="true" name="dept_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="pid" remarks="上级部门" type="BIGINT"/>
+            <column defaultValueNumeric="0" name="sub_count" remarks="子部门数目" type="INT"/>
+            <column name="name" remarks="名称" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="999" name="dept_sort" remarks="排序" type="INT"/>
+            <column name="enabled" remarks="状态" type="BIT(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="create_by" remarks="创建者" type="VARCHAR(255)"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(255)"/>
+            <column name="create_time" remarks="创建日期" type="datetime"/>
+            <column name="update_time" remarks="更新时间" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-10">
+        <createTable remarks="数据字典" tableName="sys_dict">
+            <column autoIncrement="true" name="dict_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" remarks="字典名称" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" remarks="描述" type="VARCHAR(255)"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(255)"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(255)"/>
+            <column name="create_time" remarks="创建日期" type="datetime"/>
+            <column name="update_time" remarks="更新时间" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-11">
+        <createTable remarks="数据字典详情" tableName="sys_dict_detail">
+            <column autoIncrement="true" name="detail_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="dict_id" remarks="字典id" type="BIGINT"/>
+            <column name="label" remarks="字典标签" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value" remarks="字典值" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="dict_sort" remarks="排序" type="INT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(255)"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(255)"/>
+            <column name="create_time" remarks="创建日期" type="datetime"/>
+            <column name="update_time" remarks="更新时间" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-12">
+        <createTable remarks="岗位" tableName="sys_job">
+            <column autoIncrement="true" name="job_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" remarks="岗位名称" type="VARCHAR(180)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="enabled" remarks="岗位状态" type="BIT(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="job_sort" remarks="排序" type="INT"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(255)"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(255)"/>
+            <column name="create_time" remarks="创建日期" type="datetime"/>
+            <column name="update_time" remarks="更新时间" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-13">
+        <createTable remarks="系统日志" tableName="sys_log">
+            <column autoIncrement="true" name="log_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="log_type" type="VARCHAR(10)"/>
+            <column name="method" type="VARCHAR(255)"/>
+            <column name="params" type="TEXT"/>
+            <column name="request_ip" type="VARCHAR(255)"/>
+            <column name="time" type="BIGINT"/>
+            <column name="username" type="VARCHAR(255)"/>
+            <column name="address" type="VARCHAR(255)"/>
+            <column name="browser" type="VARCHAR(255)"/>
+            <column name="exception_detail" type="TEXT"/>
+            <column name="create_time" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-14">
+        <createTable remarks="系统菜单" tableName="sys_menu">
+            <column autoIncrement="true" name="menu_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="pid" remarks="上级菜单ID" type="BIGINT"/>
+            <column defaultValueNumeric="0" name="sub_count" remarks="子菜单数目" type="INT"/>
+            <column name="type" remarks="菜单类型" type="INT"/>
+            <column name="title" remarks="菜单标题" type="VARCHAR(100)">
+                <constraints unique="true"/>
+            </column>
+            <column name="name" remarks="组件名称" type="VARCHAR(100)">
+                <constraints unique="true"/>
+            </column>
+            <column name="component" remarks="组件" type="VARCHAR(255)"/>
+            <column name="menu_sort" remarks="排序" type="INT"/>
+            <column name="icon" remarks="图标" type="VARCHAR(255)"/>
+            <column name="path" remarks="链接地址" type="VARCHAR(255)"/>
+            <column name="i_frame" remarks="是否外链" type="BIT(1)"/>
+            <column defaultValueBoolean="false" name="cache" remarks="缓存" type="BIT(1)"/>
+            <column defaultValueBoolean="false" name="hidden" remarks="隐藏" type="BIT(1)"/>
+            <column name="permission" remarks="权限" type="VARCHAR(255)"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(255)"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(255)"/>
+            <column name="create_time" remarks="创建日期" type="datetime"/>
+            <column name="update_time" remarks="更新时间" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-15">
+        <createTable remarks="定时任务" tableName="sys_quartz_job">
+            <column autoIncrement="true" name="job_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="bean_name" remarks="Spring Bean名称" type="VARCHAR(255)"/>
+            <column name="cron_expression" remarks="cron 表达式" type="VARCHAR(255)"/>
+            <column name="is_pause" remarks="状态：1暂停、0启用" type="BIT(1)"/>
+            <column name="job_name" remarks="任务名称" type="VARCHAR(255)"/>
+            <column name="method_name" remarks="方法名称" type="VARCHAR(255)"/>
+            <column name="params" remarks="参数" type="VARCHAR(255)"/>
+            <column name="description" remarks="备注" type="VARCHAR(255)"/>
+            <column name="person_in_charge" remarks="负责人" type="VARCHAR(100)"/>
+            <column name="email" remarks="报警邮箱" type="VARCHAR(100)"/>
+            <column name="sub_task" remarks="子任务ID" type="VARCHAR(100)"/>
+            <column name="pause_after_failure" remarks="任务失败后是否暂停" type="BIT(1)"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(255)"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(255)"/>
+            <column name="create_time" remarks="创建日期" type="datetime"/>
+            <column name="update_time" remarks="更新时间" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-16">
+        <createTable remarks="定时任务日志" tableName="sys_quartz_log">
+            <column autoIncrement="true" name="log_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="bean_name" type="VARCHAR(255)"/>
+            <column name="create_time" type="datetime"/>
+            <column name="cron_expression" type="VARCHAR(255)"/>
+            <column name="exception_detail" type="TEXT"/>
+            <column name="is_success" type="BIT(1)"/>
+            <column name="job_name" type="VARCHAR(255)"/>
+            <column name="method_name" type="VARCHAR(255)"/>
+            <column name="params" type="VARCHAR(255)"/>
+            <column name="time" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-17">
+        <createTable remarks="角色表" tableName="sys_role">
+            <column autoIncrement="true" name="role_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" remarks="名称" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="level" remarks="角色级别" type="INT"/>
+            <column name="description" remarks="描述" type="VARCHAR(255)"/>
+            <column name="data_scope" remarks="数据权限" type="VARCHAR(255)"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(255)"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(255)"/>
+            <column name="create_time" remarks="创建日期" type="datetime"/>
+            <column name="update_time" remarks="更新时间" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-18">
+        <createTable remarks="角色部门关联" tableName="sys_roles_depts">
+            <column name="role_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="dept_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-19">
+        <createTable remarks="角色菜单关联" tableName="sys_roles_menus">
+            <column name="menu_id" remarks="菜单ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="role_id" remarks="角色ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-20">
+        <createTable remarks="系统用户" tableName="sys_user">
+            <column autoIncrement="true" name="user_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="dept_id" remarks="部门名称" type="BIGINT"/>
+            <column name="username" remarks="用户名" type="VARCHAR(180)">
+                <constraints unique="true"/>
+            </column>
+            <column name="nick_name" remarks="昵称" type="VARCHAR(255)"/>
+            <column name="gender" remarks="性别" type="VARCHAR(2)"/>
+            <column name="phone" remarks="手机号码" type="VARCHAR(255)"/>
+            <column name="email" remarks="邮箱" type="VARCHAR(180)">
+                <constraints unique="true"/>
+            </column>
+            <column name="avatar_name" remarks="头像地址" type="VARCHAR(255)"/>
+            <column name="avatar_path" remarks="头像真实路径" type="VARCHAR(255)"/>
+            <column name="password" remarks="密码" type="VARCHAR(255)"/>
+            <column defaultValueBoolean="false" name="is_admin" remarks="是否为admin账号" type="BIT(1)"/>
+            <column name="enabled" remarks="状态：1启用、0禁用" type="BIT(1)"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(255)"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(255)"/>
+            <column name="pwd_reset_time" remarks="修改密码的时间" type="datetime"/>
+            <column name="create_time" remarks="创建日期" type="datetime"/>
+            <column name="update_time" remarks="更新时间" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-21">
+        <createTable tableName="sys_users_jobs">
+            <column name="user_id" remarks="用户ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="job_id" remarks="岗位ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-22">
+        <createTable remarks="用户角色关联" tableName="sys_users_roles">
+            <column name="user_id" remarks="用户ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="role_id" remarks="角色ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-23">
+        <createTable remarks="支付宝配置类" tableName="tool_alipay_config">
+            <column name="config_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="app_id" remarks="应用ID" type="VARCHAR(255)"/>
+            <column name="charset" remarks="编码" type="VARCHAR(255)"/>
+            <column name="format" remarks="类型 固定格式json" type="VARCHAR(255)"/>
+            <column name="gateway_url" remarks="网关地址" type="VARCHAR(255)"/>
+            <column name="notify_url" remarks="异步回调" type="VARCHAR(255)"/>
+            <column name="private_key" remarks="私钥" type="TEXT"/>
+            <column name="public_key" remarks="公钥" type="TEXT"/>
+            <column name="return_url" remarks="回调地址" type="VARCHAR(255)"/>
+            <column name="sign_type" remarks="签名方式" type="VARCHAR(255)"/>
+            <column name="sys_service_provider_id" remarks="商户号" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-24">
+        <createTable remarks="邮箱配置" tableName="tool_email_config">
+            <column name="config_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="from_user" remarks="收件人" type="VARCHAR(255)"/>
+            <column name="host" remarks="邮件服务器SMTP地址" type="VARCHAR(255)"/>
+            <column name="pass" remarks="密码" type="VARCHAR(255)"/>
+            <column name="port" remarks="端口" type="VARCHAR(255)"/>
+            <column name="user" remarks="发件者用户名" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-25">
+        <createTable remarks="本地存储" tableName="tool_local_storage">
+            <column autoIncrement="true" name="storage_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="real_name" remarks="文件真实的名称" type="VARCHAR(255)"/>
+            <column name="name" remarks="文件名" type="VARCHAR(255)"/>
+            <column name="suffix" remarks="后缀" type="VARCHAR(255)"/>
+            <column name="path" remarks="路径" type="VARCHAR(255)"/>
+            <column name="type" remarks="类型" type="VARCHAR(255)"/>
+            <column name="size" remarks="大小" type="VARCHAR(100)"/>
+            <column name="create_by" remarks="创建者" type="VARCHAR(255)"/>
+            <column name="update_by" remarks="更新者" type="VARCHAR(255)"/>
+            <column name="create_time" remarks="创建日期" type="datetime"/>
+            <column name="update_time" remarks="更新时间" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-26">
+        <createTable remarks="七牛云配置" tableName="tool_qiniu_config">
+            <column name="config_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="access_key" remarks="accessKey" type="TEXT"/>
+            <column name="bucket" remarks="Bucket 识别符" type="VARCHAR(255)"/>
+            <column name="host" remarks="外链域名" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="secret_key" remarks="secretKey" type="TEXT"/>
+            <column name="type" remarks="空间类型" type="VARCHAR(255)"/>
+            <column name="zone" remarks="机房" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-27">
+        <createTable remarks="七牛云文件存储" tableName="tool_qiniu_content">
+            <column autoIncrement="true" name="content_id" remarks="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="bucket" remarks="Bucket 识别符" type="VARCHAR(255)"/>
+            <column name="name" remarks="文件名称" type="VARCHAR(180)">
+                <constraints unique="true"/>
+            </column>
+            <column name="size" remarks="文件大小" type="VARCHAR(255)"/>
+            <column name="type" remarks="文件类型：私有或公开" type="VARCHAR(255)"/>
+            <column name="url" remarks="文件url" type="VARCHAR(255)"/>
+            <column name="suffix" remarks="文件后缀" type="VARCHAR(255)"/>
+            <column name="update_time" remarks="上传或同步的时间" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-28">
+        <createIndex indexName="FK5rwmryny6jthaaxkogownknqp" tableName="sys_user">
+            <column name="dept_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-29">
+        <createIndex indexName="FK5tpkputc6d9nboxojdbgnpmyb" tableName="sys_dict_detail">
+            <column name="dict_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-30">
+        <createIndex indexName="FK6sy157pseoxx4fmcqr1vnvvhy" tableName="mnt_deploy">
+            <column name="app_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-31">
+        <createIndex indexName="FK7qg6itn5ajdoa9h9o78v9ksur" tableName="sys_roles_depts">
+            <column name="dept_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-32">
+        <createIndex indexName="FKcngg2qadojhi3a651a5adkvbq" tableName="sys_roles_menus">
+            <column name="role_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-33">
+        <createIndex indexName="FKeaaha7jew9a02b3bk9ghols53" tableName="mnt_deploy_server">
+            <column name="server_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-34">
+        <createIndex indexName="FKq4eq273l04bpu4efj0jd0jb98" tableName="sys_users_roles">
+            <column name="role_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-35">
+        <createIndex indexName="idx_ip" tableName="mnt_server">
+            <column name="ip"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-36">
+        <createIndex indexName="idx_table_name" tableName="code_column_config">
+            <column name="table_name"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-37">
+        <createIndex indexName="idx_table_name" tableName="code_gen_config">
+            <column name="table_name"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-38">
+        <createIndex indexName="inx_enabled" tableName="sys_dept">
+            <column name="enabled"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-39">
+        <createIndex indexName="inx_enabled" tableName="sys_job">
+            <column name="enabled"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-40">
+        <createIndex indexName="inx_enabled" tableName="sys_user">
+            <column name="enabled"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-41">
+        <createIndex indexName="inx_is_pause" tableName="sys_quartz_job">
+            <column name="is_pause"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-42">
+        <createIndex indexName="inx_log_type" tableName="sys_log">
+            <column name="log_type"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-43">
+        <createIndex indexName="inx_pid" tableName="sys_dept">
+            <column name="pid"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-44">
+        <createIndex indexName="inx_pid" tableName="sys_menu">
+            <column name="pid"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="lychee (generated)" id="1697814307774-45">
+        <createIndex indexName="log_create_time_index" tableName="sys_log">
+            <column name="create_time"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>
