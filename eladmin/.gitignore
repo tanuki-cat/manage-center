@@ -7,3 +7,4 @@
 /.gradle/
 /application.pid
 */.DS_Store
+*-dev.yml
