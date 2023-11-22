@@ -9,7 +9,7 @@
       </el-select>
       <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
       <!-- 导出 -->
-      <div style="display: inline-block;">
+      <!-- <div style="display: inline-block;">
         <el-button
           :loading="downloadLoading"
           size="mini"
@@ -18,7 +18,7 @@
           icon="el-icon-download"
           @click="downloadMethod"
         >导出</el-button>
-      </div>
+      </div> -->
     </div>
     <!--表格渲染-->
     <el-table v-loading="loading" :data="data" style="width: 100%;margin-top: -10px;">
