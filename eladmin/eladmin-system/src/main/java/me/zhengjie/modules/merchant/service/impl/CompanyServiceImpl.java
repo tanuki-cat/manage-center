@@ -14,6 +14,7 @@ package me.zhengjie.modules.merchant.service.impl;/*
 *  limitations under the License.
 */
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.merchant.domain.Company;
 import me.zhengjie.modules.merchant.domain.vo.CompanyQueryCriteria;
@@ -46,7 +47,8 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
 
     @Override
     public PageResult<Company> queryAll(CompanyQueryCriteria criteria, Page<Object> page){
-        return PageUtil.toPage(companyMapper.findAll(criteria, page));
+        IPage<Company> page1 = new Page<>(page.getCurrent(),page.getSize());
+        return PageUtil.toPage(this.page(page1));
     }
 
     @Override

@@ -21,7 +21,6 @@ import java.util.List;
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.merchant.domain.Company;
 import me.zhengjie.modules.merchant.domain.vo.CompanyQueryCriteria;
-import me.zhengjie.modules.merchant.repository.CompanyRepository;
 import me.zhengjie.modules.merchant.service.CompanyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +44,6 @@ import me.zhengjie.utils.PageResult;
 public class CompanyController {
 
     private final CompanyService companyService;
-    private final CompanyRepository companyRepository;
     private static final String ENTITY_NAME = "company";
     @Log("导出数据")
     @ApiOperation("导出数据")
@@ -60,7 +58,7 @@ public class CompanyController {
     @ApiOperation("查询company")
     @PreAuthorize("@el.check('company:list')")
     public ResponseEntity<PageResult<Company>> queryCompany(CompanyQueryCriteria criteria, Page<Object> page){
-        return new ResponseEntity<>(companyRepository.queryAll(criteria,page),HttpStatus.OK);
+        return new ResponseEntity<>(companyService.queryAll(criteria,page),HttpStatus.OK);
     }
 
     @PostMapping
