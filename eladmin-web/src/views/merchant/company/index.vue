@@ -46,6 +46,7 @@
 <script>
 import crudCompany from '@/api/merchant/company/company'
 import CRUD, { presenter, header, form, crud } from '@crud/crud'
+import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.operation'
 import pagination from '@crud/Pagination'
@@ -53,7 +54,7 @@ import pagination from '@crud/Pagination'
 const defaultForm = { id: null, name: null, userName: null, userMobile: null, createBy: null, updateBy: null, createTime: null, updateTime: null }
 export default {
   name: 'Company',
-  components: { pagination, crudOperation, udOperation },
+  components: { pagination, crudOperation, rrOperation, udOperation },
   mixins: [presenter(), header(), form(defaultForm), crud()],
   cruds() {
     return CRUD({ title: '公司管理', url: 'api/merchant/company', sort: 'id,desc', crudMethod: { ...crudCompany }})
