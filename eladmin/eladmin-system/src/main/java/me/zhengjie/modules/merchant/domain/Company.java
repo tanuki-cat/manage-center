@@ -40,7 +40,7 @@ public class Company extends BaseEntity implements Serializable {
 
 
     @NotNull(groups = Update.class)
-    @TableId(value="company_id", type = IdType.ASSIGN_ID)
+    @TableId(value="company_id", type = IdType.AUTO)
     @ApiModelProperty(value = "ID", hidden = true)
     private Long id;
 

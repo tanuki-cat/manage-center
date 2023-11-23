@@ -3,7 +3,7 @@
 -- comment sys_company表添加字段
 CREATE TABLE `sys_company`
 (
-    `company_id`  bigint(20) NOT NULL COMMENT '主键ID',
+    `company_id`  bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `name`        varchar(255) DEFAULT NULL COMMENT '公司名称',
     `user_name`   varchar(255) DEFAULT NULL COMMENT '公司联系人',
     `user_mobile` varchar(11)  DEFAULT NULL COMMENT '公司联系人移动电话',
@@ -18,7 +18,7 @@ CREATE TABLE `sys_company`
 -- comment sys_visit_log表添加字段
 CREATE TABLE `sys_visit_log`
 (
-    `log_id`       bigint(20) NOT NULL COMMENT '主键ID',
+    `log_id`       bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `company_id`   bigint(20) DEFAULT NULL COMMENT '公司id',
     `company_name` varchar(255)  DEFAULT NULL COMMENT '公司名称',
     `content`      varchar(3000) DEFAULT NULL COMMENT '日志内容',
@@ -34,7 +34,7 @@ CREATE TABLE `sys_visit_log`
 -- comment sys_project表添加字段
 CREATE TABLE `sys_project`
 (
-    `project_id`   bigint(20) NOT NULL COMMENT '主键ID',
+    `project_id`   bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `company_id`   bigint(20) DEFAULT NULL COMMENT '公司id',
     `company_name` varchar(255)  DEFAULT NULL COMMENT '公司名称',
     `project_name` varchar(255)  DEFAULT NULL COMMENT '项目名称',
@@ -51,7 +51,7 @@ CREATE TABLE `sys_project`
 
 CREATE TABLE `sys_project_schedule`
     (
-        `schedule_id`   bigint(20) NOT NULL COMMENT '主键ID',
+        `schedule_id`   bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
         `project_id`   bigint(20) DEFAULT NULL COMMENT '项目id',
         `schedule_status`  int(8)  DEFAULT NULL COMMENT '进度状态',
         `nick_name`  varchar(255)  DEFAULT NULL COMMENT '创建者名字',

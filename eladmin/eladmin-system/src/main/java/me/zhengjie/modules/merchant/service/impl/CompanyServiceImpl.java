@@ -69,6 +69,11 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(Company resources) {
+        List<Company> list = list(new LambdaQueryWrapper<Company>().eq(Company::getName, resources.getName())
+                .ne(Company::getId, resources.getId()));
+        if(!list.isEmpty()){
+            throw new BadRequestException("公司名称已存在");
+        }
         Company company = getById(resources.getId());
         company.copy(resources);
         saveOrUpdate(company);
