@@ -10,7 +10,10 @@
       <el-button slot="reference" :disabled="disabledDle" type="danger" icon="el-icon-delete" size="mini" @click.stop="toDelete" />
     </el-popover>
     <el-button icon="el-icon-edit" type="success" size="mini" @click="visitAdd(data)">拜访登记</el-button>
-    <el-button icon="el-icon-search" type="warning" size="mini">查看拜访</el-button>
+   
+    <router-link icon="el-icon-search" type="warning" size="mini" :to="{ path: '/merchant/visit', query: { companyId: data.id } }">
+      <el-button icon="el-icon-search" type="warning" size="mini">查看拜访</el-button>
+    </router-link>
     
   </div>
 </template>
@@ -70,8 +73,11 @@ export default {
       this.pop = false
     },
     visitAdd(data) {
-      console.log('visitAdd');
       this.$emit('addVisit',data)
+    },
+    linkView(data) {
+      //跳转到拜访列表
+      this.$emit('linkView',data)
     }
   }
 }

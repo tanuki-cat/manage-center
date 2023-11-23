@@ -23,8 +23,19 @@
           <el-button :loading="crud.status.cu === 2" type="primary" @click="crud.submitCU">确认</el-button>
         </div>
       </el-dialog>
-      <el-dialog :close-on-click-modal="false" :visible.sync="visitVisible"  width="520px">
-        4444
+      <el-dialog :close-on-click-modal="false" :visible.sync="visitVisible"  width="520px" :title="拜访登记">
+        <el-form ref="form" :model="visitFrom" :rules="visitRules" size="small" label-width="100px">
+          <el-form-item label="公司名称" >
+            <el-input v-model="visitFrom.companyName" style="width: 350px;" disabled />
+          </el-form-item>
+          <el-form-item label="拜访内容" prop="content">
+            <el-input v-model="visitFrom.content" style="width: 350px;" type="textarea" />
+          </el-form-item>  
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+          <el-button type="text" @click="visitClose()">取消</el-button>
+          <el-button :loading="crud.status.cu === 2" type="primary" @click="$event => addVisit()">确认</el-button>
+          </div>
       </el-dialog>
       <!--表格渲染-->
       <el-table
@@ -40,12 +51,15 @@
         <el-table-column prop="name" label="公司名称" />
         <el-table-column prop="userName" label="联系人" />
         <el-table-column prop="userMobile" label="联系人手机" />
+        <el-table-column prop="createTime" label="创建日期" />
+        <el-table-column prop="updateTime" label="更新时间" />
         <el-table-column v-if="checkPer(['admin','company:edit','company:del'])" label="操作" width="550px" align="center">
           <template slot-scope="scope">
             <udOperation
               :data="scope.row"
               :permission="permission"
               @addVisit="getVisit"
+              @linkView="goVisit"
             />
           </template>
         </el-table-column>
@@ -62,6 +76,7 @@ import CRUD, { presenter, header, form, crud } from '@crud/crud'
 import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.visit'
 import pagination from '@crud/Pagination'
+import visitAdd from '@/api/merchant/visit'
 
 const defaultForm = { id: null, name: null, userName: null, userMobile: null, createBy: null, updateBy: null, createTime: null, updateTime: null }
 export default {
@@ -81,20 +96,45 @@ export default {
       visitVisible: false,
       visitFrom: {
         companyId: 0,
-        companyTitle: ''
-        
-
+        companyName: '',
+        content: ''
       },
       rules: {
         name: [
           { required: true, message: '公司名称不能为空', trigger: 'blur' }
         ]
-      }}
+      },
+      visitRules: {
+        content: [
+          { required: true, message: '拜访内容不能为空', trigger: 'blur' }
+        ]
+      }
+    }
   },
   methods: {
     getVisit(data) {
       console.log(data);
+      this.visitFrom.companyId = data.id
+      this.visitFrom.companyName = data.name
       this.visitVisible = true
+    },
+    addVisit() {
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          visitAdd.add(this.visitFrom).then(() => {
+            this.crud.notify('添加成功', 'success')
+            this.visitVisible = false
+          })
+        }
+      })
+    },
+    visitClose() {
+      this.visitVisible = false
+    },
+    goVisit(data) {
+      console.log(data)
+      //跳转到拜访列表
+      window.location.href = '/merchant/visit?companyId=' + data.id
     },
     // 钩子：在获取表格数据之前执行，false 则代表不获取数据
     [CRUD.HOOK.beforeRefresh]() {
