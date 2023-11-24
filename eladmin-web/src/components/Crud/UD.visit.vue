@@ -11,10 +11,10 @@
     </el-popover>
     <el-button icon="el-icon-edit" type="success" size="mini" @click="visitAdd(data)">拜访登记</el-button>
    
-    <router-link icon="el-icon-search" type="warning" size="mini" :to="{ path: '/merchant/visit', query: { companyId: data.id } }">
+    <router-link  :to="{ path: '/merchant/visit', query: { companyId: data.id } }">
       <el-button icon="el-icon-search" type="warning" size="mini">查看拜访</el-button>
     </router-link>
-    
+    <el-button icon="el-icon-edit" type="primary" size="mini" @click="projectAdd(data)">添加项目</el-button>
   </div>
 </template>
 <script>
@@ -75,9 +75,8 @@ export default {
     visitAdd(data) {
       this.$emit('addVisit',data)
     },
-    linkView(data) {
-      //跳转到拜访列表
-      this.$emit('linkView',data)
+    projectAdd(data){
+      this.$emit('addProject',data)
     }
   }
 }
