@@ -24,6 +24,7 @@ import me.zhengjie.utils.FileUtil;
 import lombok.RequiredArgsConstructor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import me.zhengjie.utils.PageUtil;
@@ -47,8 +48,18 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
 
     @Override
     public PageResult<Company> queryAll(CompanyQueryCriteria criteria, Page<Object> page){
-        IPage<Company> page1 = new Page<>(page.getCurrent(),page.getSize());
-        return PageUtil.toPage(this.page(page1));
+        LambdaQueryWrapper<Company> queryWrapper = new LambdaQueryWrapper<>();
+        Page<Company> companyPage = new Page<>(page.getCurrent(), page.getSize());
+        //搜索
+        if (Strings.isNotBlank(criteria.getKeywords())) {
+            queryWrapper.like(Company::getName, criteria.getKeywords())
+                    .or().like(Company::getUserName, criteria.getKeywords());
+        }
+        if (Strings.isNotBlank(criteria.getPhone())) {
+            queryWrapper.or().eq(Company::getUserMobile, criteria.getPhone());
+        }
+        IPage<Company> companyIPage = this.page(companyPage, queryWrapper);
+        return PageUtil.toPage(companyIPage);
     }
 
     @Override

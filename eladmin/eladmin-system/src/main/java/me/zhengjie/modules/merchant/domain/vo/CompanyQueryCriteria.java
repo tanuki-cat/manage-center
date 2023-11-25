@@ -18,9 +18,15 @@ package me.zhengjie.modules.merchant.domain.vo;/*
 import lombok.Data;
 
 /**
+*   搜索参数构造对象
 * @author ChinaJoy
 * @date 2023-11-22
 **/
 @Data
 public class CompanyQueryCriteria{
+
+    //关键字搜索
+    private String keywords;
+    //联系人电话搜索
+    private String phone;
 }
