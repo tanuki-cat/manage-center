@@ -35,7 +35,8 @@ export default {
   components: { pagination, crudOperation, rrOperation, udOperation },
   mixins: [presenter(), header(), form(defaultForm), crud()],
   cruds() {
-    return CRUD({ title: '拜访记录', url: 'api/merchant/visitLog', sort: 'id,desc',query: {companyId: getVisit()}, crudMethod: { ...crudVisitLog }})
+
+    return CRUD({queryOnPresenterCreated:false, title: '拜访记录', url: 'api/merchant/visitLog', sort: 'id,desc', crudMethod: { ...crudVisitLog }})
   },
   data() {
     return {
@@ -48,10 +49,15 @@ export default {
       rules: {
       }    }
   },
+  created() {
+    this.query.companyId=this.$route.query.companyId;
+    this.crud.toQuery()
+  },
   methods: {
     getVisit() {
-      return $route.query.companyId
-    },    
+      console.log(this.$route)
+      return this.$route.query.companyId
+    }, 
     // 钩子：在获取表格数据之前执行，false 则代表不获取数据
     [CRUD.HOOK.beforeRefresh]() {
       return true
