@@ -1,0 +1,51 @@
+name: Java Server CI Workflow with Maven
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+      - name: Cache Maven packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Compile with Maven
+        run: mvn compile
+      - name: Deploy to Server
+        uses: actions/checkout@v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+      - name: Package with Maven
+        run: mvn -B package --file pom.xml -Dmaven.test.skip=true -P prod
+      - name: Deploy with Maven
+        uses: garygrossgarten/github-action-scp@release
+        with:
+          local: "target/*.jar"
+          remote: "/root/admin"
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+      - name: Restart Server
+        if: always()
+        uses: fifsky/ssh-acttion@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          script: |
+            cd /root/admin
+            ./restart.sh
