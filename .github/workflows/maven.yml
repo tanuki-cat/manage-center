@@ -10,31 +10,26 @@ jobs:
   compile:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up JDK 17
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
           java-version: 17
+          cache: maven
       - name: Cache Maven packages
         uses: actions/cache@v2
         with:
-          path: ~/.m2
+          path: ~/.m2/respository
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: Compile with Maven
         run: cd eladmin && mvn compile
-      - name: Deploy to Server
-        uses: actions/checkout@v2
-      - name: Set up JDK 17
-        uses: actions/setup-java@v1
-        with:
-          java-version: 17
       - name: Package with Maven
         run: cd eladmin && mvn -B package --file pom.xml -Dmaven.test.skip=true -P prod
       - name: Deploy with Maven
         uses: garygrossgarten/github-action-scp@release
         with:
-          local: "target/*.jar"
+          local: "/eladmin/eladmin-system/target/*.jar"
           remote: "/root/admin"
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
