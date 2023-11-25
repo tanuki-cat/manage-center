@@ -30,9 +30,9 @@ jobs:
         uses: marvinpinto/action-automatic-releases@latest
         with:
           repo_token: ${{ secrets.PERSONAL_TOKEN }} 
-          automatic_release_tag: "${{ github.ref }}-${{ github.sha }}"
+          automatic_release_tag: "eladmin-${{ github.sha }}"
           prerelease: false # 是否为预发布版本
-          title: "Release ${{ github.ref}}-${{ github.sha }}"
+          title: "Release eladmin-${{ github.sha }}"
           files: |
             stashing/eladmin-system-1.1.jar.jar
       # - name: Deploy with Maven
