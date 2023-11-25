@@ -21,14 +21,14 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.m2/respository
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          key: ${{ runner.os }}-m2-${{ hashFiles('eladmin/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: Package with Maven
         run: cd eladmin && mvn -B package --file pom.xml -Dmaven.test.skip=true -P prod
       - name: Deploy with Maven
         uses: garygrossgarten/github-action-scp@release
         with:
-          local: "eladmin/eladmin-system/target/*.jar"
+          local: "eladmin/eladmin-system/target/eladmin-system-1.1.jar"
           remote: "/root/admin"
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
