@@ -27,15 +27,13 @@ jobs:
       - name: Package with Maven
         run: cd eladmin && mvn -B package --file pom.xml -Dmaven.test.skip=true -P prod
       - run: mkdir stashing && cp eladmin/eladmin-system/target/eladmin-system-1.1.jar stashing
-      - name: Create Release for Tag
-        id: release_tag
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }} 
+      - name: Automatic Release 
+        uses: marvinpinto/action-automatic-releases@latest
         with:
-          tag_name: eladmin-${{ github.ref }}
-          release_name: Release eladmin-${{ github.ref }}
+          repo_token: ${{ secrets.PERSONAL_TOKEN }} 
+          automatic_release_tag: "{{ github.ref }}"
           prerelease: false # 是否为预发布版本
+          title: "Release {{ github.ref }}"
           files: |
             stashing/*.jar
       # - name: Deploy with Maven
