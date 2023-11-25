@@ -2,7 +2,8 @@ name: Java Server CI Workflow with Maven
 
 on:
   push:
-    branches: [ master ]
+    tags:
+      - "*"
   pull_request:
     branches: [ master ]
 
@@ -25,6 +26,7 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Package with Maven
         run: cd eladmin && mvn -B package --file pom.xml -Dmaven.test.skip=true -P prod
+      - run: mkdir stashing && cp eladmin/eladmin-system/target/eladmin-system-1.1.jar stashing
       - name: Create Release for Tag
         id: release_tag
         uses: actions/create-release@v1
@@ -34,6 +36,8 @@ jobs:
           tag_name: eladmin-${{ github.ref }}
           release_name: Release eladmin-${{ github.ref }}
           prerelease: false # 是否为预发布版本
+          files: |
+            stashing/*.jar
       # - name: Deploy with Maven
       #   uses: garygrossgarten/github-action-scp@release
       #   with:
