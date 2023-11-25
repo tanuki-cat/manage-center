@@ -36,7 +36,7 @@ jobs:
           password: ${{ secrets.PASSWORD }}
       - name: Restart Server
         if: always()
-        uses: appleboy/ssh-acttion@master
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
