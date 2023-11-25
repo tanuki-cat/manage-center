@@ -22,7 +22,7 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: Compile with Maven
-        run: mvn compile
+        run: cd eladmin && mvn compile
       - name: Deploy to Server
         uses: actions/checkout@v2
       - name: Set up JDK 17
