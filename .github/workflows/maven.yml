@@ -23,14 +23,12 @@ jobs:
           path: ~/.m2/respository
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      - name: Compile with Maven
-        run: cd eladmin && mvn compile
       - name: Package with Maven
         run: cd eladmin && mvn -B package --file pom.xml -Dmaven.test.skip=true -P prod
       - name: Deploy with Maven
         uses: garygrossgarten/github-action-scp@release
         with:
-          local: "/eladmin/eladmin-system/target/*.jar"
+          local: "eladmin/eladmin-system/target/*.jar"
           remote: "/root/admin"
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
