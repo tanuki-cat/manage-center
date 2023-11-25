@@ -34,13 +34,13 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
-      # - name: Restart Server
-      #   if: always()
-      #   uses: fifsky/ssh-acttion@master
-      #   with:
-      #     host: ${{ secrets.HOST }}
-      #     username: ${{ secrets.USERNAME }}
-      #     password: ${{ secrets.PASSWORD }}
-      #     script: |
-      #       cd /root/admin
-      #       ./restart.sh
+      - name: Restart Server
+        if: always()
+        uses: appleboy/ssh-acttion@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          script: |
+            cd /root/admin
+            ./restart.sh
