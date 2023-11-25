@@ -41,6 +41,7 @@
           <el-button :loading="crud.status.cu === 2" type="primary" @click="crud.submitCU">确认</el-button>
         </div>
       </el-dialog>
+      <!--拜访登记-->
       <el-dialog :close-on-click-modal="false" :visible.sync="visitVisible" width="520px" :title="拜访登记">
         <el-form ref="form" :model="visitFrom" :rules="visitRules" size="small" label-width="100px">
           <el-form-item label="公司名称">
@@ -55,6 +56,27 @@
           <el-button :loading="crud.status.cu === 2" type="primary" @click="$event => addVisit()">确认</el-button>
         </div>
       </el-dialog>
+      <!--添加项目-->
+      <el-dialog :close-on-click-modal="false" :visible.sync="projectVisible" width="520px" :title="添加项目">
+        <el-form ref="form" :model="projectFrom" :rules="projectRules" size="small" label-width="100px">
+          <el-form-item label="公司名称">
+            <el-input v-model="projectFrom.companyName" style="width: 350px;" disabled />
+          </el-form-item>
+          <el-form-item label="项目名称">
+            <el-input v-model="projectFrom.projectName" style="width: 350px;" />
+          </el-form-item>
+          <el-form-item label="项目金额">
+            <el-input v-model="projectFrom.projectAmount" style="width: 350px;" />
+          </el-form-item>
+          <el-form-item label="项目描述" prop="projectDesc">
+            <el-input v-model="projectFrom.projectDesc" style="width: 350px;" type="textarea" />
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button type="text" @click="projectClose()">取消</el-button>
+          <el-button :loading="crud.status.cu === 2" type="primary" @click="$event => addProject()">确认</el-button>
+        </div>
+      </el-dialog>
       <!--表格渲染-->
       <el-table ref="table" v-loading="crud.loading" :data="crud.data" size="small" style="width: 100%;"
         @select="crud.selectChange" @select-all="crud.selectAllChange" @selection-change="crud.selectionChangeHandler">
@@ -67,7 +89,7 @@
         <el-table-column v-if="checkPer(['admin', 'company:edit', 'company:del'])" label="操作" width="550px"
           align="center">
           <template slot-scope="scope">
-            <udOperation :data="scope.row" :permission="permission" @addVisit="getVisit" @linkView="goVisit" />
+            <udOperation :data="scope.row" :permission="permission" @addVisit="getVisit" @addProject="getProject" />
           </template>
         </el-table-column>
       </el-table>
@@ -102,10 +124,18 @@ export default {
         del: ['admin', 'company:del']
       },
       visitVisible: false,
+      projectVisible:false,
       visitFrom: {
         companyId: 0,
         companyName: '',
         content: ''
+      },
+      projectFrom: {
+        companyId: 0,
+        companyName: '',
+        projectName: '',
+        projectDesc: '',
+        projectAmount: 0
       },
       rules: {
         name: [
@@ -139,10 +169,13 @@ export default {
     visitClose() {
       this.visitVisible = false
     },
-    goVisit(data) {
-      console.log(data)
-      //跳转到拜访列表
-      window.location.href = '/merchant/visit?companyId=' + data.id
+    getProject(data) {
+      this.projectFrom.companyId = data.id
+      this.projectFrom.companyName = data.name
+      this.projectVisible = true
+    },
+    projectClose() {
+      this.projectVisible = false
     },
     // 钩子：在获取表格数据之前执行，false 则代表不获取数据
     [CRUD.HOOK.beforeRefresh]() {

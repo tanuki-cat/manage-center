@@ -76,7 +76,7 @@ export default {
       this.$emit('addVisit',data)
     },
     projectAdd(data){
-      this.$emit('addProject',data)
+      this.$emit('addProject' , data)
     }
   }
 }
