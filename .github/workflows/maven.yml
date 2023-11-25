@@ -2,8 +2,7 @@ name: Java Server CI Workflow with Maven
 
 on:
   push:
-    tags:
-      - "v*"
+    branches: [ master ]
   pull_request:
     branches: [ master ]
 
@@ -31,9 +30,9 @@ jobs:
         uses: marvinpinto/action-automatic-releases@latest
         with:
           repo_token: ${{ secrets.PERSONAL_TOKEN }} 
-          automatic_release_tag: "{{ github.ref }} - ${{ github.event.head_commit.message }}"
+          automatic_release_tag: "{{ github.ref }}"
           prerelease: false # 是否为预发布版本
-          title: "Release {{ github.ref }} - ${{ github.event.head_commit.message }}"
+          title: "Release {{ github.ref }}"
           files: |
             stashing/eladmin-system-1.1.jar.jar
       # - name: Deploy with Maven
