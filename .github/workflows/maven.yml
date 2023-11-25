@@ -25,21 +25,30 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Package with Maven
         run: cd eladmin && mvn -B package --file pom.xml -Dmaven.test.skip=true -P prod
-      - name: Deploy with Maven
-        uses: garygrossgarten/github-action-scp@release
+      - name: Create Release for Tag
+        id: release_tag
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }} 
         with:
-          local: "eladmin/eladmin-system/target/eladmin-system-1.1.jar"
-          remote: "/root/admin"
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
-      - name: Restart Server
-        if: always()
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
-          script: |
-            cd /root/admin
-            ./restart.sh
+          tag_name: eladmin-${{ github.ref }}
+          release_name: Release eladmin-${{ github.ref }}
+          prerelease: false # 是否为预发布版本
+      # - name: Deploy with Maven
+      #   uses: garygrossgarten/github-action-scp@release
+      #   with:
+      #     local: "eladmin/eladmin-system/target/eladmin-system-1.1.jar"
+      #     remote: "/root/admin"
+      #     host: ${{ secrets.HOST }}
+      #     username: ${{ secrets.USERNAME }}
+      #     password: ${{ secrets.PASSWORD }}
+      # - name: Restart Server
+      #   if: always()
+      #   uses: appleboy/ssh-action@master
+      #   with:
+      #     host: ${{ secrets.HOST }}
+      #     username: ${{ secrets.USERNAME }}
+      #     password: ${{ secrets.PASSWORD }}
+      #     script: |
+      #       cd /root/admin
+      #       ./restart.sh
