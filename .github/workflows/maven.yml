@@ -30,7 +30,7 @@ jobs:
         with:
           java-version: 17
       - name: Package with Maven
-        run: mvn -B package --file pom.xml -Dmaven.test.skip=true -P prod
+        run: cd eladmin && mvn -B package --file pom.xml -Dmaven.test.skip=true -P prod
       - name: Deploy with Maven
         uses: garygrossgarten/github-action-scp@release
         with:
