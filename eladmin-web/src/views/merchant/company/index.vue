@@ -106,6 +106,7 @@ import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.visit'
 import pagination from '@crud/Pagination'
 import visitAdd from '@/api/merchant/visit'
+import projectAdd from '@/api/merchant/project'
 import rrOperation from '@crud/RR.operation'
 
 const defaultForm = { id: null, name: null, userName: null, userMobile: null, createBy: null, updateBy: null, createTime: null, updateTime: null }
@@ -173,6 +174,16 @@ export default {
       this.projectFrom.companyId = data.id
       this.projectFrom.companyName = data.name
       this.projectVisible = true
+    },
+    addProject() {
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          projectAdd.add(this.projectFrom).then(() => {
+            this.crud.notify('添加成功', 'success')
+            this.projectVisible = false
+          })          
+        }
+      })
     },
     projectClose() {
       this.projectVisible = false
