@@ -54,6 +54,7 @@ CREATE TABLE `sys_project_schedule`
         `schedule_id`   bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
         `project_id`   bigint(20) DEFAULT NULL COMMENT '项目id',
         `schedule_status`  int(8)  DEFAULT NULL COMMENT '进度状态',
+        `assign_user`  varchar(255)  DEFAULT NULL COMMENT '指派人',
         `nick_name`  varchar(255)  DEFAULT NULL COMMENT '创建者名字',
         `create_by`    varchar(255)  DEFAULT NULL COMMENT '创建者',
         `update_by`    varchar(255)  DEFAULT NULL COMMENT '更新者',
