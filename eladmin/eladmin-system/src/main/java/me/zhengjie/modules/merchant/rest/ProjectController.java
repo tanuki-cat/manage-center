@@ -21,6 +21,9 @@ import me.zhengjie.modules.merchant.service.ProjectService;
 import me.zhengjie.modules.merchant.domain.vo.ProjectQueryCriteria;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
+
+import me.zhengjie.modules.system.service.UserService;
+import me.zhengjie.utils.SecurityUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,6 +46,7 @@ import me.zhengjie.utils.PageResult;
 public class ProjectController {
 
     private final ProjectService projectService;
+    private final UserService userService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
@@ -65,6 +69,7 @@ public class ProjectController {
     @ApiOperation("新增project")
     @PreAuthorize("@el.check('project:add')")
     public ResponseEntity<Object> createProject(@Validated @RequestBody Project resources){
+        resources.setNickName(userService.findById(SecurityUtils.getCurrentUserId()).getNickName());
         projectService.create(resources);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

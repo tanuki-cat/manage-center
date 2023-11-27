@@ -23,4 +23,6 @@ import lombok.Data;
 **/
 @Data
 public class ProjectQueryCriteria{
+    private Long companyId;
+    private String userName;
 }

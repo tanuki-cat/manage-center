@@ -24,6 +24,7 @@ import java.io.Serializable;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.experimental.Accessors;
 import me.zhengjie.base.BaseEntity;
 import me.zhengjie.modules.merchant.enums.ScheduleEnum;
 
@@ -33,6 +34,7 @@ import me.zhengjie.modules.merchant.enums.ScheduleEnum;
 * @date 2023-11-26
 **/
 @Data
+@Accessors(chain = true)
 @TableName("sys_project_schedule")
 public class ProjectSchedule extends BaseEntity implements Serializable {
 

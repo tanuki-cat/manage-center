@@ -7,9 +7,6 @@
       <!--表单组件-->
       <el-dialog :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="500px">
         <el-form ref="form" :model="form" :rules="rules" size="small" label-width="80px">
-          <el-form-item label="公司id">
-            <el-input v-model="form.companyId" style="width: 370px;" />
-          </el-form-item>
           <el-form-item label="公司名称">
             <el-input v-model="form.companyName" style="width: 370px;" />
           </el-form-item>
@@ -49,7 +46,6 @@
       <!--表格渲染-->
       <el-table ref="table" v-loading="crud.loading" :data="crud.data" size="small" style="width: 100%;" @selection-change="crud.selectionChangeHandler">
         <el-table-column type="selection" width="55" />
-        <el-table-column prop="companyId" label="公司id" />
         <el-table-column prop="companyName" label="公司名称" />
         <el-table-column prop="projectName" label="项目名称" />
         <el-table-column prop="projectDesc" label="项目描述" />
@@ -83,13 +79,13 @@ import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.operation'
 import pagination from '@crud/Pagination'
 
-const defaultForm = { projectId: null, companyId: null, companyName: null, projectName: null, projectDesc: null, projectAmount: null, projectStatus: null, nickName: null, createBy: null, updateBy: null, createTime: null, updateTime: null }
+const defaultForm = { id: null, companyId: null, companyName: null, projectName: null, projectDesc: null, projectAmount: null, projectStatus: null, nickName: null, createBy: null, updateBy: null, createTime: null, updateTime: null }
 export default {
   name: 'Project',
   components: { pagination, crudOperation, rrOperation, udOperation },
   mixins: [presenter(), header(), form(defaultForm), crud()],
   cruds() {
-    return CRUD({ title: 'project', url: 'api/merchant/project', idField: 'projectId', sort: 'projectId,desc', crudMethod: { ...crudProject }})
+    return CRUD({ title: 'project', url: 'api/merchant/project', idField: 'id', sort: 'id,desc', crudMethod: { ...crudProject }})
   },
   data() {
     return {
