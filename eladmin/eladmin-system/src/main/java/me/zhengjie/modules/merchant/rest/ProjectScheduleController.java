@@ -59,6 +59,11 @@ public class ProjectScheduleController {
     public ResponseEntity<PageResult<ProjectSchedule>> queryProjectSchedule(ProjectScheduleQueryCriteria criteria, Page<Object> page){
         return new ResponseEntity<>(projectScheduleService.queryAll(criteria,page),HttpStatus.OK);
     }
+    @GetMapping(value = "/details/{projectId}")
+    @ApiOperation("查询projectschedule详情")
+    public ResponseEntity<Object> queryProjectScheduleDetails(@PathVariable Long projectId){
+        return new ResponseEntity<>(projectScheduleService.details(projectId),HttpStatus.OK);
+    }
 
     @PostMapping
     @Log("新增projectschedule")

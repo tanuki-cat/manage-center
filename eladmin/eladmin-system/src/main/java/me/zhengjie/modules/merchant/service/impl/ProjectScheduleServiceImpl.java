@@ -15,7 +15,10 @@
 */
 package me.zhengjie.modules.merchant.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import me.zhengjie.modules.merchant.domain.ProjectSchedule;
+import me.zhengjie.modules.merchant.domain.vo.ScheduleVO;
 import me.zhengjie.utils.FileUtil;
 import lombok.RequiredArgsConstructor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -47,12 +50,23 @@ public class ProjectScheduleServiceImpl extends ServiceImpl<ProjectScheduleMappe
 
     @Override
     public PageResult<ProjectSchedule> queryAll(ProjectScheduleQueryCriteria criteria, Page<Object> page){
-        return PageUtil.toPage(projectScheduleMapper.findAll(criteria, page));
+        IPage<ProjectSchedule> page1 = new Page<>(page.getCurrent(),page.getSize());
+        LambdaQueryWrapper<ProjectSchedule> wrapper= new LambdaQueryWrapper<ProjectSchedule>().eq(ProjectSchedule::getProjectId,criteria.getProjectId());
+        return PageUtil.toPage(this.page(page1,wrapper));
     }
 
     @Override
     public List<ProjectSchedule> queryAll(ProjectScheduleQueryCriteria criteria){
         return projectScheduleMapper.findAll(criteria);
+    }
+
+    @Override
+    public ScheduleVO details(Long projectId) {
+        List<ProjectSchedule> projectSchedules = this.list(new LambdaQueryWrapper<ProjectSchedule>()
+                .eq(ProjectSchedule::getProjectId, projectId).orderByDesc(ProjectSchedule::getScheduleStatus));
+        ScheduleVO scheduleVO = new ScheduleVO();
+        scheduleVO.setStatus(projectSchedules.get(0).getScheduleStatus().getValue());
+        return scheduleVO;
     }
 
     @Override

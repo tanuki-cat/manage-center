@@ -53,12 +53,8 @@
         <el-table-column prop="projectDesc" label="项目描述" />
         <el-table-column prop="projectAmount" label="项目金额" />
         <el-table-column prop="projectStatus" label="项目状态" />
-        <el-table-column prop="nickName" label="创建者名字" />
-        <el-table-column prop="createBy" label="创建者" />
-        <el-table-column prop="updateBy" label="更新者" />
-        <el-table-column prop="createTime" label="创建日期" />
-        <el-table-column prop="updateTime" label="更新时间" />
-        <el-table-column v-if="checkPer(['admin','project:edit','project:del'])" label="操作" width="150px" align="center">
+        <el-table-column prop="nickName" label="创建者" />
+        <el-table-column v-if="checkPer(['admin','project:edit','project:del'])" label="操作" width="450px" align="center">
           <template slot-scope="scope">
             <udOperation
               :data="scope.row"
@@ -78,7 +74,7 @@ import crudProject from '@/api/merchant/project'
 import CRUD, { presenter, header, form, crud } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
-import udOperation from '@crud/UD.operation'
+import udOperation from '@crud/UD.project'
 import pagination from '@crud/Pagination'
 
 const defaultForm = { id: null, companyId: null, companyName: null, projectName: null, projectDesc: null, projectAmount: null, projectStatus: null, nickName: null, createBy: null, updateBy: null, createTime: null, updateTime: null }

@@ -35,6 +35,7 @@ import me.zhengjie.modules.merchant.enums.ScheduleEnum;
 **/
 @Data
 @Accessors(chain = true)
+
 @TableName("sys_project_schedule")
 public class ProjectSchedule extends BaseEntity implements Serializable {
 

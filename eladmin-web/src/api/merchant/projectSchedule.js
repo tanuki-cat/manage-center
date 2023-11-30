@@ -23,5 +23,11 @@ export function edit(data) {
     data
   })
 }
+export function details(id) {
+  return request({
+    url: 'api/merchant/projectSchedule/details/' + id,
+    method: 'get'
+  })
+}
 
-export default { add, edit, del }
+export default { add, edit, del,details }

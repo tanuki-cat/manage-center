@@ -17,12 +17,13 @@ package me.zhengjie.modules.merchant.service;
 
 import me.zhengjie.modules.merchant.domain.ProjectSchedule;
 import me.zhengjie.modules.merchant.domain.vo.ProjectScheduleQueryCriteria;
-import java.util.Map;
+
 import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import me.zhengjie.modules.merchant.domain.vo.ScheduleVO;
 import me.zhengjie.utils.PageResult;
 
 /**
@@ -47,6 +48,10 @@ public interface ProjectScheduleService extends IService<ProjectSchedule> {
     */
     List<ProjectSchedule> queryAll(ProjectScheduleQueryCriteria criteria);
 
+    /**
+     * 项目详情
+     */
+    ScheduleVO details(Long projectId);
     /**
     * 创建
     * @param resources /
