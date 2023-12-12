@@ -17,6 +17,7 @@ package me.zhengjie.modules.merchant.rest;
 
 import me.zhengjie.annotation.Log;
 import me.zhengjie.modules.merchant.domain.ProjectSchedule;
+import me.zhengjie.modules.merchant.domain.vo.ProjectScheduleVO;
 import me.zhengjie.modules.merchant.service.ProjectScheduleService;
 import me.zhengjie.modules.merchant.domain.vo.ProjectScheduleQueryCriteria;
 import lombok.RequiredArgsConstructor;
@@ -56,7 +57,7 @@ public class ProjectScheduleController {
     @Log("查询projectschedule")
     @ApiOperation("查询projectschedule")
     @PreAuthorize("@el.check('projectSchedule:list')")
-    public ResponseEntity<PageResult<ProjectSchedule>> queryProjectSchedule(ProjectScheduleQueryCriteria criteria, Page<Object> page){
+    public ResponseEntity<PageResult<ProjectScheduleVO>> queryProjectSchedule(ProjectScheduleQueryCriteria criteria, Page<Object> page){
         return new ResponseEntity<>(projectScheduleService.queryAll(criteria,page),HttpStatus.OK);
     }
     @GetMapping(value = "/details/{projectId}")

@@ -52,7 +52,7 @@
         <el-table-column prop="projectName" label="项目名称" />
         <el-table-column prop="projectDesc" label="项目描述" />
         <el-table-column prop="projectAmount" label="项目金额" />
-        <el-table-column prop="projectStatus" label="项目状态" />
+        <el-table-column prop="statusName" label="项目状态" />
         <el-table-column prop="nickName" label="创建者" />
         <el-table-column v-if="checkPer(['admin','project:edit','project:del'])" label="操作" width="450px" align="center">
           <template slot-scope="scope">

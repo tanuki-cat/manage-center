@@ -18,10 +18,9 @@ package me.zhengjie.modules.merchant.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import me.zhengjie.base.BaseEntity;
-import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.merchant.domain.Project;
 import me.zhengjie.modules.merchant.domain.ProjectSchedule;
-import me.zhengjie.modules.merchant.domain.VisitLog;
+import me.zhengjie.modules.merchant.domain.vo.ProjectVO;
 import me.zhengjie.modules.merchant.enums.ProjectEnums;
 import me.zhengjie.modules.merchant.enums.ScheduleEnum;
 import me.zhengjie.modules.merchant.service.ProjectScheduleService;
@@ -59,7 +58,7 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
     private final ProjectScheduleService projectScheduleService;
 
     @Override
-    public PageResult<Project> queryAll(ProjectQueryCriteria criteria, Page<Object> page) {
+    public PageResult<ProjectVO> queryAll(ProjectQueryCriteria criteria, Page<Object> page) {
         IPage<Project> page1 = new Page<>(page.getCurrent(), page.getSize());
         LambdaQueryWrapper<Project> wrapper = new LambdaQueryWrapper<>();
         //Long companyId is not null
@@ -69,7 +68,7 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
         if (StringUtils.isNotBlank(criteria.getUserName())) {
             wrapper.eq(BaseEntity::getCreateBy, criteria.getUserName());
         }
-        return PageUtil.toPage(this.page(page1, wrapper));
+        return PageUtil.toPage(this.page(page1, wrapper).convert(project ->new ProjectVO(project)));
     }
 
     @Override

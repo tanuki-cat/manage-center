@@ -23,6 +23,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import me.zhengjie.modules.merchant.domain.vo.ProjectVO;
 import me.zhengjie.utils.PageResult;
 
 /**
@@ -33,12 +34,13 @@ import me.zhengjie.utils.PageResult;
 public interface ProjectService extends IService<Project> {
 
     /**
-    * 查询数据分页
-    * @param criteria 条件
-    * @param page 分页参数
-    * @return PageResult
-    */
-    PageResult<Project> queryAll(ProjectQueryCriteria criteria, Page<Object> page);
+     * 查询数据分页
+     *
+     * @param criteria 条件
+     * @param page     分页参数
+     * @return PageResult
+     */
+    PageResult<ProjectVO> queryAll(ProjectQueryCriteria criteria, Page<Object> page);
 
     /**
     * 查询所有数据不分页

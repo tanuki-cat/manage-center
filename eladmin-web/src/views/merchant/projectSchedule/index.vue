@@ -4,29 +4,24 @@
     <div class="head-container">
       <!--如果想在工具栏加入更多按钮，可以使用插槽方式， slot = 'left' or 'right'-->
       <jdProject :dataList="dataList" ref="jdProject"/>
-      <crudOperation :permission="permission" />
+      <!-- <crudOperation :permission="permission" /> -->
       <!--表单组件-->
 
       <!--表格渲染-->
       <el-table ref="table" v-loading="crud.loading" :data="crud.data" size="small" style="width: 100%;" @selection-change="crud.selectionChangeHandler">
-        <el-table-column type="selection" width="55" />
-        <el-table-column prop="scheduleId" label="主键ID" />
-        <el-table-column prop="projectId" label="项目id" />
-        <el-table-column prop="scheduleStatus" label="进度状态" />
+        
+        <el-table-column prop="statusName" label="进度状态" />
         <el-table-column prop="assignUser" label="指派人" />
-        <el-table-column prop="nickName" label="创建者名字" />
-        <el-table-column prop="createBy" label="创建者" />
-        <el-table-column prop="updateBy" label="更新者" />
-        <el-table-column prop="createTime" label="创建日期" />
-        <el-table-column prop="updateTime" label="更新时间" />
-        <el-table-column v-if="checkPer(['admin','projectSchedule:edit','projectSchedule:del'])" label="操作" width="150px" align="center">
+        <el-table-column prop="nickName" label="创建者" />
+        <el-table-column prop="createTime" label="日期" />
+        <!-- <el-table-column v-if="checkPer(['admin','projectSchedule:edit','projectSchedule:del'])" label="操作" width="150px" align="center">
           <template slot-scope="scope">
             <udOperation
               :data="scope.row"
               :permission="permission"
             />
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
       <!--分页组件-->
       <pagination />

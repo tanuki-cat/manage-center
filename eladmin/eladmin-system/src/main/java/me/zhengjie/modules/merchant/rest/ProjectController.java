@@ -17,6 +17,7 @@ package me.zhengjie.modules.merchant.rest;
 
 import me.zhengjie.annotation.Log;
 import me.zhengjie.modules.merchant.domain.Project;
+import me.zhengjie.modules.merchant.domain.vo.ProjectVO;
 import me.zhengjie.modules.merchant.service.ProjectService;
 import me.zhengjie.modules.merchant.domain.vo.ProjectQueryCriteria;
 import lombok.RequiredArgsConstructor;
@@ -60,7 +61,7 @@ public class ProjectController {
     @Log("查询project")
     @ApiOperation("查询project")
     @PreAuthorize("@el.check('project:list')")
-    public ResponseEntity<PageResult<Project>> queryProject(ProjectQueryCriteria criteria, Page<Object> page){
+    public ResponseEntity<PageResult<ProjectVO>> queryProject(ProjectQueryCriteria criteria, Page<Object> page){
         return new ResponseEntity<>(projectService.queryAll(criteria,page),HttpStatus.OK);
     }
 
