@@ -58,6 +58,9 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
         if (Strings.isNotBlank(criteria.getPhone())) {
             queryWrapper.or().eq(Company::getUserMobile, criteria.getPhone());
         }
+        if (Strings.isNotBlank(criteria.getCreateBy())) {
+            queryWrapper.eq(Company::getCreateBy, criteria.getCreateBy());
+        }
         IPage<Company> companyIPage = this.page(companyPage, queryWrapper);
         return PageUtil.toPage(companyIPage);
     }

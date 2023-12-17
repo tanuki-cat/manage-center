@@ -29,4 +29,6 @@ public class CompanyQueryCriteria{
     private String keywords;
     //联系人电话搜索
     private String phone;
+    //创建人
+    private String createBy;
 }

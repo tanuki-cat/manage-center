@@ -14,6 +14,7 @@ package me.zhengjie.modules.merchant.rest;/*
 *  limitations under the License.
 */
 
+import me.zhengjie.annotation.CheckCreate;
 import me.zhengjie.annotation.Log;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
@@ -57,6 +58,7 @@ public class CompanyController {
     @Log("查询company")
     @ApiOperation("查询company")
     @PreAuthorize("@el.check('company:list')")
+    @CheckCreate(roles = {"业务员"},clazz = CompanyQueryCriteria.class,filedMethod = {"setCreateBy"})
     public ResponseEntity<PageResult<Company>> queryCompany(CompanyQueryCriteria criteria, Page<Object> page){
         return new ResponseEntity<>(companyService.queryAll(criteria,page),HttpStatus.OK);
     }

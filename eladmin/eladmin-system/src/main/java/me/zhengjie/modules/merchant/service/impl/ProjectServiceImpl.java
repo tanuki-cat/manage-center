@@ -32,6 +32,7 @@ import me.zhengjie.modules.merchant.service.ProjectService;
 import me.zhengjie.modules.merchant.domain.vo.ProjectQueryCriteria;
 import me.zhengjie.modules.merchant.mapper.ProjectMapper;
 import me.zhengjie.utils.StringUtils;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import me.zhengjie.utils.PageUtil;
@@ -67,6 +68,9 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
         }
         if (StringUtils.isNotBlank(criteria.getUserName())) {
             wrapper.eq(BaseEntity::getCreateBy, criteria.getUserName());
+        }
+        if (Strings.isNotBlank(criteria.getCreateBy())) {
+            wrapper.eq(Project::getCreateBy, criteria.getCreateBy());
         }
         return PageUtil.toPage(this.page(page1, wrapper).convert(project ->new ProjectVO(project)));
     }
