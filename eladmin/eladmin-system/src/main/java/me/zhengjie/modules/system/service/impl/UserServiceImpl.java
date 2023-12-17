@@ -15,6 +15,7 @@
  */
 package me.zhengjie.modules.system.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -210,6 +211,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Transactional(rollbackFor = Exception.class)
     public void resetPwd(Set<Long> ids, String pwd) {
         userMapper.resetPwd(ids, pwd);
+    }
+
+    @Override
+    public List<User> getRoleUserList(Integer roleId) {
+        return userMapper.getRoleUserList(roleId);
     }
 
     @Override

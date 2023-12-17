@@ -8,6 +8,7 @@
       <crudOperation :permission="permission" />
       <!--表单组件-->
       <el-dialog :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="500px">
+        
         <el-form ref="form" :model="form" :rules="rules" size="small" label-width="80px">
           <el-form-item label="公司名称">
             <el-input v-model="form.companyName" style="width: 370px;" />
@@ -45,6 +46,39 @@
           <el-button :loading="crud.status.cu === 2" type="primary" @click="crud.submitCU">确认</el-button>
         </div>
       </el-dialog>
+
+      <!--派发任务-->
+      <el-dialog :close-on-click-modal="false" :visible.sync="userVisible" width="520px" :title="派发任务">
+        <el-form ref="form" :model="visitFrom" :rules="visitRules" size="small" label-width="100px">
+          <el-form-item label="公司名称">
+            <el-input v-model="userProjectFrom.companyName" style="width: 350px;" disabled />
+          </el-form-item>
+          <el-form-item label="项目名称">
+            <el-input v-model="userProjectFrom.projectName" style="width: 350px;" disabled />
+          </el-form-item>
+        
+          <el-form-item label="指派人员">
+              <el-select
+                v-model="userProjectFrom.assignUser"
+                style="width: 178px"
+                placeholder="请选择"
+               
+              >
+                <el-option
+                  v-for="item in userList"
+                  :key="item.nickName"
+                  :label="item.nickName"
+                  :value="item.id"
+                  @click.native="selectUser(item)"
+                />
+              </el-select>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button type="text" @click="visitClose()">取消</el-button>
+          <el-button :loading="crud.status.cu === 2" type="primary" @click="$event => addVisit()">确认</el-button>
+        </div>
+      </el-dialog>
       <!--表格渲染-->
       <el-table ref="table" v-loading="crud.loading" :data="crud.data" size="small" style="width: 100%;" @selection-change="crud.selectionChangeHandler">
         <el-table-column type="selection" width="55" />
@@ -59,6 +93,7 @@
             <udOperation
               :data="scope.row"
               :permission="permission"
+              @addProject="getUserProject"
             />
           </template>
         </el-table-column>
@@ -76,6 +111,7 @@ import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.project'
 import pagination from '@crud/Pagination'
+import crudUser from '@/api/system/user'
 
 const defaultForm = { id: null, companyId: null, companyName: null, projectName: null, projectDesc: null, projectAmount: null, projectStatus: null, nickName: null, createBy: null, updateBy: null, createTime: null, updateTime: null }
 export default {
@@ -87,6 +123,16 @@ export default {
   },
   data() {
     return {
+      userList:[],
+      userVisible:false,
+      userProjectFrom: {
+        companyId: 0,
+        companyName: '',
+        projectId:'',
+        projectName:'',
+        assignUser:[],
+        assignUserId:0
+      },
       permission: {
         add: ['admin', 'project:add'],
         edit: ['admin', 'project:edit'],
@@ -99,6 +145,32 @@ export default {
     // 钩子：在获取表格数据之前执行，false 则代表不获取数据
     [CRUD.HOOK.beforeRefresh]() {
       return true
+    },
+    visitClose() {
+      this.userVisible = false
+    },
+    getUserProject(data) {
+      console.log(data)
+      this.userProjectFrom.companyId = data.companyId
+      this.userProjectFrom.companyName = data.companyName
+      this.userProjectFrom.projectId = data.id
+      this.userProjectFrom.projectName =data.projectName
+      this.userProjectFrom.assignUser=''
+      this.userProjectFrom.assignUserId=0
+      this.userVisible = true    
+      crudUser.roleList().then(res => {
+        console.log(res)
+        this.userList=res
+      })
+    },
+    selectUser(data) {
+      this.userProjectFrom.assignUserId =data.id
+      this.userProjectFrom.assignUser =data.nickName
+   
+    },
+    deleteTag(){
+      this.userProjectFrom.assignUser = ''
+      this.userProjectFrom.assignUserId =0
     }
   }
 }

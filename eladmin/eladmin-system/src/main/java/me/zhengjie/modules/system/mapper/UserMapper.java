@@ -61,4 +61,5 @@ public interface UserMapper extends BaseMapper<User> {
     int countByRoles(@Param("roleIds") Set<Long> roleIds);
 
     void resetPwd(@Param("userIds") Set<Long> userIds, @Param("pwd") String pwd);
+    List<User> getRoleUserList(@Param("roleId") Integer roleId);
 }

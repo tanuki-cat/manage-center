@@ -10,6 +10,7 @@ import me.zhengjie.modules.merchant.enums.ScheduleEnum;
 @Data
 public class ProjectVO extends Project {
     private String statusName;
+    private  Integer scheduleStatus;
 
     public ProjectVO(Project entity){
         BeanUtil.copyProperties(entity,this, CopyOptions.create().setIgnoreNullValue(true));

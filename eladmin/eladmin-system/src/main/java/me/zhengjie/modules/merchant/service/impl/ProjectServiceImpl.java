@@ -72,7 +72,12 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
         if (Strings.isNotBlank(criteria.getCreateBy())) {
             wrapper.eq(Project::getCreateBy, criteria.getCreateBy());
         }
-        return PageUtil.toPage(this.page(page1, wrapper).convert(project ->new ProjectVO(project)));
+        return PageUtil.toPage(this.page(page1, wrapper).convert(project ->vo(project)));
+    }
+    protected ProjectVO vo(Project project){
+        ProjectVO projectVO = new ProjectVO(project);
+        projectVO.setScheduleStatus(projectScheduleService.details(project.getId()).getStatus());
+        return projectVO;
     }
 
     @Override

@@ -162,6 +162,24 @@
         </foreach>
     </select>
 
+    <select id="getRoleUserList" resultMap="BaseResultMap">
+        select u.*,
+        <include refid="Job_Column_List"/>,
+        <include refid="Role_Column_List"/>
+        from (
+        select
+        <include refid="Base_Column_List"/>
+        from sys_user u
+        left join sys_dept d on u.dept_id = d.dept_id
+
+        ) u
+        left join sys_users_jobs suj on u.user_user_id = suj.user_id
+        left join sys_job j on suj.job_id = j.job_id
+        left join sys_users_roles sur on suj.user_id = sur.user_id
+        left join sys_role r on sur.role_id = r.role_id
+        where r.role_id =#{roleId}
+        order by u.user_user_id desc
+    </select>
     <select id="countByRoles" resultType="int">
         SELECT count(*) FROM sys_user u, sys_users_roles r
         WHERE u.user_id = r.user_id AND r.role_id in
@@ -169,7 +187,6 @@
             #{roleId}
         </foreach>
     </select>
-
     <update id="resetPwd">
         update sys_user set password = #{pwd}
         where user_id in

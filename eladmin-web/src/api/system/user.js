@@ -64,6 +64,11 @@ export function updateEmail(form) {
     data
   })
 }
-
-export default { add, edit, del, resetPwd }
+export function roleList(){
+  return request({
+    url: 'api/users/roleList',
+    method: 'get'    
+  })
+}
+export default { add, edit, del, resetPwd,roleList }
 

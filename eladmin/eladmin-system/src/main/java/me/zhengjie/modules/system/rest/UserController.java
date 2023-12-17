@@ -194,6 +194,13 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Log("根据用户角色查询列表")
+    @ApiOperation("根据用户角色查询列表")
+    @GetMapping(value = "/roleList")
+    public ResponseEntity<Object> roleList(){
+        return new ResponseEntity<>(userService.getRoleUserList(4),HttpStatus.OK);
+    }
+
     /**
      * 如果当前用户的角色级别低于创建用户的角色级别，则抛出权限不足的错误
      * @param resources /
