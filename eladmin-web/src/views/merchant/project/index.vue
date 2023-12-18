@@ -49,7 +49,7 @@
 
       <!--派发任务-->
       <el-dialog :close-on-click-modal="false" :visible.sync="userVisible" width="520px" :title="派发任务">
-        <el-form ref="form" :model="visitFrom" :rules="visitRules" size="small" label-width="100px">
+        <el-form ref="form" :model="userProjectFrom" :rules="visitRules" size="small" label-width="100px">
           <el-form-item label="公司名称">
             <el-input v-model="userProjectFrom.companyName" style="width: 350px;" disabled />
           </el-form-item>
@@ -62,7 +62,7 @@
                 v-model="userProjectFrom.assignUser"
                 style="width: 178px"
                 placeholder="请选择"
-               
+                prop="content"
               >
                 <el-option
                   v-for="item in userList"
@@ -76,7 +76,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button type="text" @click="visitClose()">取消</el-button>
-          <el-button :loading="crud.status.cu === 2" type="primary" @click="$event => addVisit()">确认</el-button>
+          <el-button :loading="crud.status.cu === 2" type="primary" @click="$event => addUserProject()">确认</el-button>
         </div>
       </el-dialog>
       <!--表格渲染-->
@@ -112,6 +112,7 @@ import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.project'
 import pagination from '@crud/Pagination'
 import crudUser from '@/api/system/user'
+import projectSchedule from '@/api/merchant/projectSchedule'
 
 const defaultForm = { id: null, companyId: null, companyName: null, projectName: null, projectDesc: null, projectAmount: null, projectStatus: null, nickName: null, createBy: null, updateBy: null, createTime: null, updateTime: null }
 export default {
@@ -139,7 +140,13 @@ export default {
         del: ['admin', 'project:del']
       },
       rules: {
-      }    }
+      },
+      visitRules: {
+        content: [
+          { required: true, message: '指派人员不能为空', trigger: 'blur' }
+        ]
+      }
+    }
   },
   methods: {
     // 钩子：在获取表格数据之前执行，false 则代表不获取数据
@@ -171,6 +178,24 @@ export default {
     deleteTag(){
       this.userProjectFrom.assignUser = ''
       this.userProjectFrom.assignUserId =0
+    },
+    addUserProject(){
+      if(this.userProjectFrom.assignUserId==0){
+        this.$message({
+          message: '请选择指派人员',
+          type: 'warning'
+        })
+        return false
+      }
+   
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          projectSchedule.assign(this.userProjectFrom).then(() => {
+            this.crud.notify('添加成功', 'success')
+            this.userVisible = false
+          })
+        }
+      })
     }
   }
 }

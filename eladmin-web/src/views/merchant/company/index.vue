@@ -35,6 +35,7 @@
           <el-form-item label="联系人手机">
             <el-input v-model="form.userMobile" style="width: 350px;" maxlength="11" />
           </el-form-item>
+         
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button type="text" @click="crud.cancelCU">取消</el-button>
