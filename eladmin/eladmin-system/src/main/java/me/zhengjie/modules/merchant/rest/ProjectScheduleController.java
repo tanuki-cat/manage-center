@@ -18,10 +18,14 @@ package me.zhengjie.modules.merchant.rest;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.modules.merchant.domain.ProjectSchedule;
 import me.zhengjie.modules.merchant.domain.vo.ProjectScheduleVO;
+import me.zhengjie.modules.merchant.domain.vo.ScheduleCommand;
 import me.zhengjie.modules.merchant.service.ProjectScheduleService;
 import me.zhengjie.modules.merchant.domain.vo.ProjectScheduleQueryCriteria;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
+
+import me.zhengjie.modules.system.service.UserService;
+import me.zhengjie.utils.SecurityUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -44,7 +48,7 @@ import me.zhengjie.utils.PageResult;
 public class ProjectScheduleController {
 
     private final ProjectScheduleService projectScheduleService;
-
+    private final UserService userService;
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
@@ -91,5 +95,15 @@ public class ProjectScheduleController {
     public ResponseEntity<Object> deleteProjectSchedule(@RequestBody List<Long> ids) {
         projectScheduleService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+    @Log("派发项目")
+    @ApiOperation("派发项目")
+    @PostMapping(value = "/assign")
+    public ResponseEntity<Object> assignProject(@RequestBody ScheduleCommand resources){
+        resources.setNickName(userService.findById(SecurityUtils.getCurrentUserId()).getNickName());
+        projectScheduleService.assign(resources);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

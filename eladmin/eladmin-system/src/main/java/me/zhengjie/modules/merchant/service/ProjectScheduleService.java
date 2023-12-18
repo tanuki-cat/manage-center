@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import me.zhengjie.modules.merchant.domain.vo.ProjectScheduleVO;
+import me.zhengjie.modules.merchant.domain.vo.ScheduleCommand;
 import me.zhengjie.modules.merchant.domain.vo.ScheduleVO;
 import me.zhengjie.utils.PageResult;
 
@@ -79,4 +80,9 @@ public interface ProjectScheduleService extends IService<ProjectSchedule> {
     * @throws IOException /
     */
     void download(List<ProjectSchedule> all, HttpServletResponse response) throws IOException;
+
+    /**
+     * 指派项目经理
+     */
+    void assign(ScheduleCommand command);
 }

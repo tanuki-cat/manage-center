@@ -19,7 +19,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import me.zhengjie.modules.merchant.domain.ProjectSchedule;
 import me.zhengjie.modules.merchant.domain.vo.ProjectScheduleVO;
+import me.zhengjie.modules.merchant.domain.vo.ScheduleCommand;
 import me.zhengjie.modules.merchant.domain.vo.ScheduleVO;
+import me.zhengjie.modules.merchant.enums.ScheduleEnum;
 import me.zhengjie.utils.FileUtil;
 import lombok.RequiredArgsConstructor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -106,5 +108,16 @@ public class ProjectScheduleServiceImpl extends ServiceImpl<ProjectScheduleMappe
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);
+    }
+
+    @Override
+    public void assign(ScheduleCommand command) {
+        ProjectSchedule schedule = new ProjectSchedule()
+                .setAssignUser(command.getAssignUser())
+                .setAssignUserId(command.getAssignUserId())
+                .setProjectId(command.getProjectId())
+                .setScheduleStatus(ScheduleEnum.TEAMLEADER)
+                .setNickName(command.getNickName());
+        this.save(schedule);
     }
 }
