@@ -17,6 +17,7 @@ package me.zhengjie.modules.merchant.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import me.zhengjie.base.BaseEntity;
 import me.zhengjie.modules.merchant.domain.Project;
 import me.zhengjie.modules.merchant.domain.ProjectSchedule;
@@ -37,12 +38,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import me.zhengjie.utils.PageUtil;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.io.IOException;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 
 import me.zhengjie.utils.PageResult;
 
@@ -72,7 +71,14 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
         if (Strings.isNotBlank(criteria.getCreateBy())) {
             wrapper.eq(Project::getCreateBy, criteria.getCreateBy());
         }
-        return PageUtil.toPage(this.page(page1, wrapper).convert(project ->vo(project)));
+        if (Objects.nonNull(criteria.getAssignUserId()) && criteria.getAssignUserId() > 0) {
+            //当前角色为项目经理时
+            List<ProjectSchedule> schedules = this.projectScheduleService.list(Wrappers.<ProjectSchedule>query().lambda()
+                    .eq(ProjectSchedule::getAssignUserId, criteria.getAssignUserId()));
+            List<Long> projectIds = schedules.stream().map(ProjectSchedule::getProjectId).toList();
+            wrapper.in(Project::getId, projectIds);
+        }
+        return PageUtil.toPage(this.page(page1, wrapper).convert(project -> vo(project)));
     }
     protected ProjectVO vo(Project project){
         ProjectVO projectVO = new ProjectVO(project);

@@ -26,4 +26,6 @@ public class ProjectQueryCriteria{
     private Long companyId;
     private String userName;
     private String createBy;
+    private String assignUser;
+    private Long assignUserId;
 }
