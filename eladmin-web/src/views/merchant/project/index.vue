@@ -193,6 +193,8 @@ export default {
           projectSchedule.assign(this.userProjectFrom).then(() => {
             this.crud.notify('添加成功', 'success')
             this.userVisible = false
+            //刷新表格
+            this.crud.refresh()
           })
         }
       })
