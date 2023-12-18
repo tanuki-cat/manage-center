@@ -51,6 +51,8 @@ public class ProjectSchedule extends BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "指派人")
     private String assignUser;
+    @ApiModelProperty(value = "指派人Id")
+    private String assignUserId;
 
     @ApiModelProperty(value = "创建者名字")
     private String nickName;
