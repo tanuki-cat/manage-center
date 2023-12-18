@@ -82,11 +82,13 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
             throw new BadRequestException("公司名称已存在");
         }
         save(resources);
-        resources.getCompanyBaseInfoExt().setCompanyId(resources.getId());
-        resources.getCompanyBaseInfoExt().setCompanyId(resources.getId());
-        CompanyInfoExtDto companyInfoExtDto = new CompanyInfoExtDto();
-        BeanUtils.copyProperties(resources, companyInfoExtDto);
-        this.companyInfoExtService.create(companyInfoExtDto);
+        if (resources.getCompanyBaseInfoExt() != null && resources.getCompanyBusinessInfoExt() != null) {
+            resources.getCompanyBaseInfoExt().setCompanyId(resources.getId());
+            resources.getCompanyBaseInfoExt().setCompanyId(resources.getId());
+            CompanyInfoExtDto companyInfoExtDto = new CompanyInfoExtDto();
+            BeanUtils.copyProperties(resources, companyInfoExtDto);
+            this.companyInfoExtService.create(companyInfoExtDto);
+        }
     }
 
     @Override
