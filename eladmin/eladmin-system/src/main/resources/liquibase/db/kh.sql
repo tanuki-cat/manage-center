@@ -62,3 +62,8 @@ CREATE TABLE `sys_project_schedule`
         `update_time`  datetime      DEFAULT NULL COMMENT '更新时间',
         PRIMARY KEY (`schedule_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='项目进度管理';
+
+-- changeset Joy:20231218_2045
+-- comment sys_project_schedule表添加字段
+ALTER TABLE `sys_project_schedule`
+    ADD COLUMN `assign_user_id` bigint(20) NULL COMMENT '指派人员Id' AFTER `assign_user`;
