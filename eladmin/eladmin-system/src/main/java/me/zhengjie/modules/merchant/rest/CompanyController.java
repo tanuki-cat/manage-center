@@ -14,6 +14,8 @@ package me.zhengjie.modules.merchant.rest;/*
 *  limitations under the License.
 */
 
+import com.alibaba.fastjson.JSONArray;
+import me.zhengjie.annotation.AnonymousAccess;
 import me.zhengjie.annotation.CheckCreate;
 import me.zhengjie.annotation.Log;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ import java.util.List;
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.merchant.domain.Company;
 import me.zhengjie.modules.merchant.domain.vo.CompanyQueryCriteria;
+import me.zhengjie.modules.merchant.enums.CompanyTypeEnum;
 import me.zhengjie.modules.merchant.service.CompanyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +33,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
 import java.io.IOException;
+import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import me.zhengjie.utils.PageResult;
@@ -91,5 +95,12 @@ public class CompanyController {
     public ResponseEntity<Object> deleteCompany(@RequestBody List<Long> ids) {
         companyService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/enumList")
+    @ApiOperation("枚举列表")
+    @AnonymousAccess
+    public ResponseEntity<JSONArray> enumList() {
+        return new ResponseEntity<>(CompanyTypeEnum.listJson(),HttpStatus.OK);
     }
 }

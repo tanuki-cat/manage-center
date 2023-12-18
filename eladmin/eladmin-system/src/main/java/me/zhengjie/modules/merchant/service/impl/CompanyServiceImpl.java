@@ -17,14 +17,17 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.merchant.domain.Company;
+import me.zhengjie.modules.merchant.domain.dto.CompanyInfoExtDto;
 import me.zhengjie.modules.merchant.domain.vo.CompanyQueryCriteria;
 import me.zhengjie.modules.merchant.mapper.CompanyMapper;
+import me.zhengjie.modules.merchant.service.CompanyInfoExtService;
 import me.zhengjie.modules.merchant.service.CompanyService;
 import me.zhengjie.utils.FileUtil;
 import lombok.RequiredArgsConstructor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import me.zhengjie.utils.PageUtil;
@@ -45,6 +48,7 @@ import me.zhengjie.utils.PageResult;
 public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> implements CompanyService {
 
     private final CompanyMapper companyMapper;
+    private final CompanyInfoExtService companyInfoExtService;
 
     @Override
     public PageResult<Company> queryAll(CompanyQueryCriteria criteria, Page<Object> page){
@@ -78,6 +82,11 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
             throw new BadRequestException("公司名称已存在");
         }
         save(resources);
+        resources.getCompanyBaseInfoExt().setCompanyId(resources.getId());
+        resources.getCompanyBaseInfoExt().setCompanyId(resources.getId());
+        CompanyInfoExtDto companyInfoExtDto = new CompanyInfoExtDto();
+        BeanUtils.copyProperties(resources, companyInfoExtDto);
+        this.companyInfoExtService.create(companyInfoExtDto);
     }
 
     @Override
