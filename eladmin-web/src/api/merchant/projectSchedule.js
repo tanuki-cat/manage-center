@@ -29,5 +29,12 @@ export function details(id) {
     method: 'get'
   })
 }
+export function assign(data){
+  return request({
+    url: 'api/merchant/projectSchedule/assign',
+    method: 'post',
+    data
+  })
+}
 
-export default { add, edit, del,details }
+export default { add, edit, del,details,assign }
