@@ -16,7 +16,9 @@ package me.zhengjie.modules.merchant.domain;/*
 
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.core.conditions.update.Update;
+import io.swagger.annotations.Api;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import io.swagger.annotations.ApiModelProperty;
@@ -52,6 +54,14 @@ public class Company extends BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "公司联系人移动电话")
     private String userMobile;
+
+
+    @TableField(exist = false)
+    @ApiModelProperty(value = "公司基础信息扩展表")
+    private CompanyBaseInfoExt companyBaseInfoExt;
+    @TableField(exist = false)
+    @ApiModelProperty(value = "公司业务信息扩展表")
+    private CompanyBusinessInfoExt companyBusinessInfoExt;
 
     public void copy(Company source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
