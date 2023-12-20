@@ -51,26 +51,31 @@ public class CheckCreatorAspect {
                 if (checkClass.isInstance(arg)) {
                     for (String method : checkCreate.filedMethod()) {
                         if (method.equals("setAssignUserId")) {
-                            Method setMethod = checkClass.getDeclaredMethod(method , Long.class);
+                            Method setMethod = checkClass.getDeclaredMethod(method , String.class);
                             setMethod.invoke(arg, currentUserId);
                             return pjp.proceed();
                         }
                     }
                 }
             }
-        }
-        for (String checkRole : checkRoles) {
-            if (roleNames.contains(checkRole)) {
-                for(Object arg: args) {
-                    if (checkClass.isInstance(arg)) {
-                        for (String method : checkCreate.filedMethod()) {
-                            Method setCreatedBy = checkClass.getDeclaredMethod(method , String.class);
-                            setCreatedBy.invoke(arg, currentUserName);
+        } else {
+            for (String checkRole : checkRoles) {
+                if (roleNames.contains(checkRole)) {
+                    for (Object arg : args) {
+                        if (checkClass.isInstance(arg)) {
+                            for (String method : checkCreate.filedMethod()) {
+                                if (method.equals("setAssignUserId")) {
+                                    continue;
+                                }
+                                Method setMethod = checkClass.getDeclaredMethod(method, String.class);
+                                setMethod.invoke(arg, currentUserName);
+                            }
+                            return pjp.proceed();
                         }
-                        return pjp.proceed();
                     }
                 }
             }
+            return pjp.proceed();
         }
         return pjp.proceed();
     }

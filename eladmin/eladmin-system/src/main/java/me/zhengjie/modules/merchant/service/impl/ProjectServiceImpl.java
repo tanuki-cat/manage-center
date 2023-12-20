@@ -71,7 +71,7 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
         if (Strings.isNotBlank(criteria.getCreateBy())) {
             wrapper.eq(Project::getCreateBy, criteria.getCreateBy());
         }
-        if (Objects.nonNull(criteria.getAssignUserId()) && criteria.getAssignUserId() > 0) {
+        if (Objects.nonNull(criteria.getAssignUserId()) && Long.parseLong(criteria.getAssignUserId()) > 0) {
             //当前角色为项目经理时
             List<ProjectSchedule> schedules = this.projectScheduleService.list(Wrappers.<ProjectSchedule>query().lambda()
                     .eq(ProjectSchedule::getAssignUserId, criteria.getAssignUserId()));

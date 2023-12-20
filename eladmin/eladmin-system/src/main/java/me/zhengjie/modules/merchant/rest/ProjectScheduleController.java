@@ -101,6 +101,7 @@ public class ProjectScheduleController {
     @Log("派发项目")
     @ApiOperation("派发项目")
     @PostMapping(value = "/assign")
+    @PreAuthorize("@el.check('projectSchedule:assign')")
     public ResponseEntity<Object> assignProject(@RequestBody ScheduleCommand resources){
         resources.setNickName(userService.findById(SecurityUtils.getCurrentUserId()).getNickName());
         projectScheduleService.assign(resources);
