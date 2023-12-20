@@ -72,7 +72,8 @@ export default {
       crudProjectSchedule.details(data).then(res=>{
         console.log(res)
         this.dataList=res;
-        this.$refs.jdProject.getSchedule((res.status+1))
+        const status = res.status>1?res.status:res.status+1
+        this.$refs.jdProject.getSchedule(status)
       })      
     }
   }

@@ -67,3 +67,14 @@ CREATE TABLE `sys_project_schedule`
 -- comment sys_project_schedule表添加字段
 ALTER TABLE `sys_project_schedule`
     ADD COLUMN `assign_user_id` bigint(20) NULL COMMENT '指派人员Id' AFTER `assign_user`;
+
+-- changeset Joy:20231220_1946
+-- comment sys_project_schedule表添加字段
+ALTER TABLE `sys_project`
+    ADD COLUMN `user_name` varchar(255) NULL COMMENT '公司联系人' AFTER `company_name`,
+    ADD COLUMN `user_mobile` varchar(11) NULL COMMENT '公司联系人移动电话' AFTER `user_name`,
+    ADD COLUMN `amount_percent` varchar(255) NULL COMMENT '金额百分比' AFTER `user_mobile`;
+
+ALTER TABLE `sys_project_schedule`
+    ADD COLUMN `amount_percent` varchar(255) NULL COMMENT '金额百分比' AFTER `assign_user_id`,
+    ADD COLUMN `schedule_desc` varchar(255) NULL COMMENT '进度描述' AFTER `amount_percent`;

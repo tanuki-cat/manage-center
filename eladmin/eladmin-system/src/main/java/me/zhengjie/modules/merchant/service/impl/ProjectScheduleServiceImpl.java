@@ -120,4 +120,24 @@ public class ProjectScheduleServiceImpl extends ServiceImpl<ProjectScheduleMappe
                 .setNickName(command.getNickName());
         this.save(schedule);
     }
+
+    @Override
+    public void setManager(ScheduleCommand command) {
+        ProjectSchedule schedule = new ProjectSchedule()
+                .setProjectId(command.getProjectId())
+                .setScheduleStatus(ScheduleEnum.MANAGER)
+                .setScheduleDesc(command.getScheduleDesc())
+                .setNickName(command.getNickName());
+        this.save(schedule);
+    }
+
+    @Override
+    public void transfer(ScheduleCommand command) {
+        ProjectSchedule schedule = new ProjectSchedule()
+                .setProjectId(command.getProjectId())
+                .setScheduleStatus(ScheduleEnum.FINANCE)
+                .setNickName(command.getNickName());
+        this.save(schedule);
+
+    }
 }

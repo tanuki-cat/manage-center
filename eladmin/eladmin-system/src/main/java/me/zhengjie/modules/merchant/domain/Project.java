@@ -15,6 +15,7 @@
 */
 package me.zhengjie.modules.merchant.domain;
 
+import io.swagger.annotations.Api;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import io.swagger.annotations.ApiModelProperty;
@@ -60,6 +61,13 @@ public class Project extends BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "创建者名字")
     private String nickName;
+    @ApiModelProperty(value = "联系人")
+    private String userName;
+    @ApiModelProperty(value = "联系电话")
+    private String userMobile;
+    @ApiModelProperty(value = "金额百分比")
+    private String amountPercent;
+
 
 
 

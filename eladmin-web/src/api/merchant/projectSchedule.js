@@ -36,5 +36,19 @@ export function assign(data){
     data
   })
 }
+export function manager(data){
+  return request({
+    url: 'api/merchant/projectSchedule/manager',
+    method: 'post',
+    data
+  })
+}
+export function transfer(data){
+  return request({
+    url: 'api/merchant/projectSchedule/transfer',
+    method: 'post',
+    data
+  })
+}
 
-export default { add, edit, del,details,assign }
+export default { add, edit, del,details,assign,manager,transfer }

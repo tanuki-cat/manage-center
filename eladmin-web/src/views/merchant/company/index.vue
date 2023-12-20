@@ -66,8 +66,17 @@
           <el-form-item label="项目名称">
             <el-input v-model="projectFrom.projectName" style="width: 350px;" />
           </el-form-item>
+          <el-form-item label="联系人">
+            <el-input v-model="projectFrom.userName" style="width: 350px;" />
+          </el-form-item>
+          <el-form-item label="联系人电话">
+            <el-input v-model="projectFrom.userMobile" style="width: 350px;" maxlength="11" />
+          </el-form-item>
           <el-form-item label="项目金额">
             <el-input v-model="projectFrom.projectAmount" style="width: 350px;" />
+          </el-form-item>
+          <el-form-item label="金额百分比">
+            <el-input v-model="projectFrom.amountPercent" style="width: 350px;" />
           </el-form-item>
           <el-form-item label="项目描述" prop="projectDesc">
             <el-input v-model="projectFrom.projectDesc" style="width: 350px;" type="textarea" />
@@ -137,7 +146,10 @@ export default {
         companyName: '',
         projectName: '',
         projectDesc: '',
-        projectAmount: 0
+        projectAmount: 0,
+        userName: '',
+        userMobile: '',
+        amountPercent: ''
       },
       rules: {
         name: [

@@ -56,7 +56,10 @@ public class ProjectSchedule extends BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "创建者名字")
     private String nickName;
-
+    @ApiModelProperty(value = "金额百分比")
+    private String amountPercent;
+    @ApiModelProperty(value = "进度描述")
+    private String scheduleDesc;
 
 
     public void copy(ProjectSchedule source){

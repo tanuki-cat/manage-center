@@ -75,6 +75,7 @@ public class ProjectScheduleController {
     @ApiOperation("新增projectschedule")
     @PreAuthorize("@el.check('projectSchedule:add')")
     public ResponseEntity<Object> createProjectSchedule(@Validated @RequestBody ProjectSchedule resources){
+        resources.setNickName(userService.findById(SecurityUtils.getCurrentUserId()).getNickName());
         projectScheduleService.create(resources);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -107,4 +108,23 @@ public class ProjectScheduleController {
         projectScheduleService.assign(resources);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
+    @Log("项目经理填写")
+    @ApiOperation("项目经理填写")
+    @PostMapping(value = "/manager")
+    public ResponseEntity<Object> managerProject(@RequestBody ScheduleCommand resources){
+        resources.setNickName(userService.findById(SecurityUtils.getCurrentUserId()).getNickName());
+        projectScheduleService.setManager(resources);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+    @Log("转交业务人员")
+    @ApiOperation("转交业务人员")
+    @PostMapping(value = "/transfer")
+    public ResponseEntity<Object> transferProject(@RequestBody ScheduleCommand resources){
+        resources.setNickName(userService.findById(SecurityUtils.getCurrentUserId()).getNickName());
+        projectScheduleService.transfer(resources);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+
 }

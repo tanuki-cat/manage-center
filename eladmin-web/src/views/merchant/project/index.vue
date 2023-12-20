@@ -79,13 +79,36 @@
           <el-button :loading="crud.status.cu === 2" type="primary" @click="$event => addUserProject()">确认</el-button>
         </div>
       </el-dialog>
+        <!--项目经理填写-->
+        <el-dialog :close-on-click-modal="false" :visible.sync="projectVisible" width="520px" :title="派发任务">
+        <el-form ref="form" :model="projectFrom" :rules="rules" size="small" label-width="100px">
+          <el-form-item label="公司名称">
+            <el-input v-model="projectFrom.companyName" style="width: 350px;" disabled />
+          </el-form-item>
+          <el-form-item label="项目名称">
+            <el-input v-model="projectFrom.projectName" style="width: 350px;" disabled />
+          </el-form-item>
+          <el-form-item label="项目进度" prop="scheduleDesc">
+            <el-input v-model="projectFrom.scheduleDesc" style="width: 350px;" />
+          </el-form-item>      
+          
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button type="text" @click="projectClose()">取消</el-button>
+          <el-button :loading="crud.status.cu === 2" type="primary" @click="$event => addProjectManager()">填写</el-button>
+          <el-button type="danger" @click="goTransfer()">转交</el-button>       
+        </div>
+      </el-dialog>
       <!--表格渲染-->
       <el-table ref="table" v-loading="crud.loading" :data="crud.data" size="small" style="width: 100%;" @selection-change="crud.selectionChangeHandler">
         <el-table-column type="selection" width="55" />
         <el-table-column prop="companyName" label="公司名称" />
         <el-table-column prop="projectName" label="项目名称" />
         <el-table-column prop="projectDesc" label="项目描述" />
+        <el-table-column prop="userName" label="联系人" />
+        <el-table-column prop="userMobile" label="联系人电话" />
         <el-table-column prop="projectAmount" label="项目金额" />
+        <el-table-column prop="amountPercent" label="金额百分比" />    
         <el-table-column prop="statusName" label="项目状态" />
         <el-table-column prop="nickName" label="创建者" />
         <el-table-column v-if="checkPer(['admin','project:edit','project:del'])" label="操作" width="450px" align="center">
@@ -94,6 +117,8 @@
               :data="scope.row"
               :permission="permission"
               @addProject="getUserProject"
+              @upProject="getUserProject"
+              @projectManager="getProjectManager"
             />
           </template>
         </el-table-column>
@@ -126,6 +151,7 @@ export default {
     return {
       userList:[],
       userVisible:false,
+      projectVisible:false,
       userProjectFrom: {
         companyId: 0,
         companyName: '',
@@ -134,12 +160,22 @@ export default {
         assignUser:[],
         assignUserId:0
       },
+      projectFrom: {
+        companyId: 0,
+        companyName: '',
+        projectId:'',
+        projectName:'',
+        scheduleDesc:''
+      },
       permission: {
         add: ['admin', 'project:add'],
         edit: ['admin', 'project:edit'],
         del: ['admin', 'project:del']
       },
       rules: {
+        scheduleDesc: [
+          { required: true, message: '项目进度不能为空', trigger: 'blur' }
+        ]
       },
       visitRules: {
         content: [
@@ -155,6 +191,9 @@ export default {
     },
     visitClose() {
       this.userVisible = false
+    },
+    projectClose() {
+      this.projectVisible = false
     },
     getUserProject(data) {
       console.log(data)
@@ -198,7 +237,37 @@ export default {
           })
         }
       })
+    },
+    //项目经理
+    getProjectManager(data){
+      this.projectFrom.companyId = data.companyId
+      this.projectFrom.companyName = data.companyName
+      this.projectFrom.projectId = data.id
+      this.projectFrom.projectName =data.projectName
+      this.projectVisible = true
+    },
+    addProjectManager(){
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          projectSchedule.manager(this.projectFrom).then(() => {
+            this.crud.notify('提交成功', 'success')
+            this.projectVisible = false
+            //刷新表格
+            this.crud.refresh()
+          })
+        }
+      })
+    },
+    //转交   
+    goTransfer(){
+      projectSchedule.transfer(this.projectFrom).then(() => {
+            this.crud.notify('转交成功', 'success')
+            this.projectVisible = false
+            //刷新表格
+            this.crud.refresh()
+      })
     }
+
   }
 }
 </script>

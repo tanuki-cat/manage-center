@@ -36,9 +36,9 @@ public enum ScheduleEnum implements IEnum<Integer> {
 
     public static String name(int value) {
         return switch (value) {
-            case 0 -> "业务";
-            case 1 -> "项目组长";
-            case 2 -> "项目经理";
+            case 0 -> "项目创建";
+            case 1 -> "项目组长分配";
+            case 2 -> "项目经理填写";
             case 3 -> "财务";
             case 4 -> "完结";
             default -> "";
