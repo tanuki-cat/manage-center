@@ -83,3 +83,11 @@ ALTER TABLE `sys_project_schedule`
 -- comment sys_project_schedule表添加指派作废的status字段
 ALTER TABLE `sys_project_schedule`
     ADD COLUMN `assign_status` int(2) NOT NULL DEFAULT 0 COMMENT '指派状态 1- 作废 0- 指派' AFTER `schedule_desc`;
+
+-- changeset lychee:20231221_2017
+-- comment sys_project_schedule,sys_project 修改字段
+ALTER TABLE `sys_project_schedule`
+   MODIFY COLUMN `amount_percent` int(8) NOT NULL DEFAULT 0 COMMENT '金额百分比'  AFTER `assign_user_id`;
+
+ALTER TABLE `sys_project`
+   MODIFY COLUMN `amount_percent` int(8) NOT NULL DEFAULT 0 COMMENT '金额百分比'  AFTER `user_mobile`;
