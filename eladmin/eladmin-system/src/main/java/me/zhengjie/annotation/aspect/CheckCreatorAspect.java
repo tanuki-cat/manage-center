@@ -37,7 +37,7 @@ public class CheckCreatorAspect {
     public Object addCreator(ProceedingJoinPoint pjp ) throws Throwable {
         Object[] args = pjp.getArgs();
         String currentUserName = SecurityUtils.getCurrentUsername();
-        Long currentUserId = SecurityUtils.getCurrentUserId();
+        String currentUserId = SecurityUtils.getCurrentUserId().toString();
         List<Role> roleList = roleService.findByUsersId(SecurityUtils.getCurrentUserId());
         List<String> roleNames = roleList.stream().map(Role::getName).collect(Collectors.toList());
         MethodSignature signature = (MethodSignature) pjp.getSignature();
@@ -46,7 +46,7 @@ public class CheckCreatorAspect {
         Class checkClass = checkCreate.clazz();
         String[] checkRoles = checkCreate.roles();
         //当当前角色是项目经理时
-        if (roleNames.stream().anyMatch("项目"::equals) && Arrays.stream(checkRoles).allMatch("项目"::equals)) {
+        if (roleNames.stream().anyMatch("项目"::equals) && Arrays.stream(checkRoles).anyMatch("项目"::equals)) {
             for(Object arg: args) {
                 if (checkClass.isInstance(arg)) {
                     for (String method : checkCreate.filedMethod()) {
