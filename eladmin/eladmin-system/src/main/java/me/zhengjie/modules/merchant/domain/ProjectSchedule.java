@@ -61,6 +61,8 @@ public class ProjectSchedule extends BaseEntity implements Serializable {
     @ApiModelProperty(value = "进度描述")
     private String scheduleDesc;
 
+    @ApiModelProperty(value = "指派状态",allowableValues = "0:指派,1:指派作废")
+    private Integer assignStatus;
 
     public void copy(ProjectSchedule source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

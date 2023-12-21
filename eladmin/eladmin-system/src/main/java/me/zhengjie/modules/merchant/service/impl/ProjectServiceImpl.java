@@ -74,7 +74,7 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
         if (Objects.nonNull(criteria.getAssignUserId()) && Long.parseLong(criteria.getAssignUserId()) > 0) {
             //当前角色为项目经理时
             List<ProjectSchedule> schedules = this.projectScheduleService.list(Wrappers.<ProjectSchedule>query().lambda()
-                    .eq(ProjectSchedule::getAssignUserId, criteria.getAssignUserId()));
+                    .eq(ProjectSchedule::getAssignUserId, criteria.getAssignUserId()).eq(ProjectSchedule::getAssignStatus,0));
             List<Long> projectIds = schedules.stream().map(ProjectSchedule::getProjectId).toList();
             wrapper.in(Project::getId, projectIds);
         }

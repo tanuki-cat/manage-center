@@ -15,6 +15,8 @@
 */
 package me.zhengjie.modules.merchant.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import me.zhengjie.modules.merchant.domain.ProjectSchedule;
@@ -22,6 +24,8 @@ import me.zhengjie.modules.merchant.domain.vo.ProjectScheduleVO;
 import me.zhengjie.modules.merchant.domain.vo.ScheduleCommand;
 import me.zhengjie.modules.merchant.domain.vo.ScheduleVO;
 import me.zhengjie.modules.merchant.enums.ScheduleEnum;
+import me.zhengjie.modules.system.domain.User;
+import me.zhengjie.modules.system.service.UserService;
 import me.zhengjie.utils.FileUtil;
 import lombok.RequiredArgsConstructor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -29,15 +33,15 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import me.zhengjie.modules.merchant.service.ProjectScheduleService;
 import me.zhengjie.modules.merchant.domain.vo.ProjectScheduleQueryCriteria;
 import me.zhengjie.modules.merchant.mapper.ProjectScheduleMapper;
+import me.zhengjie.utils.SecurityUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import me.zhengjie.utils.PageUtil;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+
 import me.zhengjie.utils.PageResult;
 
 /**
@@ -50,6 +54,7 @@ import me.zhengjie.utils.PageResult;
 public class ProjectScheduleServiceImpl extends ServiceImpl<ProjectScheduleMapper, ProjectSchedule> implements ProjectScheduleService {
 
     private final ProjectScheduleMapper projectScheduleMapper;
+    private final UserService userService;
 
     @Override
     public PageResult<ProjectScheduleVO> queryAll(ProjectScheduleQueryCriteria criteria, Page<Object> page){
@@ -118,6 +123,15 @@ public class ProjectScheduleServiceImpl extends ServiceImpl<ProjectScheduleMappe
                 .setProjectId(command.getProjectId())
                 .setScheduleStatus(ScheduleEnum.TEAMLEADER)
                 .setNickName(command.getNickName());
+        //查询该项目是否有被指派过项目经理，如果有则修改原有记录的指派状态
+        List<ProjectSchedule> schedules = this.lambdaQuery().eq(ProjectSchedule::getProjectId,command.getProjectId())
+                .eq(ProjectSchedule::getScheduleStatus,ScheduleEnum.TEAMLEADER).list();
+        if (CollUtil.isNotEmpty(schedules)){
+            schedules.forEach(x ->{
+                x.setAssignStatus(1);
+            });
+            this.updateBatchById(schedules);
+        }
         this.save(schedule);
     }
 
