@@ -99,6 +99,26 @@
           <el-button type="danger" @click="goTransfer()">转交</el-button>       
         </div>
       </el-dialog>
+         <!--财务填写-->
+         <el-dialog :close-on-click-modal="false" :visible.sync="financeVisible" width="520px" :title="财务填写">
+        <el-form ref="form" :model="financeFrom" :rules="rules" size="small" label-width="100px">
+          <el-form-item label="公司名称">
+            <el-input v-model="financeFrom.companyName" style="width: 350px;" disabled />
+          </el-form-item>
+          <el-form-item label="项目名称">
+            <el-input v-model="financeFrom.projectName" style="width: 350px;" disabled />
+          </el-form-item>
+          <el-form-item label="金额百分比" prop="amountPercent">
+            <el-input v-model="financeFrom.amountPercent" style="width: 350px;" />
+          </el-form-item>      
+          
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button type="text" @click="financeClose()">取消</el-button>
+          <el-button :loading="crud.status.cu === 2" type="primary" @click="$event => addProjectFinance()">填写</el-button>
+          <el-button type="danger" @click="goFinish()">完结</el-button>       
+        </div>
+      </el-dialog>
       <!--表格渲染-->
       <el-table ref="table" v-loading="crud.loading" :data="crud.data" size="small" style="width: 100%;" @selection-change="crud.selectionChangeHandler">
         <el-table-column type="selection" width="55" />
@@ -119,6 +139,7 @@
               @addProject="getUserProject"
               @upProject="getUserProject"
               @projectManager="getProjectManager"
+              @projectFinance="getProjectFinance"
             />
           </template>
         </el-table-column>
@@ -133,7 +154,7 @@
 import crudProject from '@/api/merchant/project'
 import CRUD, { presenter, header, form, crud } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'
-import crudOperation from '@crud/CRUD.operation'
+import crudOperation from '@crud/CRUD.project'
 import udOperation from '@crud/UD.project'
 import pagination from '@crud/Pagination'
 import crudUser from '@/api/system/user'
@@ -152,20 +173,31 @@ export default {
       userList:[],
       userVisible:false,
       projectVisible:false,
+      //财务
+      financeVisible:false,
       userProjectFrom: {
         companyId: 0,
         companyName: '',
         projectId:'',
         projectName:'',
         assignUser:[],
-        assignUserId:0
+        assignUserId:0,
+        amountPercent:0
       },
       projectFrom: {
         companyId: 0,
         companyName: '',
         projectId:'',
         projectName:'',
-        scheduleDesc:''
+        scheduleDesc:'',
+        amountPercent:0
+      },
+      financeFrom: {
+        companyId: 0,
+        companyName: '',
+        projectId:'',
+        projectName:'',
+        amountPercent:0
       },
       permission: {
         add: ['admin', 'project:add'],
@@ -175,6 +207,9 @@ export default {
       rules: {
         scheduleDesc: [
           { required: true, message: '项目进度不能为空', trigger: 'blur' }
+        ],
+        amountPercent: [
+          { required: true, message: '金额百分比不能为空', trigger: 'blur' }
         ]
       },
       visitRules: {
@@ -195,6 +230,9 @@ export default {
     projectClose() {
       this.projectVisible = false
     },
+    financeClose() {
+      this.financeVisible = false
+    },
     getUserProject(data) {
       console.log(data)
       this.userProjectFrom.companyId = data.companyId
@@ -203,6 +241,7 @@ export default {
       this.userProjectFrom.projectName =data.projectName
       this.userProjectFrom.assignUser=''
       this.userProjectFrom.assignUserId=0
+      this.userProjectFrom.amountPercent=data.amountPercent
       this.userVisible = true    
       crudUser.roleList().then(res => {
         console.log(res)
@@ -240,10 +279,13 @@ export default {
     },
     //项目经理
     getProjectManager(data){
+      //清空当前值
+      this.projectFrom.scheduleDesc=''
       this.projectFrom.companyId = data.companyId
       this.projectFrom.companyName = data.companyName
       this.projectFrom.projectId = data.id
       this.projectFrom.projectName =data.projectName
+      this.projectFrom.amountPercent=data.amountPercent
       this.projectVisible = true
     },
     addProjectManager(){
@@ -263,6 +305,38 @@ export default {
       projectSchedule.transfer(this.projectFrom).then(() => {
             this.crud.notify('转交成功', 'success')
             this.projectVisible = false
+            //刷新表格
+            this.crud.refresh()
+      })
+    },
+    //财务
+    getProjectFinance(data){
+      //清空当前值
+      this.financeFrom.companyId = data.companyId
+      this.financeFrom.companyName = data.companyName
+      this.financeFrom.projectId = data.id
+      this.financeFrom.projectName =data.projectName
+      this.financeFrom.amountPercent=data.amountPercent
+      this.financeVisible = true
+    },
+    addProjectFinance(){
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          projectSchedule.finance(this.financeFrom).then(() => {
+            this.crud.notify('提交成功', 'success')
+            this.financeVisible = false
+            //刷新表格
+            this.crud.refresh()
+          })
+        }
+      })
+    },
+    //完结
+  
+    goFinish(){
+      projectSchedule.complete(this.financeFrom).then(() => {
+            this.crud.notify('提交成功', 'success')
+            this.financeVisible = false
             //刷新表格
             this.crud.refresh()
       })

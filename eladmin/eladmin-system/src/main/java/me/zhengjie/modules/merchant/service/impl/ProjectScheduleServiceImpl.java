@@ -122,6 +122,8 @@ public class ProjectScheduleServiceImpl extends ServiceImpl<ProjectScheduleMappe
                 .setAssignUserId(command.getAssignUserId())
                 .setProjectId(command.getProjectId())
                 .setScheduleStatus(ScheduleEnum.TEAMLEADER)
+                .setAmountPercent(command.getAmountPercent())
+                .setScheduleDesc("未开始")
                 .setNickName(command.getNickName());
         //查询该项目是否有被指派过项目经理，如果有则修改原有记录的指派状态
         List<ProjectSchedule> schedules = this.lambdaQuery().eq(ProjectSchedule::getProjectId,command.getProjectId())
@@ -141,6 +143,7 @@ public class ProjectScheduleServiceImpl extends ServiceImpl<ProjectScheduleMappe
                 .setProjectId(command.getProjectId())
                 .setScheduleStatus(ScheduleEnum.MANAGER)
                 .setScheduleDesc(command.getScheduleDesc())
+                .setAmountPercent(command.getAmountPercent())
                 .setNickName(command.getNickName());
         this.save(schedule);
     }
@@ -150,7 +153,33 @@ public class ProjectScheduleServiceImpl extends ServiceImpl<ProjectScheduleMappe
         ProjectSchedule schedule = new ProjectSchedule()
                 .setProjectId(command.getProjectId())
                 .setScheduleStatus(ScheduleEnum.FINANCE)
+                .setScheduleDesc("完成")
+                .setAmountPercent(command.getAmountPercent())
                 .setNickName(command.getNickName());
+        this.save(schedule);
+
+    }
+
+    @Override
+    public void finance(ScheduleCommand resources) {
+        ProjectSchedule schedule = new ProjectSchedule()
+                .setProjectId(resources.getProjectId())
+                .setScheduleStatus(ScheduleEnum.FINANCE)
+                .setScheduleDesc("完成")
+                .setAmountPercent(resources.getAmountPercent())
+                .setNickName(resources.getNickName());
+        this.save(schedule);
+
+    }
+
+    @Override
+    public void complete(ScheduleCommand resources) {
+        ProjectSchedule schedule = new ProjectSchedule()
+                .setProjectId(resources.getProjectId())
+                .setScheduleStatus(ScheduleEnum.COMPLETION)
+                .setScheduleDesc("完成")
+                .setAmountPercent(resources.getAmountPercent())
+                .setNickName(resources.getNickName());
         this.save(schedule);
 
     }

@@ -149,7 +149,7 @@ export default {
         projectAmount: 0,
         userName: '',
         userMobile: '',
-        amountPercent: ''
+        amountPercent: 0
       },
       rules: {
         name: [

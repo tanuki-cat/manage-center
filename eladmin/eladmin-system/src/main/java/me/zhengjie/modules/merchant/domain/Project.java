@@ -66,7 +66,7 @@ public class Project extends BaseEntity implements Serializable {
     @ApiModelProperty(value = "联系电话")
     private String userMobile;
     @ApiModelProperty(value = "金额百分比")
-    private String amountPercent;
+    private Integer amountPercent;
 
 
 

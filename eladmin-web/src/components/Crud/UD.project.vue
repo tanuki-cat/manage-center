@@ -17,6 +17,7 @@
     <el-button icon="el-icon-edit" type="primary" size="mini" @click="projectAdd(data)" v-if="data.scheduleStatus==0">派发项目</el-button>
     <el-button icon="el-icon-edit" type="primary" size="mini" @click="projectUpdate(data)" v-if="data.scheduleStatus==1">重新派发</el-button>
     <el-button icon="el-icon-edit" type="primary" size="mini" @click="projectManager(data)" v-if="data.scheduleStatus==1||data.scheduleStatus==2">填写或提交财务</el-button>
+    <el-button icon="el-icon-edit" type="primary" size="mini" @click="projectFinance(data)" v-if="data.scheduleStatus==3">填写或完结</el-button>
   </div>
 </template>
 <script>
@@ -82,6 +83,10 @@ export default {
     },
     projectManager(data){
       this.$emit('projectManager' , data)
+    },
+    //财务
+    projectFinance(data){
+      this.$emit('projectFinance' , data)
     }
   }
 }

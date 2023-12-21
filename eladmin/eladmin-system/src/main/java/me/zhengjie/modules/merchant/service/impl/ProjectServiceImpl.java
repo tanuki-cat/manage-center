@@ -99,9 +99,10 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
         ProjectSchedule schedule = new ProjectSchedule()
                 .setProjectId(resources.getId())
                 .setScheduleStatus(ScheduleEnum.BUSINESS)
+                .setAmountPercent(resources.getAmountPercent())
+                .setScheduleDesc("未开始")
                 .setNickName(resources.getNickName());
         projectScheduleService.save(schedule);
-
     }
 
     @Override
@@ -115,6 +116,9 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteAll(List<Long> ids) {
+        for (Long id : ids) {
+            projectScheduleService.remove(new LambdaQueryWrapper<ProjectSchedule>().eq(ProjectSchedule::getProjectId, id));
+        }
         removeBatchByIds(ids);
     }
 

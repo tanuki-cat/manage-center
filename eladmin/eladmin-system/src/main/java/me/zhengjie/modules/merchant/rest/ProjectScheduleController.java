@@ -24,6 +24,7 @@ import me.zhengjie.modules.merchant.domain.vo.ProjectScheduleQueryCriteria;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
 
+import me.zhengjie.modules.merchant.service.ProjectUpdateService;
 import me.zhengjie.modules.system.service.UserService;
 import me.zhengjie.utils.SecurityUtils;
 import org.springframework.http.HttpStatus;
@@ -49,6 +50,7 @@ public class ProjectScheduleController {
 
     private final ProjectScheduleService projectScheduleService;
     private final UserService userService;
+    private final ProjectUpdateService projectUpdateService;
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
@@ -105,7 +107,7 @@ public class ProjectScheduleController {
     @PreAuthorize("@el.check('projectSchedule:assign')")
     public ResponseEntity<Object> assignProject(@RequestBody ScheduleCommand resources){
         resources.setNickName(userService.findById(SecurityUtils.getCurrentUserId()).getNickName());
-        projectScheduleService.assign(resources);
+        projectUpdateService.assign(resources);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -123,6 +125,23 @@ public class ProjectScheduleController {
     public ResponseEntity<Object> transferProject(@RequestBody ScheduleCommand resources){
         resources.setNickName(userService.findById(SecurityUtils.getCurrentUserId()).getNickName());
         projectScheduleService.transfer(resources);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @Log("完成项目")
+    @ApiOperation("完成项目")
+    @PostMapping(value = "/complete")
+    public ResponseEntity<Object> completeProject(@RequestBody ScheduleCommand resources){
+        resources.setNickName(userService.findById(SecurityUtils.getCurrentUserId()).getNickName());
+        projectUpdateService.complete(resources);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+    @Log("财务提交")
+    @ApiOperation("财务提交")
+    @PostMapping(value = "/finance")
+    public ResponseEntity<Object> financeProject(@RequestBody ScheduleCommand resources){
+        resources.setNickName(userService.findById(SecurityUtils.getCurrentUserId()).getNickName());
+        projectUpdateService.finance(resources);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
