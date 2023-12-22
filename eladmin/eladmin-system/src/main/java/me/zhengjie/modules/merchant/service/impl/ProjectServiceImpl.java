@@ -78,6 +78,8 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
             List<Long> projectIds = schedules.stream().map(ProjectSchedule::getProjectId).toList();
             wrapper.in(Project::getId, projectIds);
         }
+        //排序
+        wrapper.orderByDesc(Project::getCreateTime);
         return PageUtil.toPage(this.page(page1, wrapper).convert(project -> vo(project)));
     }
     protected ProjectVO vo(Project project){
