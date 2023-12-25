@@ -71,7 +71,7 @@ public class StatisticiansServiceImpl implements StatisticiansService {
 
     @Override
     public JSONObject countAll() {
-        JSONObject result = new JSONObject();
+         JSONObject result = new JSONObject();
         //统计公司数
         long companyCount = this.companyService.count();
         //统计项目数

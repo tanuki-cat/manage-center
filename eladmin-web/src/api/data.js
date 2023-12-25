@@ -15,3 +15,10 @@ export function download(url, params) {
     responseType: 'blob'
   })
 }
+
+export function getCountAll() {
+  return request({
+      url: 'api/merchant/statisticians/countAll',
+      method: 'get'
+  })
+}
