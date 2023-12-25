@@ -21,4 +21,5 @@ public class StatisticiansDto implements java.io.Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd", iso = DateTimeFormat.ISO.DATE)
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private LocalDateTime day;
+    private String dateStr;
 }

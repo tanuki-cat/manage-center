@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import me.zhengjie.annotation.AnonymousAccess;
 import me.zhengjie.modules.merchant.domain.dto.StatisticiansDto;
 import me.zhengjie.modules.merchant.service.StatisticiansService;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 /**
@@ -33,9 +35,12 @@ public class StatisticiansController {
     @AnonymousAccess
     @RequestMapping(value = "/countByDay", produces = "application/json;charset=UTF-8", method = { RequestMethod.POST})
     public ResponseEntity<JSONObject> countByDay(@RequestBody StatisticiansDto statisticiansDto) {
-        if (Objects.isNull(statisticiansDto.getDay())) {
-            statisticiansDto.setDay(LocalDateTime.now());
-        }
+//        if (Objects.isNull(statisticiansDto.getDay())) {
+//            statisticiansDto.setDay(LocalDateTime.now());
+//        }
+//        if (Strings.isBlank(statisticiansDto.getDateStr())) {
+//            statisticiansDto.setDateStr(DateTimeFormatter.ofPattern("yyyy-MM-dd").format(statisticiansDto.getDay()));
+//        }
         return ResponseEntity.ok(statisticiansService.countByDay(statisticiansDto));
     }
 

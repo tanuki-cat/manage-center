@@ -11,10 +11,12 @@ import me.zhengjie.modules.merchant.domain.dto.StatisticiansDto;
 import me.zhengjie.modules.merchant.service.CompanyService;
 import me.zhengjie.modules.merchant.service.ProjectService;
 import me.zhengjie.modules.merchant.service.StatisticiansService;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
@@ -36,9 +38,23 @@ public class StatisticiansServiceImpl implements StatisticiansService {
     @Override
     public JSONObject countByDay(StatisticiansDto statisticiansDto) {
         JSONObject result = new JSONObject();
-        String day = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(statisticiansDto.getDay());
-        String start = day + " 00:00:00";
-        String end = day + " 23:59:59";
+        String day;
+        String start;
+        String end;
+//        String day = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(statisticiansDto.getDay());
+//        String start = day + " 00:00:00";
+//        String end = day + " 23:59:59";
+        if (Strings.isBlank(statisticiansDto.getDateStr())) {
+            day = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(LocalDateTime.now());
+            start = day + " 00:00:00";
+            end = day + " 23:59:59";
+        } else {
+            if (!statisticiansDto.getDateStr().contains("~")) {
+                return result;
+            }
+            start = statisticiansDto.getDateStr().split("~")[0] + " 00:00:00";
+            end = statisticiansDto.getDateStr().split("~")[1] + " 23:59:59";
+        }
         //统计公司数
         long companyCount = this.companyService.count(Wrappers.<Company>lambdaQuery().between( Company::getCreateTime,start,end));
         //统计项目数
