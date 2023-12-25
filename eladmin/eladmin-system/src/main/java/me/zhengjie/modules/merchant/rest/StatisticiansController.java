@@ -50,4 +50,18 @@ public class StatisticiansController {
     public ResponseEntity<JSONObject> countAll() {
         return ResponseEntity.ok(statisticiansService.countAll());
     }
+
+    @ApiOperation("统计当天的公司数、项目数、项目金额数")
+    @AnonymousAccess
+    @RequestMapping(value = "/countByCurrentDay", produces = "application/json;charset=UTF-8", method = { RequestMethod.GET})
+    public ResponseEntity<JSONObject> countByCurrentDay() {
+        return ResponseEntity.ok(statisticiansService.countByCurrentDay());
+    }
+
+    @AnonymousAccess
+    @ApiOperation("统计按星期统计实际收入、预计收入")
+    @RequestMapping(value = "/countByWeek", produces = "application/json;charset=UTF-8", method = { RequestMethod.GET})
+    public ResponseEntity<JSONObject> countByWeek() {
+        return ResponseEntity.ok(statisticiansService.countByWeek());
+    }
 }

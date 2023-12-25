@@ -16,10 +16,13 @@
 
 package me.zhengjie.utils;
 
+import javax.swing.text.DateFormatter;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
+import java.util.*;
 
 /**
  * @author: liaojinlong
@@ -30,6 +33,8 @@ public class DateUtil {
 
     public static final DateTimeFormatter DFY_MD_HMS = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     public static final DateTimeFormatter DFY_MD = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    public static final SimpleDateFormat SDF_YMD = new SimpleDateFormat("yyyy-MM-dd");
+    public static final SimpleDateFormat SDF_EEE = new SimpleDateFormat("EEE", Locale.ENGLISH);
 
     /**
      * LocalDateTime 转时间戳
@@ -165,5 +170,34 @@ public class DateUtil {
      */
     public static LocalDateTime parseLocalDateTimeFormatyMdHms(String localDateTime) {
         return LocalDateTime.from(DFY_MD_HMS.parse(localDateTime));
+    }
+
+    /**
+     * 获取本周 从周一开始计算
+     * @return
+     */
+    public static List<Map.Entry<String,String>> currentWeekDay() {
+        TreeMap<String,String> week = new TreeMap<>();
+        Date[] date = new Date[7];
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_WEEK,Calendar.MONDAY);
+        Date startDate = calendar.getTime();
+        date[0] = startDate;
+        for (int i = 1 ; i < 7; i++) {
+            calendar.add(Calendar.DAY_OF_WEEK, 1);
+            Date endDate = calendar.getTime();
+            date[i] = endDate;
+        }
+        for (Date d:date) {
+            week.put(SDF_EEE.format(d),SDF_YMD.format(d));
+        }
+        List<Map.Entry<String,String>> weekList = new ArrayList<Map.Entry<String,String>>(week.entrySet());
+        weekList.sort(new Comparator<Map.Entry<String, String>>() {
+            @Override
+            public int compare(Map.Entry<String, String> o1, Map.Entry<String, String> o2) {
+                return o1.getValue().compareTo(o2.getValue());
+            }
+        });
+        return weekList;
     }
 }

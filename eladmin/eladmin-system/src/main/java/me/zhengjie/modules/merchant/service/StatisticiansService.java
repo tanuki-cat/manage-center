@@ -22,4 +22,16 @@ public interface StatisticiansService {
      * @return
      */
     JSONObject countAll();
+
+    /**
+     * 统计当天的公司数、项目数、项目金额数
+     * @return
+     */
+    JSONObject countByCurrentDay();
+
+    /**
+     * 按星期统计实际收入、预计收入
+     * @return
+     */
+    JSONObject countByWeek();
 }

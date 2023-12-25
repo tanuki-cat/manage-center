@@ -1,8 +1,10 @@
 package me.zhengjie.modules.merchant.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.mchange.v2.collection.MapEntry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.zhengjie.modules.merchant.domain.Company;
@@ -11,6 +13,7 @@ import me.zhengjie.modules.merchant.domain.dto.StatisticiansDto;
 import me.zhengjie.modules.merchant.service.CompanyService;
 import me.zhengjie.modules.merchant.service.ProjectService;
 import me.zhengjie.modules.merchant.service.StatisticiansService;
+import me.zhengjie.utils.DateUtil;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
@@ -18,8 +21,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author wangzy
@@ -79,9 +81,81 @@ public class StatisticiansServiceImpl implements StatisticiansService {
         long projectCount = projects.size();
         //统计项目金额
         BigDecimal projectAmount = projects.stream().reduce(BigDecimal.ZERO, (x,y) -> x.add(y.getProjectAmount()), BigDecimal::add);
+        //实际收入项目金额
+        BigDecimal reallyAmount = projects.stream().reduce(BigDecimal.ZERO, (x,y) ->
+                 x.add(y.getProjectAmount().multiply(BigDecimal.valueOf(y.getAmountPercent() /100.0)))
+        , BigDecimal::add);
         result.put("companyCount",companyCount);
         result.put("projectCount",projectCount);
         result.put("projectAmount",projectAmount);
+        result.put("reallyAmount",reallyAmount);
+        return result;
+    }
+
+    /**
+     * 统计当天的公司数、项目数、项目金额数
+     *
+     * @return
+     */
+    @Override
+    public JSONObject countByCurrentDay() {
+        String day = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(LocalDateTime.now());
+        String start = day + " 00:00:00";
+        String end = day + " 23:59:59";
+        JSONObject result = new JSONObject();
+        //统计公司数
+        long companyCount = this.companyService.count(Wrappers.<Company>lambdaQuery().between( Company::getCreateTime,start,end));
+        //统计项目数
+        List<Project> projects = this.projectService.list(Wrappers.<Project>lambdaQuery().between( Project::getCreateTime,start,end));
+        long projectCount = projects.size();
+        //统计项目金额
+        BigDecimal projectAmount = projects.stream().reduce(BigDecimal.ZERO, (x,y) -> x.add(y.getProjectAmount()), BigDecimal::add);
+        //实际收入项目金额
+        BigDecimal reallyAmount = projects.stream().reduce(BigDecimal.ZERO, (x,y) ->
+             x.add(y.getProjectAmount().multiply(BigDecimal.valueOf(y.getAmountPercent()/100.0)))
+        ,BigDecimal::add);
+        log.info("公司数:{},项目数:{},项目金额:{}",companyCount,projectCount,projectAmount);
+        result.put("companyCount",companyCount);
+        result.put("projectCount",projectCount);
+        result.put("projectAmount",projectAmount);
+        result.put("reallyAmount",reallyAmount);
+        return result;
+    }
+
+    /**
+     * 按星期统计实际收入、预计收入
+     *
+     * @return
+     */
+    @Override
+    public JSONObject countByWeek() {
+        JSONObject result = new JSONObject();
+        List<String> weekArray = new ArrayList<>();
+        List<BigDecimal> weekAmount = new ArrayList<>();
+        List<BigDecimal> weekReallyAmount = new ArrayList<>();
+        String day;
+        String start;
+        String end;
+        List<Map.Entry<String,String>> week = DateUtil.currentWeekDay();
+        for (Map.Entry<String,String> entry: week) {
+            weekArray.add(entry.getKey());
+            day = entry.getValue();
+            start = day + " 00:00:00";
+            end = day + " 23:59:59";
+            //统计项目数
+            List<Project> projects = this.projectService.list(Wrappers.<Project>lambdaQuery().between( Project::getCreateTime,start,end));
+            //统计项目金额
+            BigDecimal projectAmount = projects.stream().reduce(BigDecimal.ZERO, (x,y) -> x.add(y.getProjectAmount()), BigDecimal::add);
+            //实际收入项目金额
+            BigDecimal reallyAmount = projects.stream().reduce(BigDecimal.ZERO, (x,y) ->
+                x.add(y.getProjectAmount().multiply(BigDecimal.valueOf(y.getAmountPercent()/100.0)))
+            ,BigDecimal::add);
+            weekAmount.add(projectAmount);
+            weekReallyAmount.add(reallyAmount);
+        }
+        result.put("weekArray",weekArray);
+        result.put("weekAmount",weekAmount);
+        result.put("weekReallyAmount",weekReallyAmount);
         return result;
     }
 }
