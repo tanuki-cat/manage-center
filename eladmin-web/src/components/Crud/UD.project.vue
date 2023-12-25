@@ -11,13 +11,13 @@
     </el-popover> -->
 
    
-    <router-link  :to="{ path: '/merchant/projectSchedule', query: { projectId: data.id } }">
+    <router-link v-permission="permission.detail"  :to="{ path: '/merchant/projectSchedule', query: { projectId: data.id } }">
       <el-button icon="el-icon-search" type="warning" size="mini">查看详情</el-button>
     </router-link>
-    <el-button icon="el-icon-edit" type="primary" size="mini" @click="projectAdd(data)" v-if="data.scheduleStatus==0">派发项目</el-button>
-    <el-button icon="el-icon-edit" type="primary" size="mini" @click="projectUpdate(data)" v-if="data.scheduleStatus==1">重新派发</el-button>
-    <el-button icon="el-icon-edit" type="primary" size="mini" @click="projectManager(data)" v-if="data.scheduleStatus==1||data.scheduleStatus==2">填写或提交财务</el-button>
-    <el-button icon="el-icon-edit" type="primary" size="mini" @click="projectFinance(data)" v-if="data.scheduleStatus==3">填写或完结</el-button>
+    <el-button v-permission="permission.leader" icon="el-icon-edit" type="primary" size="mini" @click="projectAdd(data)" v-if="data.scheduleStatus==0">派发项目</el-button>
+    <el-button v-permission="permission.leader" icon="el-icon-edit" type="primary" size="mini" @click="projectUpdate(data)" v-if="data.scheduleStatus==1">重新派发</el-button>
+    <el-button v-permission="permission.manager" icon="el-icon-edit" type="primary" size="mini" @click="projectManager(data)" v-if="data.scheduleStatus==1||data.scheduleStatus==2">填写或提交财务</el-button>
+    <el-button v-permission="permission.finance" icon="el-icon-edit" type="primary" size="mini" @click="projectFinance(data)" v-if="data.scheduleStatus==3">填写或完结</el-button>
   </div>
 </template>
 <script>

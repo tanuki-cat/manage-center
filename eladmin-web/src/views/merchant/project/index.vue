@@ -202,7 +202,14 @@ export default {
       permission: {
         add: ['admin', 'project:add'],
         edit: ['admin', 'project:edit'],
-        del: ['admin', 'project:del']
+        del: ['admin', 'project:del'],
+        leader: ['admin', 'project:leader'],
+        //项目经理
+        manager: ['admin', 'project:manager'],
+        //财务
+        finance: ['admin', 'project:finance'],
+        //详情
+        detail: ['admin', 'project:detail']
       },
       rules: {
         scheduleDesc: [
