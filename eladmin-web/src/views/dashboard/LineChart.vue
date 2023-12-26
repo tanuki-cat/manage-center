@@ -6,7 +6,7 @@
 import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
 import resize from './mixins/resize'
-
+import {getWeekCount} from '@/api/data'
 export default {
   mixins: [resize],
   props: {
@@ -48,6 +48,7 @@ export default {
     this.$nextTick(() => {
       this.initChart()
     })
+    this.getWeekCount()
   },
   beforeDestroy() {
     if (!this.chart) {
@@ -59,12 +60,16 @@ export default {
   methods: {
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
-      this.setOptions(this.chartData)
     },
-    setOptions({ expectedData, actualData } = {}) {
+    getWeekCount(){
+      getWeekCount().then(res=>{
+        this.setOptions({day:res.weekArray,expectedData:res.weekAmount,actualData:res.weekReallyAmount})
+      })
+    },
+    setOptions({ expectedData, actualData,day } = {}) {
       this.chart.setOption({
         xAxis: {
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          data: day,
           boundaryGap: false,
           axisTick: {
             show: false
@@ -90,10 +95,10 @@ export default {
           }
         },
         legend: {
-          data: ['expected', 'actual']
+          data: ['签单金额', '到账金额']
         },
         series: [{
-          name: 'expected', itemStyle: {
+          name: '签单金额', itemStyle: {
             normal: {
               color: '#FF005A',
               lineStyle: {
@@ -109,7 +114,7 @@ export default {
           animationEasing: 'cubicInOut'
         },
         {
-          name: 'actual',
+          name: '到账金额',
           smooth: true,
           type: 'line',
           itemStyle: {

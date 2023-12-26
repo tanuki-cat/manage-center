@@ -9,7 +9,7 @@
           <div class="card-panel-text">
             今日新增公司数
           </div>
-          <count-to :start-val="0" :end-val="102400" :duration="2600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="this.day_companyCount" :duration="2600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -22,7 +22,7 @@
           <div class="card-panel-text">
               今日签单数  
           </div>
-          <count-to :start-val="0" :end-val="81212" :duration="3000" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="this.day_projectCount" :duration="3000" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -35,7 +35,7 @@
           <div class="card-panel-text">
             今日签单金额
           </div>
-          <count-to :start-val="0" :end-val="9280" :duration="3200" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="this.day_projectAmount" :duration="3200" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -48,7 +48,7 @@
           <div class="card-panel-text">
             今日到账数
           </div>
-          <count-to :start-val="0" :end-val="13600" :duration="3600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="this.day_reallyAmount" :duration="3600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -100,7 +100,7 @@
           <div class="card-panel-text">
            总到账数
           </div>
-          <count-to :start-val="0" :end-val="13600" :duration="3600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="this.reallyAmount" :duration="3600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -111,16 +111,18 @@
 <script>
 import CountTo from 'vue-count-to'
 //统计
-import {getCountAll} from '@/api/data'
+import {getCountAll,getDayCount} from '@/api/data'
 export default {
   data() {
     return {
       companyCount: 0,
       projectCount: 0,
       projectAmount: 0,
+      reallyAmount :0,
       day_projectAmount: 0,
       day_projectCount: 0,
-      day_companyCount: 0
+      day_companyCount: 0,
+      day_reallyAmount:0
     }
   },
   components: {
@@ -128,6 +130,7 @@ export default {
   },
   created(){
     this.getCountAll()
+    this.getDayCount()
   },
   methods: {
     handleSetLineChartData(type) {
@@ -138,7 +141,16 @@ export default {
         this.companyCount = res.companyCount
         this.projectCount = res.projectCount
         this.projectAmount = res.projectAmount
-       
+        this.reallyAmount =res.reallyAmount
+      })
+    },
+    getDayCount(){
+      getDayCount().then(res=>{
+        this.day_companyCount = res.companyCount
+        this.day_projectCount = res.projectCount
+        this.day_projectAmount = res.projectAmount
+        this.day_reallyAmount =res.reallyAmount 
+        
       })
     }
   }

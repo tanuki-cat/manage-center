@@ -22,3 +22,18 @@ export function getCountAll() {
       method: 'get'
   })
 }
+
+export function getDayCount() {
+  return request({
+    url: 'api/merchant/statisticians/countByCurrentDay',
+    method: 'get'
+  })
+  
+}
+
+export function getWeekCount() {
+  return request({
+    url: 'api/merchant/statisticians/countByWeek',
+    method: 'get'
+  })
+}
