@@ -9,6 +9,9 @@
       </div>
       <el-button slot="reference" :disabled="disabledDle" type="danger" icon="el-icon-delete" size="mini" @click.stop="toDelete" />
     </el-popover>
+    <router-link  :to="{ path: '/merchant/edits', query: { companyId: data.id } }">
+      <el-button icon="el-icon-edit" type="warning" size="mini">完善信息</el-button>
+    </router-link>
     <el-button icon="el-icon-edit" type="success" size="mini" @click="visitAdd(data)">拜访登记</el-button>
    
     <router-link  :to="{ path: '/merchant/visit', query: { companyId: data.id } }">
