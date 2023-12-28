@@ -1,5 +1,7 @@
 package me.zhengjie.modules.merchant.domain;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
@@ -8,6 +10,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 import me.zhengjie.base.BaseEntity;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -25,6 +28,7 @@ import java.util.List;
 @ApiModel(value = "企业基本信息扩展表")
 @Data
 @TableName(value = "biz_company_base_info_ext",autoResultMap = true)
+@Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class CompanyBaseInfoExt extends BaseEntity implements Serializable {
     @Serial
@@ -42,17 +46,21 @@ public class CompanyBaseInfoExt extends BaseEntity implements Serializable {
     @ApiModelProperty(value = "所属行业")
     private String industry;
 
+    @TableField(value = "main_market")
+    @ApiModelProperty(value = "主营市场")
+    private String mainMarket;
+
     @TableField(value = "main_products")
     @ApiModelProperty(value = "主营产品")
     private String mainProducts;
 
     @TableField(value = "technical_indicator")
     @ApiModelProperty(value = "技术指标",allowableValues = "1-高于国家标准,2-参照国家标准")
-    private Integer technicalIndicator;
+    private String technicalIndicator;
 
     @TableField(value = "company_nature")
     @ApiModelProperty(value = "公司性质",allowableValues = "1-国有企业,2-外方独资,3-合资企业,4-合资企业,5-民营企业,6-其他")
-    private Integer companyNature;
+    private String companyNature;
 
     @TableField(value = "registration_time")
     @ApiModelProperty(value = "注册时间",example = "2020-01-01")
@@ -91,4 +99,8 @@ public class CompanyBaseInfoExt extends BaseEntity implements Serializable {
     @TableField(value = "is_deleted")
     @TableLogic(value = "0",delval = "1")
     private Integer isDeleted;
+
+    public void copy(CompanyBaseInfoExt source){
+        BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
+    }
 }

@@ -91,3 +91,18 @@ ALTER TABLE `sys_project_schedule`
 
 ALTER TABLE `sys_project`
    MODIFY COLUMN `amount_percent` int(8) NOT NULL DEFAULT 0 COMMENT '金额百分比'  AFTER `user_mobile`;
+
+-- changeset lychee:20231221_1058
+-- comment 新建sys_company_ext表
+CREATE TABLE `sys_company_ext`
+(
+    `id`          bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `company_id`  bigint(20) NOT NULL COMMENT '公司Id',
+    `info_ext`    json DEFAULT NULL COMMENT '公司扩展信息',
+    `create_by`   varchar(255) DEFAULT NULL COMMENT '创建者',
+    `update_by`   varchar(255) DEFAULT NULL COMMENT '更新者',
+    `create_time` datetime     DEFAULT NULL COMMENT '创建日期',
+    `update_time` datetime     DEFAULT NULL COMMENT '更新时间',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `company_id` (`company_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='公司扩展信息表';

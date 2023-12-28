@@ -136,7 +136,7 @@ public class StatisticiansServiceImpl implements StatisticiansService {
         String day;
         String start;
         String end;
-        List<Map.Entry<String,String>> week = DateUtil.currentWeekDay();
+        List<Map.Entry<String,String>> week = DateUtil.prevSevenDay();
         for (Map.Entry<String,String> entry: week) {
             weekArray.add(entry.getValue());
             day = entry.getValue();
