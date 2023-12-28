@@ -23,5 +23,24 @@ export function edit(data) {
     data
   })
 }
+export function addExt(data) {
+  return request({
+    url: 'api/merchant/company/addExt',
+    method: 'post',
+    data
+  })  
+}
+export function getCompany(id) {
+  return request({
+    url: 'api/merchant/company/detail?companyId=' + id,
+    method: 'get'
+  })
+}
+export function getExtInfo(id) {
+  return request({
+    url: 'api/merchant/company/extInfo?companyId=' + id,
+    method: 'get'
+  })
+}
 
-export default { add, edit, del }
+export default { add, edit, del,addExt,getCompany,getExtInfo }

@@ -14,18 +14,18 @@
         <tr>
           <td colspan="4">企业名称</td>
           <td colspan="8">
-            <el-input v-model="form.companyName" disabled />
+            <el-input style="color: #000;" v-model="form.companyName" disabled  />
           </td>
         </tr>
         <!-- 联系人-->
         <tr>
           <td colspan="4">联系人</td>
           <td colspan="2">
-            <el-input v-model="form.userName" disabled />
+            <el-input v-model="form.userName" disabled style="color: #000;;" />
           </td>
           <td colspan="2">联系方式</td>
           <td colspan="4">
-            <el-input v-model="form.userMobile" disabled />
+            <el-input v-model="form.userMobile" disabled style="color: #000;;" />
           </td>
         </tr>
         <!-- 所属行业-->
@@ -134,10 +134,10 @@
           <td colspan="4" rowspan="4">财务状况（近三年）<br>（万元）</td>
           <td colspan="2">年份</td>
           <td colspan="2">
-            {{ this.form.threeYearsFinance.data[3].year }}
+           <el-input v-model="form.threeYearsFinance.data[3].year"/>
           </td>
-          <td colspan="2">    {{ this.form.threeYearsFinance.data[2].year }}</td>
-          <td colspan="2">    {{ this.form.threeYearsFinance.data[1].year }}</td>
+          <td colspan="2">   <el-input v-model="form.threeYearsFinance.data[2].year"/></td>
+          <td colspan="2">   <el-input v-model="form.threeYearsFinance.data[1].year"/></td>
         </tr>
         <tr>
           <td colspan="2">销售收入</td>
@@ -345,6 +345,9 @@
   </div>
 </template>
 <script>
+import crudCompany from '@/api/merchant/company/company'
+import  { presenter, header, form, crud } from '@crud/crud'
+
 export default {
   name: "edits",
   props: {
@@ -357,12 +360,12 @@ export default {
       required: true,
     },
   },
+  mixins: [ crud()],
   data() {
     return {
       //显示隐藏
       dialogFormVisible: false,
       form: {
-        companyId: 0,
         companyName: "",
         userName: "",
         userMobile: "",
@@ -424,6 +427,13 @@ export default {
       systematicSituation:"1",
       remark:""      
     },
+    froms:{
+      id: 0,
+      companyId: 0,
+      infoExt:{
+
+      },
+    },
       rules: {
         companyName: [
           { required: true, message: "请输入公司名称", trigger: "blur" },
@@ -438,7 +448,9 @@ export default {
     };
   },
   created() {
-      this.getConfig()
+    this.froms.companyId = this.$route.query.companyId;
+    
+    this.getExinfo(this.froms.companyId)
   },
   methods: {
       //初始化
@@ -479,7 +491,43 @@ export default {
       },
       //提交
       onSubmit(){
-          console.log(this.form)
+         this.froms.infoExt = this.form
+         crudCompany.addExt(this.froms).then(() => {
+            //弹窗成公
+          this.$message({
+          message: '修改成功',
+          type: 'success'
+        });
+          
+          }) 
+      },
+      getCompany(id){
+        if(id>0){
+            crudCompany.getCompany(id).then(res=>{
+                this.form.companyName = res.name
+                this.form.userName = res.userName
+                this.form.userMobile = res.userMobile                    
+            })
+        }
+      },
+      getExinfo(id){
+        if(id>0){
+            crudCompany.getExtInfo(id).then(res=>{
+              this.froms.id=res.id
+              if(res.infoExt){
+                this.form = res.infoExt
+                if(this.form.systematicSituation=="4"){
+                    this.dialogFormVisible=true            
+                  }else{
+                    this.dialogFormVisible=false
+                    this.form.remark=""
+                  }
+              }else{
+                this.getConfig()
+              }
+            })
+            this.getCompany(id)
+        }
       }
   }
 };
@@ -499,5 +547,11 @@ export default {
 tr,
 td {
   border: 1pt solid #000;
+}
+.el-input.is-disabled .el-input__inner {
+    background-color: #f5f7fa;
+    border-color: #dfe4ed;
+    color: #000;
+    cursor: not-allowed;
 }
 </style>
