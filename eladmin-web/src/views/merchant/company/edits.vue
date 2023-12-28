@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 50px" width="100%">
+  <div style="padding: 50px 50px 200px 50px" width="100%">
     <!--表单 -->
     <el-form
       :ref="form"
@@ -168,13 +168,13 @@
                 <el-row>
                     <el-col :span="12">
                       <el-form-item label="主营产品市场占有率">
-                        <el-input v-model="form.threeYearsFinance.marketShare"/>
+                        <el-input v-model="form.threeYearsFinance.marketShare" style="width: 150px;"/>
                       </el-form-item>
 
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="主营产品国内排名">
-                          <el-input v-model="form.threeYearsFinance.ranking"/>
+                          <el-input v-model="form.threeYearsFinance.ranking" style="width: 150px;"/>
                         </el-form-item>
                     </el-col>
                   </el-row>
@@ -265,19 +265,66 @@
         </tr>
         <tr>          
             <td>自主研发</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td colspan="3"></td>
-            <td></td>
+            <td>
+                <el-input v-model="form.thirdYearsPropertyRights[1].selfDevelopment"/>
+            </td>
+            <td>
+                <el-input v-model="form.thirdYearsPropertyRights[2].selfDevelopment"/>
+            </td>
+            <td>
+                <el-input v-model="form.thirdYearsPropertyRights[3].selfDevelopment"/>
+            </td>
+            <td colspan="3">
+                <el-input v-model="form.thirdYearsPropertyRights[4].selfDevelopment"/>
+            </td>
+            <td>
+                <el-input v-model="form.thirdYearsPropertyRights[5].selfDevelopment"/>
+            </td>
         </tr>
         <tr>          
             <td>转让所得</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td colspan="3"></td>
-            <td></td>
+            <td>
+                <el-input v-model="form.thirdYearsPropertyRights[1].transfer"/> 
+            </td>
+            <td>
+                <el-input v-model="form.thirdYearsPropertyRights[2].transfer"/>
+            </td>
+            <td>
+                <el-input v-model="form.thirdYearsPropertyRights[3].transfer"/>
+            </td>
+            <td colspan="3">
+                <el-input v-model="form.thirdYearsPropertyRights[4].transfer"/>
+            </td>
+            <td>
+                <el-input v-model="form.thirdYearsPropertyRights[5].transfer"/>
+            </td>
+        </tr>
+        <!--体系情况-->
+        <tr>
+            <td colspan="4">
+                体系情况
+            </td>
+            <td colspan="8">
+              <el-row>
+                <el-col :span="8">
+                  <el-select v-model="form.systematicSituation" style="width: 200px;" @change="selectChange()">
+                    <el-option label="质量体系" value="1"></el-option>
+                    <el-option label="环境体系" value="2"></el-option>
+                    <el-option label="职业健康体系" value="3"></el-option>
+                    <el-option label="其他" value="4"></el-option>
+                  </el-select>
+                </el-col>
+                <el-col :span="8">
+                  <div v-if="dialogFormVisible">（
+                  <el-input v-model="form.remark" style="width: 150px;" />）
+                  </div>
+                </el-col>
+              </el-row>
+              
+              
+              
+
+            </td>
         </tr>
         <!--近三年是否有环保事故、税务处罚-->
         <tr style="height: 100px;">
@@ -291,9 +338,8 @@
         </tr>
       </table>
       <!-- table-->
-      <el-form-item style="float: right;">
-        <el-button type="primary">确认</el-button>
-        <el-button>取消</el-button>
+      <el-form-item style="float: right; margin: 20px;">
+        <el-button type="primary" @click="$event => onSubmit()">确认</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -301,7 +347,6 @@
 <script>
 export default {
   name: "edits",
-
   props: {
     data: {
       type: Object,
@@ -314,7 +359,10 @@ export default {
   },
   data() {
     return {
+      //显示隐藏
+      dialogFormVisible: false,
       form: {
+        companyId: 0,
         companyName: "",
         userName: "",
         userMobile: "",
@@ -364,9 +412,17 @@ export default {
             projectAmount: ""
          
       }],
+      thirdYearsPropertyRights: [
+        {
+          selfDevelopment:"",
+          transferIncome:""
+        }
+      ],
       projectsUnderDeclaration: "",
       schoolEnterpriseCooperation: "",
       incidentThirdYears: "",
+      systematicSituation:"1",
+      remark:""      
     },
       rules: {
         companyName: [
@@ -403,8 +459,27 @@ export default {
                   projectTime: "",
                   projectAmount: ""
               })
-          })      
+          })  
+          const   thirdYearsPropertyRights= [1,2,3,4,5];
+          thirdYearsPropertyRights.forEach(item=>{
+              this.form.thirdYearsPropertyRights.push({
+                  selfDevelopment:"",
+                  transferIncome:""
+              })
+          })    
          
+      },
+      selectChange(){
+          if(this.form.systematicSituation=="4"){
+              this.dialogFormVisible=true            
+          }else{
+              this.dialogFormVisible=false
+              this.form.remark=""
+          }
+      },
+      //提交
+      onSubmit(){
+          console.log(this.form)
       }
   }
 };
