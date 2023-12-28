@@ -111,10 +111,8 @@ public class CompanyController {
     @ApiOperation(value = "新增公司扩展信息")
     @PostMapping("/addExt")
     @Log("新增公司扩展信息")
+//    @AnonymousAccess
     public ResponseEntity<Object> addCompanyExtInfo(@RequestBody CompanyExt resource){
-        if (resource.getId() != null) {
-            throw new BadRequestException("A new "+ ENTITY_NAME +" cannot already have an ID");
-        }
         Company company = this.companyService.getById(resource.getCompanyId());
         if (Objects.isNull(company)){
             throw new BadRequestException("企业不存在");

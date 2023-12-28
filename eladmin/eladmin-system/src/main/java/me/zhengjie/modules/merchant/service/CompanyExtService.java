@@ -27,7 +27,7 @@ public class CompanyExtService extends ServiceImpl<CompanyExtMapper, CompanyExt>
     private final CompanyService companyService;
     @Transactional(rollbackFor = Exception.class)
     public void add(CompanyExt companyExt){
-        this.save(companyExt);
+        this.saveOrUpdate(companyExt);
     }
 
     @Transactional(rollbackFor = Exception.class)
