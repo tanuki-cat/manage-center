@@ -1,5 +1,7 @@
 package me.zhengjie.modules.merchant.domain;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
@@ -8,6 +10,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 import me.zhengjie.base.BaseEntity;
 
 import java.io.Serial;
@@ -23,6 +26,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "企业经营情况信息扩展表")
+@Accessors(chain = true)
 @TableName(value = "biz_company_business_info_ext",autoResultMap = true)
 public class CompanyBusinessInfoExt extends BaseEntity implements Serializable {
     @Serial
@@ -56,6 +60,14 @@ public class CompanyBusinessInfoExt extends BaseEntity implements Serializable {
     @TableField(value = "three_years_finance", typeHandler = JacksonTypeHandler.class)
     private List<JSONObject> threeYearsFinance;
 
+    @TableField(value = "main_product_percent")
+    @ApiModelProperty(value = "主营产品百分比")
+    private String  mainProductPercent;
+
+    @TableField(value = "main_product_rank")
+    @ApiModelProperty(value = "主营产品国内排行")
+    private String mainProductRank;
+
     @ApiModelProperty(value = "历年来获取的资质、荣誉、项目")
     @TableField(value = "years_honors", typeHandler = JacksonTypeHandler.class)
     private List<JSONObject> yearsHonors;
@@ -71,4 +83,8 @@ public class CompanyBusinessInfoExt extends BaseEntity implements Serializable {
     @TableField(value = "is_deleted")
     @TableLogic(value = "0",delval = "1")
     private Integer isDeleted;
+
+    public void copy(CompanyBusinessInfoExt source){
+        BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
+    }
 }

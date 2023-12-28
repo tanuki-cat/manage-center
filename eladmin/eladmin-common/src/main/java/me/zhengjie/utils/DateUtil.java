@@ -200,4 +200,34 @@ public class DateUtil {
         });
         return weekList;
     }
+
+    /**
+     * 生成前七天的日期
+     * @return
+     */
+    public static List<Map.Entry<String,String>> prevSevenDay() {
+        TreeMap<String,String> week = new TreeMap<>();
+        Date[] date = new Date[7];
+        Calendar calendar = Calendar.getInstance();
+//        calendar.set(Calendar.DAY_OF_WEEK,Calendar.MONDAY);
+        Date startDate = calendar.getTime();
+        date[0] = startDate;
+        for (int i = 1 ; i < 7; i++) {
+//            calendar.add(Calendar.DAY_OF_WEEK, 1);
+            calendar.add(Calendar.DATE, -1);
+            Date endDate = calendar.getTime();
+            date[i] = endDate;
+        }
+        for (Date d:date) {
+            week.put(SDF_EEE.format(d),SDF_YMD.format(d));
+        }
+        List<Map.Entry<String,String>> weekList = new ArrayList<Map.Entry<String,String>>(week.entrySet());
+        weekList.sort(new Comparator<Map.Entry<String, String>>() {
+            @Override
+            public int compare(Map.Entry<String, String> o1, Map.Entry<String, String> o2) {
+                return o1.getValue().compareTo(o2.getValue());
+            }
+        });
+        return weekList;
+    }
 }

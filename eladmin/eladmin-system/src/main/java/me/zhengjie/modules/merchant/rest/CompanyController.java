@@ -23,8 +23,10 @@ import java.util.List;
 
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.merchant.domain.Company;
+import me.zhengjie.modules.merchant.domain.CompanyExt;
 import me.zhengjie.modules.merchant.domain.vo.CompanyQueryCriteria;
 import me.zhengjie.modules.merchant.enums.CompanyTypeEnum;
+import me.zhengjie.modules.merchant.service.CompanyExtService;
 import me.zhengjie.modules.merchant.service.CompanyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +36,7 @@ import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 import javax.servlet.http.HttpServletResponse;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import me.zhengjie.utils.PageResult;
@@ -49,6 +52,7 @@ import me.zhengjie.utils.PageResult;
 public class CompanyController {
 
     private final CompanyService companyService;
+    private final CompanyExtService companyExtService;
     private static final String ENTITY_NAME = "company";
     @Log("导出数据")
     @ApiOperation("导出数据")
@@ -103,4 +107,34 @@ public class CompanyController {
     public ResponseEntity<JSONArray> enumList() {
         return new ResponseEntity<>(CompanyTypeEnum.listJson(),HttpStatus.OK);
     }
+
+    @ApiOperation(value = "新增公司扩展信息")
+    @PostMapping("/addExt")
+    @Log("新增公司扩展信息")
+    public ResponseEntity<Object> addCompanyExtInfo(@RequestBody CompanyExt resource){
+        if (resource.getId() != null) {
+            throw new BadRequestException("A new "+ ENTITY_NAME +" cannot already have an ID");
+        }
+        Company company = this.companyService.getById(resource.getCompanyId());
+        if (Objects.isNull(company)){
+            throw new BadRequestException("企业不存在");
+        }
+        companyExtService.add(resource);
+        return new ResponseEntity<>("新增成功",HttpStatus.CREATED);
+    }
+
+    @ApiOperation(value = "修改公司扩展信息信息")
+    @PostMapping("/editExt")
+    @Log("修改公司扩展信息信息")
+    public ResponseEntity<Object> editCompanyExtInfo(@RequestBody CompanyExt resource){
+        companyExtService.edit(resource);
+        return new ResponseEntity<>("修改成功",HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/extInfo")
+    @ApiOperation(value = "获取公司扩展信息")
+    public ResponseEntity<Object> getCompanyExtInfo(@RequestParam(value = "companyId") Long companyId){
+        return new ResponseEntity<>(companyExtService.getExtInfoByCompanyId(companyId),HttpStatus.OK);
+    }
+
 }
