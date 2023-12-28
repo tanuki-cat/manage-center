@@ -131,7 +131,7 @@ public class CompanyController {
 
     @GetMapping("/extInfo")
     @ApiOperation(value = "获取公司扩展信息")
-    public ResponseEntity<Object> getCompanyExtInfo(@RequestParam(value = "companyId") Long companyId){
+    public ResponseEntity<CompanyExt> getCompanyExtInfo(@RequestParam(value = "companyId") Long companyId){
         return new ResponseEntity<>(companyExtService.getExtInfoByCompanyId(companyId),HttpStatus.OK);
     }
     @GetMapping("/detail")

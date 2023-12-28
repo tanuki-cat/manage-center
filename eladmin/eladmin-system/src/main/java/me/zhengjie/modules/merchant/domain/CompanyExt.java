@@ -3,11 +3,14 @@ package me.zhengjie.modules.merchant.domain;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,10 +30,12 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName(value = "sys_company_ext",autoResultMap = true)
+@JsonSerialize()
 public class CompanyExt extends BaseEntity implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @JSONField(serialzeFeatures = SerializerFeature.WriteNonStringValueAsString)
     @TableId(value = "id",type = IdType.ASSIGN_ID)
     @ApiModelProperty(value = "主键ID")
     private Long id;
