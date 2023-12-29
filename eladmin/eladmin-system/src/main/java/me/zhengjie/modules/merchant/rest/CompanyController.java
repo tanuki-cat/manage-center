@@ -15,6 +15,7 @@ package me.zhengjie.modules.merchant.rest;/*
 */
 
 import com.alibaba.fastjson.JSONArray;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import me.zhengjie.annotation.AnonymousAccess;
 import me.zhengjie.annotation.CheckCreate;
 import me.zhengjie.annotation.Log;
@@ -24,10 +25,12 @@ import java.util.List;
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.merchant.domain.Company;
 import me.zhengjie.modules.merchant.domain.CompanyExt;
+import me.zhengjie.modules.merchant.domain.Project;
 import me.zhengjie.modules.merchant.domain.vo.CompanyQueryCriteria;
 import me.zhengjie.modules.merchant.enums.CompanyTypeEnum;
 import me.zhengjie.modules.merchant.service.CompanyExtService;
 import me.zhengjie.modules.merchant.service.CompanyService;
+import me.zhengjie.modules.merchant.service.ProjectService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -53,6 +56,7 @@ public class CompanyController {
 
     private final CompanyService companyService;
     private final CompanyExtService companyExtService;
+    private final ProjectService projectService;
     private static final String ENTITY_NAME = "company";
     @Log("导出数据")
     @ApiOperation("导出数据")
@@ -97,6 +101,10 @@ public class CompanyController {
     @ApiOperation("删除company")
     @PreAuthorize("@el.check('company:del')")
     public ResponseEntity<Object> deleteCompany(@RequestBody List<Long> ids) {
+        LambdaQueryWrapper<Project> queryWrapper = new LambdaQueryWrapper<Project>().in(Project::getCompanyId,ids);
+        if (projectService.count(queryWrapper) > 0) {
+            throw new BadRequestException("该公司下存在项目，请先删除项目");
+        }
         companyService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }

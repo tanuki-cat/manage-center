@@ -15,11 +15,14 @@ package me.zhengjie.modules.merchant.service.impl;/*
 */
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.merchant.domain.Company;
+import me.zhengjie.modules.merchant.domain.CompanyExt;
 import me.zhengjie.modules.merchant.domain.dto.CompanyInfoExtDto;
 import me.zhengjie.modules.merchant.domain.vo.CompanyQueryCriteria;
 import me.zhengjie.modules.merchant.mapper.CompanyMapper;
+import me.zhengjie.modules.merchant.service.CompanyExtService;
 import me.zhengjie.modules.merchant.service.CompanyInfoExtService;
 import me.zhengjie.modules.merchant.service.CompanyService;
 import me.zhengjie.utils.FileUtil;
@@ -28,12 +31,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import me.zhengjie.utils.PageUtil;
 
 import java.util.*;
 import java.io.IOException;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 
 import me.zhengjie.utils.PageResult;
@@ -44,11 +49,12 @@ import me.zhengjie.utils.PageResult;
 * @date 2023-11-22
 **/
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor_= {@Lazy})
 public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> implements CompanyService {
 
     private final CompanyMapper companyMapper;
     private final CompanyInfoExtService companyInfoExtService;
+    private final CompanyExtService companyExtService;
 
     @Override
     public PageResult<Company> queryAll(CompanyQueryCriteria criteria, Page<Object> page){
@@ -107,6 +113,12 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteAll(List<Long> ids) {
+        LambdaQueryWrapper<CompanyExt> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.in(CompanyExt::getCompanyId,ids);
+        if (companyExtService.count(queryWrapper) > 0 ) {
+            List<Long> extIds =  companyExtService.list(queryWrapper).stream().map(CompanyExt::getId).toList();
+            companyExtService.removeBatchByIds(extIds);
+        }
         removeBatchByIds(ids);
     }
 
