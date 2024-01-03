@@ -39,21 +39,21 @@ public class CheckCreatorAspect {
         String currentUserName = SecurityUtils.getCurrentUsername();
         String currentUserId = SecurityUtils.getCurrentUserId().toString();
         List<Role> roleList = roleService.findByUsersId(SecurityUtils.getCurrentUserId());
-        List<String> roleNames = roleList.stream().map(Role::getName).collect(Collectors.toList());
+        List<String> roleNames = roleList.stream().map(Role::getName).toList();
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         Method signatureMethod = signature.getMethod();
         CheckCreate checkCreate = signatureMethod.getAnnotation(CheckCreate.class);
         Class checkClass = checkCreate.clazz();
         String[] checkRoles = checkCreate.roles();
-        //当当前角色是项目经理时
-        if (roleNames.stream().anyMatch("项目"::equals) && Arrays.stream(checkRoles).anyMatch("项目"::equals)) {
+        //当当前角色是项目经理或者专利经理时
+        if ((roleNames.stream().anyMatch("项目经理"::equals) && Arrays.asList(checkRoles).contains("项目经理")) ||
+                (roleNames.stream().anyMatch("专利经理"::equals) && Arrays.asList(checkRoles).contains("专利经理"))) {
             for(Object arg: args) {
                 if (checkClass.isInstance(arg)) {
                     for (String method : checkCreate.filedMethod()) {
                         if (method.equals("setAssignUserId")) {
                             Method setMethod = checkClass.getDeclaredMethod(method , String.class);
                             setMethod.invoke(arg, currentUserId);
-                            return pjp.proceed();
                         }
                     }
                 }
@@ -70,12 +70,10 @@ public class CheckCreatorAspect {
                                 Method setMethod = checkClass.getDeclaredMethod(method, String.class);
                                 setMethod.invoke(arg, currentUserName);
                             }
-                            return pjp.proceed();
                         }
                     }
                 }
             }
-            return pjp.proceed();
         }
         return pjp.proceed();
     }

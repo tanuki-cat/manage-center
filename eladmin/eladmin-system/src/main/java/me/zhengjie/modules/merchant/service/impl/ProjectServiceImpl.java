@@ -44,6 +44,7 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 
 import me.zhengjie.utils.PageResult;
+import org.springframework.util.CollectionUtils;
 
 /**
  * @author ChinaJoy
@@ -65,7 +66,7 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
         if (criteria.getCompanyId() != null && criteria.getCompanyId() > 0) {
             wrapper.eq(Project::getCompanyId, criteria.getCompanyId());
         }
-        if (StringUtils.isNotBlank(criteria.getUserName())) {
+        if (Strings.isNotBlank(criteria.getUserName())) {
             wrapper.eq(BaseEntity::getCreateBy, criteria.getUserName());
         }
         if (Strings.isNotBlank(criteria.getCreateBy())) {
@@ -75,8 +76,10 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
             //当前角色为项目经理时
             List<ProjectSchedule> schedules = this.projectScheduleService.list(Wrappers.<ProjectSchedule>query().lambda()
                     .eq(ProjectSchedule::getAssignUserId, criteria.getAssignUserId()).eq(ProjectSchedule::getAssignStatus,0));
-            List<Long> projectIds = schedules.stream().map(ProjectSchedule::getProjectId).toList();
-            wrapper.in(Project::getId, projectIds);
+            if (!CollectionUtils.isEmpty(schedules)) {
+                List<Long> projectIds = schedules.stream().map(ProjectSchedule::getProjectId).toList();
+                wrapper.in(Project::getId, projectIds);
+            }
         }
         //排序
         wrapper.orderByDesc(Project::getCreateTime);

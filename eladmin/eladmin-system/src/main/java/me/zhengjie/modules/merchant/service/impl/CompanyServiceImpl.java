@@ -19,12 +19,14 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.merchant.domain.Company;
 import me.zhengjie.modules.merchant.domain.CompanyExt;
+import me.zhengjie.modules.merchant.domain.Patent;
 import me.zhengjie.modules.merchant.domain.dto.CompanyInfoExtDto;
 import me.zhengjie.modules.merchant.domain.vo.CompanyQueryCriteria;
 import me.zhengjie.modules.merchant.mapper.CompanyMapper;
 import me.zhengjie.modules.merchant.service.CompanyExtService;
 import me.zhengjie.modules.merchant.service.CompanyInfoExtService;
 import me.zhengjie.modules.merchant.service.CompanyService;
+import me.zhengjie.modules.merchant.service.PatentService;
 import me.zhengjie.utils.FileUtil;
 import lombok.RequiredArgsConstructor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -71,6 +73,7 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
         if (Strings.isNotBlank(criteria.getCreateBy())) {
             queryWrapper.eq(Company::getCreateBy, criteria.getCreateBy());
         }
+        queryWrapper.orderByDesc(Company::getCreateTime);
         IPage<Company> companyIPage = this.page(companyPage, queryWrapper);
         return PageUtil.toPage(companyIPage);
     }
@@ -115,6 +118,7 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
     public void deleteAll(List<Long> ids) {
         LambdaQueryWrapper<CompanyExt> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.in(CompanyExt::getCompanyId,ids);
+        //删除公司下的扩展信息
         if (companyExtService.count(queryWrapper) > 0 ) {
             List<Long> extIds =  companyExtService.list(queryWrapper).stream().map(CompanyExt::getId).toList();
             companyExtService.removeBatchByIds(extIds);
