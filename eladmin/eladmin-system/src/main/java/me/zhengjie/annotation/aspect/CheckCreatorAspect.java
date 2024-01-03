@@ -46,7 +46,7 @@ public class CheckCreatorAspect {
         Class checkClass = checkCreate.clazz();
         String[] checkRoles = checkCreate.roles();
         //当当前角色是项目经理或者专利经理时
-        if ((roleNames.stream().anyMatch("项目"::equals) && Arrays.asList(checkRoles).contains("项目")) ||
+        if ((roleNames.stream().anyMatch("项目经理"::equals) && Arrays.asList(checkRoles).contains("项目经理")) ||
                 (roleNames.stream().anyMatch("专利经理"::equals) && Arrays.asList(checkRoles).contains("专利经理"))) {
             for(Object arg: args) {
                 if (checkClass.isInstance(arg)) {
@@ -54,7 +54,6 @@ public class CheckCreatorAspect {
                         if (method.equals("setAssignUserId")) {
                             Method setMethod = checkClass.getDeclaredMethod(method , String.class);
                             setMethod.invoke(arg, currentUserId);
-                            return pjp.proceed();
                         }
                     }
                 }
@@ -71,12 +70,10 @@ public class CheckCreatorAspect {
                                 Method setMethod = checkClass.getDeclaredMethod(method, String.class);
                                 setMethod.invoke(arg, currentUserName);
                             }
-                            return pjp.proceed();
                         }
                     }
                 }
             }
-            return pjp.proceed();
         }
         return pjp.proceed();
     }
