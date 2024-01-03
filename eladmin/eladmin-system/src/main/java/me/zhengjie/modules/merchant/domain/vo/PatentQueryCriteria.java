@@ -23,4 +23,9 @@ import lombok.Data;
 **/
 @Data
 public class PatentQueryCriteria{
+    private Long companyId;
+    private String userName;
+    private String createBy;
+    private String assignUser;
+    private String assignUserId;
 }

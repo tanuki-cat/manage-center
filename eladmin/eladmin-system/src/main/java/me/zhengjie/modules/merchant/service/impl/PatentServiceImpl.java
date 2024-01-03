@@ -15,7 +15,12 @@
 */
 package me.zhengjie.modules.merchant.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import me.zhengjie.modules.merchant.domain.Patent;
+import me.zhengjie.modules.merchant.domain.PatentSchedule;
+import me.zhengjie.modules.merchant.domain.Project;
+import me.zhengjie.modules.merchant.service.PatentScheduleService;
 import me.zhengjie.utils.FileUtil;
 import lombok.RequiredArgsConstructor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -23,16 +28,17 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import me.zhengjie.modules.merchant.service.PatentService;
 import me.zhengjie.modules.merchant.domain.vo.PatentQueryCriteria;
 import me.zhengjie.modules.merchant.mapper.PatentMapper;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import me.zhengjie.utils.PageUtil;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+
 import me.zhengjie.utils.PageResult;
+import org.springframework.util.CollectionUtils;
 
 /**
 * @description 服务实现
@@ -44,10 +50,34 @@ import me.zhengjie.utils.PageResult;
 public class PatentServiceImpl extends ServiceImpl<PatentMapper, Patent> implements PatentService {
 
     private final PatentMapper patentMapper;
+    private final PatentScheduleService patentScheduleService;
 
     @Override
     public PageResult<Patent> queryAll(PatentQueryCriteria criteria, Page<Object> page){
-        return PageUtil.toPage(patentMapper.findAll(criteria, page));
+        LambdaQueryWrapper<Patent> wrapper = new LambdaQueryWrapper<>();
+        //设置查询条件
+        if (criteria.getCompanyId() != null && criteria.getCompanyId() > 0) {
+            wrapper.eq(Patent::getCompanyId, criteria.getCompanyId());
+        }
+        if (criteria.getCreateBy() != null) {
+            wrapper.eq(Patent::getCreateBy, criteria.getCreateBy());
+        }
+        if (criteria.getUserName() != null) {
+            wrapper.eq(Patent::getCreateBy, criteria.getUserName());
+        }
+        if (Strings.isNotBlank(criteria.getAssignUserId()) && Long.parseLong(criteria.getAssignUserId()) > 0) {
+             List<PatentSchedule> patentSchedules = this.patentScheduleService.lambdaQuery()
+                    .eq(PatentSchedule::getAssignUserId, criteria.getAssignUserId())
+                    .eq(PatentSchedule::getAssignStatus,0).list();
+            if (!CollectionUtils.isEmpty(patentSchedules)) {
+                List<Long> patentIds = patentSchedules.stream().map(PatentSchedule::getPatentId).toList();
+                wrapper.in(Patent::getId, patentIds);
+            }
+
+        }
+        wrapper.orderByDesc(Patent::getCreateTime);
+        IPage<Patent> page1 = new Page<>(page.getCurrent(), page.getSize());
+        return PageUtil.toPage(patentMapper.selectPage(page1, wrapper));
     }
 
     @Override
@@ -72,6 +102,8 @@ public class PatentServiceImpl extends ServiceImpl<PatentMapper, Patent> impleme
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteAll(List<Long> ids) {
+        //删除专利下的流程
+        patentScheduleService.remove(new LambdaQueryWrapper<PatentSchedule>().in(PatentSchedule::getPatentId, ids));
         removeBatchByIds(ids);
     }
 

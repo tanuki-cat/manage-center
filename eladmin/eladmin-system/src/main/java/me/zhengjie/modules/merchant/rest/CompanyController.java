@@ -25,11 +25,13 @@ import java.util.List;
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.merchant.domain.Company;
 import me.zhengjie.modules.merchant.domain.CompanyExt;
+import me.zhengjie.modules.merchant.domain.Patent;
 import me.zhengjie.modules.merchant.domain.Project;
 import me.zhengjie.modules.merchant.domain.vo.CompanyQueryCriteria;
 import me.zhengjie.modules.merchant.enums.CompanyTypeEnum;
 import me.zhengjie.modules.merchant.service.CompanyExtService;
 import me.zhengjie.modules.merchant.service.CompanyService;
+import me.zhengjie.modules.merchant.service.PatentService;
 import me.zhengjie.modules.merchant.service.ProjectService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,6 +59,7 @@ public class CompanyController {
     private final CompanyService companyService;
     private final CompanyExtService companyExtService;
     private final ProjectService projectService;
+    private final PatentService patentService;
     private static final String ENTITY_NAME = "company";
     @Log("导出数据")
     @ApiOperation("导出数据")
@@ -104,6 +107,9 @@ public class CompanyController {
         LambdaQueryWrapper<Project> queryWrapper = new LambdaQueryWrapper<Project>().in(Project::getCompanyId,ids);
         if (projectService.count(queryWrapper) > 0) {
             throw new BadRequestException("该公司下存在项目，请先删除项目");
+        }
+        if (patentService.lambdaQuery().in(Patent::getCompanyId,ids).count() > 0) {
+            throw new BadRequestException("该公司下存在专利，请先删除专利");
         }
         companyService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);

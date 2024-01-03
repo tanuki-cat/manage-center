@@ -15,8 +15,10 @@
 */
 package me.zhengjie.modules.merchant.rest;
 
+import me.zhengjie.annotation.CheckCreate;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.modules.merchant.domain.Patent;
+import me.zhengjie.modules.merchant.domain.vo.ProjectQueryCriteria;
 import me.zhengjie.modules.merchant.service.PatentService;
 import me.zhengjie.modules.merchant.domain.vo.PatentQueryCriteria;
 import lombok.RequiredArgsConstructor;
@@ -56,6 +58,7 @@ public class PatentController {
     @Log("查询patent")
     @ApiOperation("查询patent")
     @PreAuthorize("@el.check('patent:list')")
+    @CheckCreate(roles = {"专利经理"},clazz = PatentQueryCriteria.class,filedMethod = {"setCreateBy","setAssignUser","setAssignUserId"})
     public ResponseEntity<PageResult<Patent>> queryPatent(PatentQueryCriteria criteria, Page<Object> page){
         return new ResponseEntity<>(patentService.queryAll(criteria,page),HttpStatus.OK);
     }
