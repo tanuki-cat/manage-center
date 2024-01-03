@@ -23,6 +23,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import me.zhengjie.modules.merchant.domain.vo.PatentVO;
 import me.zhengjie.utils.PageResult;
 
 /**
@@ -38,7 +39,7 @@ public interface PatentService extends IService<Patent> {
     * @param page 分页参数
     * @return PageResult
     */
-    PageResult<Patent> queryAll(PatentQueryCriteria criteria, Page<Object> page);
+    PageResult<PatentVO> queryAll(PatentQueryCriteria criteria, Page<Object> page);
 
     /**
     * 查询所有数据不分页

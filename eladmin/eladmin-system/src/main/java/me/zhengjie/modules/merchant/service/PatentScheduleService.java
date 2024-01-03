@@ -23,6 +23,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import me.zhengjie.modules.merchant.domain.vo.ScheduleVO;
 import me.zhengjie.utils.PageResult;
 
 /**
@@ -72,4 +73,6 @@ public interface PatentScheduleService extends IService<PatentSchedule> {
     * @throws IOException /
     */
     void download(List<PatentSchedule> all, HttpServletResponse response) throws IOException;
+
+    ScheduleVO details(Long patentId);
 }

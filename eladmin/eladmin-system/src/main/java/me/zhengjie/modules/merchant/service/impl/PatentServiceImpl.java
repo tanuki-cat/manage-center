@@ -20,6 +20,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import me.zhengjie.modules.merchant.domain.Patent;
 import me.zhengjie.modules.merchant.domain.PatentSchedule;
 import me.zhengjie.modules.merchant.domain.Project;
+import me.zhengjie.modules.merchant.domain.vo.PatentVO;
+import me.zhengjie.modules.merchant.domain.vo.ProjectVO;
 import me.zhengjie.modules.merchant.service.PatentScheduleService;
 import me.zhengjie.utils.FileUtil;
 import lombok.RequiredArgsConstructor;
@@ -53,7 +55,7 @@ public class PatentServiceImpl extends ServiceImpl<PatentMapper, Patent> impleme
     private final PatentScheduleService patentScheduleService;
 
     @Override
-    public PageResult<Patent> queryAll(PatentQueryCriteria criteria, Page<Object> page){
+    public PageResult<PatentVO> queryAll(PatentQueryCriteria criteria, Page<Object> page){
         LambdaQueryWrapper<Patent> wrapper = new LambdaQueryWrapper<>();
         //设置查询条件
         if (criteria.getCompanyId() != null && criteria.getCompanyId() > 0) {
@@ -77,9 +79,13 @@ public class PatentServiceImpl extends ServiceImpl<PatentMapper, Patent> impleme
         }
         wrapper.orderByDesc(Patent::getCreateTime);
         IPage<Patent> page1 = new Page<>(page.getCurrent(), page.getSize());
-        return PageUtil.toPage(patentMapper.selectPage(page1, wrapper));
+        return PageUtil.toPage(patentMapper.selectPage(page1, wrapper).convert(patent -> vo(patent)));
     }
-
+    protected PatentVO vo(Patent patent){
+        PatentVO patentVO = new PatentVO(patent);
+        patentVO.setScheduleStatus(patentScheduleService.details(patent.getId()).getStatus());
+        return patentVO;
+    }
     @Override
     public List<Patent> queryAll(PatentQueryCriteria criteria){
         return patentMapper.findAll(criteria);

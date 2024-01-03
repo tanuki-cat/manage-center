@@ -18,11 +18,16 @@ package me.zhengjie.modules.merchant.rest;
 import me.zhengjie.annotation.CheckCreate;
 import me.zhengjie.annotation.Log;
 import me.zhengjie.modules.merchant.domain.Patent;
+import me.zhengjie.modules.merchant.domain.vo.PatentVO;
 import me.zhengjie.modules.merchant.domain.vo.ProjectQueryCriteria;
 import me.zhengjie.modules.merchant.service.PatentService;
 import me.zhengjie.modules.merchant.domain.vo.PatentQueryCriteria;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
+
+import me.zhengjie.modules.merchant.service.PatentUpdateSerivce;
+import me.zhengjie.modules.system.service.UserService;
+import me.zhengjie.utils.SecurityUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,10 +46,11 @@ import me.zhengjie.utils.PageResult;
 @RestController
 @RequiredArgsConstructor
 @Api(tags = "patent管理")
-@RequestMapping("/api/patent")
+@RequestMapping("/api/merchant/patent")
 public class PatentController {
-
+    private final UserService userService;
     private final PatentService patentService;
+    private final PatentUpdateSerivce patentUpdateSerivce;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
@@ -59,7 +65,7 @@ public class PatentController {
     @ApiOperation("查询patent")
     @PreAuthorize("@el.check('patent:list')")
     @CheckCreate(roles = {"专利经理"},clazz = PatentQueryCriteria.class,filedMethod = {"setCreateBy","setAssignUser","setAssignUserId"})
-    public ResponseEntity<PageResult<Patent>> queryPatent(PatentQueryCriteria criteria, Page<Object> page){
+    public ResponseEntity<PageResult<PatentVO>> queryPatent(PatentQueryCriteria criteria, Page<Object> page){
         return new ResponseEntity<>(patentService.queryAll(criteria,page),HttpStatus.OK);
     }
 
@@ -68,7 +74,8 @@ public class PatentController {
     @ApiOperation("新增patent")
     @PreAuthorize("@el.check('patent:add')")
     public ResponseEntity<Object> createPatent(@Validated @RequestBody Patent resources){
-        patentService.create(resources);
+        resources.setNickName(userService.findById(SecurityUtils.getCurrentUserId()).getNickName());
+        patentUpdateSerivce.create(resources);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

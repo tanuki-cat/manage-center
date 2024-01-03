@@ -39,7 +39,7 @@ import me.zhengjie.utils.PageResult;
 @RestController
 @RequiredArgsConstructor
 @Api(tags = "patentSchedule管理")
-@RequestMapping("/api/patentSchedule")
+@RequestMapping("/api/merchant/patentSchedule")
 public class PatentScheduleController {
 
     private final PatentScheduleService patentScheduleService;

@@ -18,9 +18,8 @@ package me.zhengjie.modules.merchant.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import me.zhengjie.modules.merchant.domain.PatentSchedule;
-import me.zhengjie.modules.merchant.domain.ProjectSchedule;
 import me.zhengjie.modules.merchant.domain.vo.PatentScheduleVO;
-import me.zhengjie.modules.merchant.domain.vo.ProjectScheduleVO;
+import me.zhengjie.modules.merchant.domain.vo.ScheduleVO;
 import me.zhengjie.utils.FileUtil;
 import lombok.RequiredArgsConstructor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -106,5 +105,14 @@ public class PatentScheduleServiceImpl extends ServiceImpl<PatentScheduleMapper,
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);
+    }
+
+    @Override
+    public ScheduleVO details(Long patentId) {
+        List<PatentSchedule> patentSchedules = this.list(new LambdaQueryWrapper<PatentSchedule>()
+                .eq(PatentSchedule::getPatentId, patentId).orderByDesc(PatentSchedule::getScheduleStatus));
+        ScheduleVO scheduleVO = new ScheduleVO();
+        scheduleVO.setStatus(patentSchedules.get(0).getScheduleStatus().getValue());
+        return scheduleVO;
     }
 }

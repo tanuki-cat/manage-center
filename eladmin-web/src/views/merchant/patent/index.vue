@@ -121,7 +121,7 @@ export default {
   components: { pagination, crudOperation, rrOperation, udOperation },
   mixins: [presenter(), header(), form(defaultForm), crud()],
   cruds() {
-    return CRUD({ title: 'patent', url: 'api/merchant/patent', idField: 'patentId', sort: 'patentId,desc', crudMethod: { ...crudPatent }})
+    return CRUD({ title: 'patent', url: 'api/merchant/patent', idField: 'id', sort: 'id,desc', crudMethod: { ...crudPatent }})
   },
   data() {
     return {
