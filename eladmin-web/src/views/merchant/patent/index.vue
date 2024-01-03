@@ -50,7 +50,7 @@
             <el-input v-model="form.forewarnTime" style="width: 370px;" />
           </el-form-item>
           <el-form-item label="状态">
-            <el-input v-model="form.patentStatus" style="width: 370px;" />
+            <el-input v-model="form.statusName" style="width: 370px;" />
           </el-form-item>
           <el-form-item label="创建者名字">
             <el-input v-model="form.nickName" style="width: 370px;" />
@@ -88,7 +88,7 @@
         <el-table-column prop="authorizationTime" label="授权下证时间" />
         <el-table-column prop="patentNum" label="专利数" />
         <el-table-column prop="forewarnTime" label="年费预警时间" />
-        <el-table-column prop="patentStatus" label="状态" />
+        <el-table-column prop="statusName" label="状态" />
         <el-table-column prop="nickName" label="创建者名字" />
         <el-table-column prop="createTime" label="添加时间" />
 
