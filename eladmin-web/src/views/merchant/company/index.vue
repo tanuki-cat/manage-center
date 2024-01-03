@@ -87,6 +87,33 @@
           <el-button :loading="crud.status.cu === 2" type="primary" @click="$event => addProject()">确认</el-button>
         </div>
       </el-dialog>
+      <!--添加专利-->
+      <el-dialog :close-on-click-modal="false" :visible.sync="patentVisible" width="520px" :title="添加专利">
+        <el-form ref="form" :model="patentFrom" :rules="rules" size="small" label-width="100px">
+          <el-form-item label="公司名称">
+            <el-input v-model="patentFrom.companyName" style="width: 350px;" disabled />
+          </el-form-item>
+          <el-form-item label="发明专利">
+            <el-input v-model="patentFrom.invention" style="width: 350px;" />
+          </el-form-item>
+          <el-form-item label="实用新型专利">
+            <el-input v-model="patentFrom.utilityModel" style="width: 350px;"  />
+          </el-form-item>
+          <el-form-item label="外观专利">
+            <el-input v-model="patentFrom.appearance" style="width: 350px;" />
+          </el-form-item>
+          <el-form-item label="软件著作">
+            <el-input v-model="patentFrom.softwareWorks" style="width: 350px;" />
+          </el-form-item>
+          <el-form-item label="版权">
+            <el-input v-model="patentFrom.copyright" style="width: 350px;" />
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button type="text" @click="patentClose()">取消</el-button>
+          <el-button :loading="crud.status.cu === 2" type="primary" @click="$event => addPatent()">确认</el-button>
+        </div>
+      </el-dialog>
       <!--表格渲染-->
       <el-table ref="table" v-loading="crud.loading" :data="crud.data" size="small" style="width: 100%;"
         @select="crud.selectChange" @select-all="crud.selectAllChange" @selection-change="crud.selectionChangeHandler">
@@ -99,7 +126,7 @@
         <el-table-column v-if="checkPer(['admin', 'company:edit', 'company:del'])" label="操作" width="550px"
           align="center">
           <template slot-scope="scope">
-            <udOperation :data="scope.row" :permission="permission" @addVisit="getVisit" @addProject="getProject" />
+            <udOperation :data="scope.row" :permission="permission" @addVisit="getVisit" @addProject="getProject" @addPatent="getPatent" />
           </template>
         </el-table-column>
       </el-table>
@@ -117,6 +144,7 @@ import udOperation from '@crud/UD.visit'
 import pagination from '@crud/Pagination'
 import visitAdd from '@/api/merchant/visit'
 import projectAdd from '@/api/merchant/project'
+import patentAdd from '@/api/merchant/patent'
 import rrOperation from '@crud/RR.operation'
 
 const defaultForm = { id: null, name: null, userName: null, userMobile: null, createBy: null, updateBy: null, createTime: null, updateTime: null }
@@ -136,6 +164,7 @@ export default {
       },
       visitVisible: false,
       projectVisible:false,
+      patentVisible: false,
       visitFrom: {
         companyId: 0,
         companyName: '',
@@ -150,6 +179,16 @@ export default {
         userName: '',
         userMobile: '',
         amountPercent: 0
+      },
+      patentFrom: {
+        companyId: 0,
+        companyName: '',
+        invention: '',
+        utilityModel: '',
+        appearance: '',
+        softwareWorks: '',
+        copyright: ''
+
       },
       rules: {
         name: [
@@ -200,6 +239,25 @@ export default {
     },
     projectClose() {
       this.projectVisible = false
+    },
+    getPatent(data) {
+      this.patentFrom.companyId = data.id
+      this.patentFrom.companyName = data.name
+      this.patentVisible = true
+    },
+    addPatent() {
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          patentAdd.add(this.patentFrom).then(() => {
+            this.crud.notify('添加成功', 'success')
+            this.patentVisible = false
+
+          })
+        }
+      })
+    },
+    patentClose() {
+      this.patentVisible = false
     },
     // 钩子：在获取表格数据之前执行，false 则代表不获取数据
     [CRUD.HOOK.beforeRefresh]() {

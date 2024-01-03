@@ -18,6 +18,9 @@
       <el-button icon="el-icon-search" type="warning" size="mini">查看拜访</el-button>
     </router-link>
     <el-button icon="el-icon-edit" type="primary" size="mini" @click="projectAdd(data)">添加项目</el-button>
+    <div>
+    <el-button icon="el-icon-edit" type="danger" size="mini" @click="patentAdd(data)" style="float: left;margin: 10px 20px;">添加专利</el-button>
+  </div>
   </div>
 </template>
 <script>
@@ -80,6 +83,9 @@ export default {
     },
     projectAdd(data){
       this.$emit('addProject' , data)
+    },
+    patentAdd(data){
+      this.$emit('addPatent' , data)
     }
   }
 }
