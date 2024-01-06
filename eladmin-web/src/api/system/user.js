@@ -70,5 +70,11 @@ export function roleList(){
     method: 'get'    
   })
 }
-export default { add, edit, del, resetPwd,roleList }
+export function roleLists(){
+  return request({
+    url: 'api/users/roleLists',
+    method: 'get'    
+  })
+}
+export default { add, edit, del, resetPwd,roleList,roleLists }
 

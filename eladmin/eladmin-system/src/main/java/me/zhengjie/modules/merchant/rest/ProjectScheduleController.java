@@ -119,8 +119,8 @@ public class ProjectScheduleController {
         projectScheduleService.setManager(resources);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-    @Log("转交业务人员")
-    @ApiOperation("转交业务人员")
+    @Log("转交财务人员")
+    @ApiOperation("转交财务人员")
     @PostMapping(value = "/transfer")
     public ResponseEntity<Object> transferProject(@RequestBody ScheduleCommand resources){
         resources.setNickName(userService.findById(SecurityUtils.getCurrentUserId()).getNickName());

@@ -26,41 +26,41 @@ export function edit(data) {
 
 export function details(id) {
   return request({
-    url: 'api/merchant/projectSchedule/details/' + id,
+    url: 'api/merchant/patentSchedule/details/' + id,
     method: 'get'
   })
 }
 export function assign(data){
   return request({
-    url: 'api/merchant/projectSchedule/assign',
+    url: 'api/merchant/patentSchedule/assign',
     method: 'post',
     data
   })
 }
 export function manager(data){
   return request({
-    url: 'api/merchant/projectSchedule/manager',
+    url: 'api/merchant/patentSchedule/manager',
     method: 'post',
     data
   })
 }
 export function transfer(data){
   return request({
-    url: 'api/merchant/projectSchedule/transfer',
+    url: 'api/merchant/patentSchedule/transfer',
     method: 'post',
     data
   })
 }
 export function finance(data){
   return request({
-    url: 'api/merchant/projectSchedule/finance',
+    url: 'api/merchant/patentSchedule/finance',
     method: 'post',
     data
   })
 }
 export function complete(data){
   return request({
-    url: 'api/merchant/projectSchedule/complete',
+    url: 'api/merchant/patentSchedule/complete',
     method: 'post',
     data
   })

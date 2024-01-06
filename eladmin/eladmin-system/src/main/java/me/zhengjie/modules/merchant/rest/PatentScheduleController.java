@@ -17,10 +17,16 @@ package me.zhengjie.modules.merchant.rest;
 
 import me.zhengjie.annotation.Log;
 import me.zhengjie.modules.merchant.domain.PatentSchedule;
+import me.zhengjie.modules.merchant.domain.vo.PatentScheduleCommand;
+import me.zhengjie.modules.merchant.domain.vo.PatentScheduleVO;
 import me.zhengjie.modules.merchant.service.PatentScheduleService;
 import me.zhengjie.modules.merchant.domain.vo.PatentScheduleQueryCriteria;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
+
+import me.zhengjie.modules.merchant.service.PatentUpdateSerivce;
+import me.zhengjie.modules.system.service.UserService;
+import me.zhengjie.utils.SecurityUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,7 +49,8 @@ import me.zhengjie.utils.PageResult;
 public class PatentScheduleController {
 
     private final PatentScheduleService patentScheduleService;
-
+    private final UserService userService;
+    private final PatentUpdateSerivce patentUpdateSerivce;
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
@@ -56,7 +63,7 @@ public class PatentScheduleController {
     @Log("查询patentSchedule")
     @ApiOperation("查询patentSchedule")
     @PreAuthorize("@el.check('patentSchedule:list')")
-    public ResponseEntity<PageResult<PatentSchedule>> queryPatentSchedule(PatentScheduleQueryCriteria criteria, Page<Object> page){
+    public ResponseEntity<PageResult<PatentScheduleVO>> queryPatentSchedule(PatentScheduleQueryCriteria criteria, Page<Object> page){
         return new ResponseEntity<>(patentScheduleService.queryAll(criteria,page),HttpStatus.OK);
     }
 
@@ -86,4 +93,43 @@ public class PatentScheduleController {
         patentScheduleService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+    @Log("派发项目")
+    @ApiOperation("派发项目")
+    @PostMapping(value = "/assign")
+    public ResponseEntity<Object> assignPatent(@RequestBody PatentScheduleCommand resources){
+        resources.setNickName(userService.findById(SecurityUtils.getCurrentUserId()).getNickName());
+        patentUpdateSerivce.assign(resources);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+    @GetMapping(value = "/details/{pantentId}")
+    @ApiOperation("查询patentSchedule详情")
+    public ResponseEntity<Object> queryPatentScheduleDetails(@PathVariable Long pantentId){
+        return new ResponseEntity<>(patentScheduleService.details(pantentId),HttpStatus.OK);
+    }
+    @Log("专利经理填写")
+    @ApiOperation("专利经理填写")
+    @PostMapping(value = "/manager")
+    public ResponseEntity<Object> managerPatent(@RequestBody PatentScheduleCommand resources){
+        resources.setNickName(userService.findById(SecurityUtils.getCurrentUserId()).getNickName());
+        patentUpdateSerivce.setManager(resources);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+
+    }
+    @Log("转交财务人员")
+    @ApiOperation("转交财务人员")
+    @PostMapping(value = "/transfer")
+    public ResponseEntity<Object> transferPatent(@RequestBody PatentScheduleCommand resources){
+        resources.setNickName(userService.findById(SecurityUtils.getCurrentUserId()).getNickName());
+        patentUpdateSerivce.transfer(resources);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+    @Log("完成项目")
+    @ApiOperation("完成项目")
+    @PostMapping(value = "/complete")
+    public ResponseEntity<Object> completePatent(@RequestBody PatentScheduleCommand resources){
+        resources.setNickName(userService.findById(SecurityUtils.getCurrentUserId()).getNickName());
+        patentUpdateSerivce.complete(resources);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
 }

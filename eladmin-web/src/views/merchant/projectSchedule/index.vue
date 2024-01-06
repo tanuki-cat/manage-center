@@ -14,7 +14,7 @@
         <el-table-column prop="assignUser" label="指派人" />
         <el-table-column prop="amountPercent" label="金额百分比(%)" />
         <el-table-column prop="scheduleDesc" label="项目进度" />
-        <el-table-column prop="nickName" label="创建者" />
+        <el-table-column prop="nickName" label="最后操作人" />
         <el-table-column prop="createTime" label="日期" />
         <!-- <el-table-column v-if="checkPer(['admin','projectSchedule:edit','projectSchedule:del'])" label="操作" width="150px" align="center">
           <template slot-scope="scope">

@@ -50,7 +50,7 @@ public class PatentScheduleServiceImpl extends ServiceImpl<PatentScheduleMapper,
     private final PatentScheduleMapper patentScheduleMapper;
 
     @Override
-    public PageResult<PatentSchedule> queryAll(PatentScheduleQueryCriteria criteria, Page<Object> page){
+    public PageResult<PatentScheduleVO> queryAll(PatentScheduleQueryCriteria criteria, Page<Object> page){
         IPage<PatentSchedule> page1 =new Page<>(page.getCurrent(),page.getSize());
         LambdaQueryWrapper<PatentSchedule> wrapper= new LambdaQueryWrapper<PatentSchedule>().eq(PatentSchedule::getPatentId,criteria.getPatentId());
         return PageUtil.toPage(this.page(page1,wrapper).convert(patentSchedule -> new PatentScheduleVO(patentSchedule)));

@@ -80,7 +80,7 @@
         </div>
       </el-dialog>
         <!--项目经理填写-->
-        <el-dialog :close-on-click-modal="false" :visible.sync="projectVisible" width="520px" :title="派发任务">
+        <el-dialog :close-on-click-modal="false" :visible.sync="projectVisible" width="520px" :title="填写项目">
         <el-form ref="form" :model="projectFrom" :rules="rules" size="small" label-width="100px">
           <el-form-item label="公司名称">
             <el-input v-model="projectFrom.companyName" style="width: 350px;" disabled />

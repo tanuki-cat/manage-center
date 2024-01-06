@@ -23,6 +23,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import me.zhengjie.modules.merchant.domain.vo.PatentScheduleVO;
 import me.zhengjie.modules.merchant.domain.vo.ScheduleVO;
 import me.zhengjie.utils.PageResult;
 
@@ -39,7 +40,7 @@ public interface PatentScheduleService extends IService<PatentSchedule> {
     * @param page 分页参数
     * @return PageResult
     */
-    PageResult<PatentSchedule> queryAll(PatentScheduleQueryCriteria criteria, Page<Object> page);
+    PageResult<PatentScheduleVO> queryAll(PatentScheduleQueryCriteria criteria, Page<Object> page);
 
     /**
     * 查询所有数据不分页

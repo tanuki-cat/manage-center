@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button v-permission="permission.edit" :loading="crud.status.cu === 2" :disabled="disabledEdit" size="mini" type="primary" icon="el-icon-edit" @click.stop="crud.toEdit(data)" />
+    <!-- <el-button v-permission="permission.edit" :loading="crud.status.cu === 2" :disabled="disabledEdit" size="mini" type="primary" icon="el-icon-edit" @click.stop="crud.toEdit(data)" />
     <el-popover v-model="pop" v-permission="permission.del" placement="top" width="180" trigger="manual" @show="onPopoverShow" @hide="onPopoverHide">
       <p>{{ msg }}</p>
       <div style="text-align: right; margin: 0">
@@ -8,19 +8,16 @@
         <el-button :loading="crud.dataStatus[crud.getDataId(data)].delete === 2" type="primary" size="mini" @click="crud.doDelete(data)">确定</el-button>
       </div>
       <el-button slot="reference" :disabled="disabledDle" type="danger" icon="el-icon-delete" size="mini" @click.stop="toDelete" />
-    </el-popover>
-    <router-link  :to="{ path: '/merchant/edits', query: { companyId: data.id } }">
-      <el-button icon="el-icon-edit" type="warning" size="mini">完善信息</el-button>
-    </router-link>
-    <el-button icon="el-icon-edit" type="success" size="mini" @click="visitAdd(data)">拜访登记</el-button>
+    </el-popover> -->
+
    
-    <router-link  :to="{ path: '/merchant/visit', query: { companyId: data.id } }">
-      <el-button icon="el-icon-search" type="warning" size="mini">查看拜访</el-button>
+    <router-link v-permission="permission.detail"  :to="{ path: '/merchant/patentSchedule', query: { patentId: data.id } }">
+      <el-button icon="el-icon-search" type="warning" size="mini">查看详情</el-button>
     </router-link>
-    <el-button icon="el-icon-edit" type="primary" size="mini" @click="projectAdd(data)">添加项目</el-button>
-    <div>
-    <el-button icon="el-icon-edit" type="danger" size="mini" @click="patentAdd(data)" style="float: left;margin: 10px 20px;">添加专利</el-button>
-  </div>
+    <el-button v-permission="permission.leader" icon="el-icon-edit" type="primary" size="mini" @click="patentAdd(data)" v-if="data.scheduleStatus==0">派发专利</el-button>
+    <el-button v-permission="permission.leader" icon="el-icon-edit" type="primary" size="mini" @click="patentUpdate(data)" v-if="data.scheduleStatus==1">重新派发</el-button>
+    <el-button v-permission="permission.manager" icon="el-icon-edit" type="primary" size="mini" @click="patentManager(data)" v-if="data.scheduleStatus==1||data.scheduleStatus==2">填写或提交财务</el-button>
+    <el-button v-permission="permission.finance" icon="el-icon-edit" type="primary" size="mini" @click="patentFinance(data)" v-if="data.scheduleStatus==3">完结</el-button>
   </div>
 </template>
 <script>
@@ -75,17 +72,21 @@ export default {
     onPopoverHide() {
       document.removeEventListener('click', this.handleDocumentClick)
     },
-    handleDocumentClick(event) { 
+    handleDocumentClick(event) {
       this.pop = false
-    },
-    visitAdd(data) {
-      this.$emit('addVisit',data)
-    },
-    projectAdd(data){
-      this.$emit('addProject' , data)
     },
     patentAdd(data){
       this.$emit('addPatent' , data)
+    },
+    patentUpdate(data){
+      this.$emit('upPatent' , data)
+    },
+    patentManager(data){
+      this.$emit('patentManager' , data)
+    },
+    //财务
+    patentFinance(data){
+      this.$emit('patentFinance' , data)
     }
   }
 }
