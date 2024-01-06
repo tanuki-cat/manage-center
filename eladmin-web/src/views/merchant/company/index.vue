@@ -251,7 +251,7 @@ export default {
           patentAdd.add(this.patentFrom).then(() => {
             this.crud.notify('添加成功', 'success')
             this.patentVisible = false
-
+            this.patentFrom = {}
           })
         }
       })
