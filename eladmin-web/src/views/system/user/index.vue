@@ -277,7 +277,7 @@ export default {
     ])
   },
   created() {
-    this.crud.msg.add = '新增成功，默认密码：123456'
+    this.crud.msg.add = '新增成功，默认密码：TaoTie@2024'
   },
   mounted: function() {
     const that = this
