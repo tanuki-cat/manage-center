@@ -131,5 +131,14 @@ public class PatentScheduleController {
         patentUpdateSerivce.complete(resources);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+    @Log("财务提交")
+    @ApiOperation("财务提交")
+    @PostMapping(value = "/finance")
+    public ResponseEntity<Object> financePatent(@RequestBody PatentScheduleCommand resources){
+        resources.setNickName(userService.findById(SecurityUtils.getCurrentUserId()).getNickName());
+        patentUpdateSerivce.finance(resources);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
 
 }

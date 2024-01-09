@@ -130,6 +130,7 @@
         <el-table-column prop="projectAmount" label="项目金额" />
         <el-table-column prop="amountPercent" label="金额百分比" />    
         <el-table-column prop="statusName" label="项目状态" />
+        <el-table-column prop="createTime" label="签单日期" />
         <el-table-column prop="nickName" label="创建者" />
         <el-table-column v-if="checkPer(['admin','project:edit','project:del'])" label="操作" width="450px" align="center">
           <template slot-scope="scope">

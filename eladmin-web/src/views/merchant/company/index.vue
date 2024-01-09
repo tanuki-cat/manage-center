@@ -81,6 +81,9 @@
           <el-form-item label="项目描述" prop="projectDesc">
             <el-input v-model="projectFrom.projectDesc" style="width: 350px;" type="textarea" />
           </el-form-item>
+          <el-form-item label="签单日期">
+            <el-date-picker v-model="projectFrom.createTime" type="datetime" style="width: 370px;" />
+          </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button type="text" @click="projectClose()">取消</el-button>
@@ -107,6 +110,15 @@
           </el-form-item>
           <el-form-item label="版权">
             <el-input v-model="patentFrom.copyright" style="width: 350px;" />
+          </el-form-item>
+          <el-form-item label="金额">
+            <el-input v-model="patentFrom.projectAmount" style="width: 350px;" />
+          </el-form-item>
+          <el-form-item label="金额百分比">
+            <el-input v-model="patentFrom.amountPercent" style="width: 350px;" />
+          </el-form-item>
+          <el-form-item label="签单日期">
+            <el-date-picker v-model="patentFrom.createTime" type="datetime" style="width: 370px;" />
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -178,7 +190,8 @@ export default {
         projectAmount: 0,
         userName: '',
         userMobile: '',
-        amountPercent: 0
+        amountPercent: 0,
+        createTime: ''
       },
       patentFrom: {
         companyId: 0,
@@ -187,7 +200,10 @@ export default {
         utilityModel: '',
         appearance: '',
         softwareWorks: '',
-        copyright: ''
+        copyright: '',
+        projectAmount: 0,
+        amountPercent: 0,
+        createTime: ''
 
       },
       rules: {

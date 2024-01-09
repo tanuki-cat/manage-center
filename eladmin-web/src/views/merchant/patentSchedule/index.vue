@@ -18,6 +18,7 @@
         <el-table-column prop="authorizationTime" label="授权下证时间" />
         <el-table-column prop="patentNum" label="专利数" />
         <el-table-column prop="forewarnTime" label="年费预警时间" />
+        <el-table-column prop="amountPercent" label="金额百分比(%)" />
         <el-table-column prop="nickName" label="最后操作人" />
         <!-- <el-table-column v-if="checkPer(['admin','patentSchedule:edit','patentSchedule:del'])" label="操作" width="150px" align="center">
           <template slot-scope="scope">

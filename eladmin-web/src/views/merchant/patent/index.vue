@@ -74,29 +74,32 @@
             <el-input v-model="financeFrom.companyName" style="width: 350px;" disabled />
           </el-form-item>      
           <el-form-item label="专利数">
-            <el-input v-model="financeFrom.patentNum" style="width: 350px;" />
+            <el-input v-model="financeFrom.patentNum" style="width: 350px;" disabled/>
           </el-form-item>
           <el-form-item label="年费预警时间">
-            <el-input v-model="financeFrom.forewarnTime" style="width: 350px;" />
+            <el-input v-model="financeFrom.forewarnTime" style="width: 350px;" disabled/>
           </el-form-item>
           <el-form-item label="专利进度" >
-            <el-input v-model="financeFrom.progress" style="width: 350px;" />
+            <el-input v-model="financeFrom.progress" style="width: 350px;" disabled/>
           </el-form-item>   
           <el-form-item label="专利申报时间" >
-            <el-input v-model="financeFrom.filingTime" style="width: 350px;" />
+            <el-input v-model="financeFrom.filingTime" style="width: 350px;" disabled/>
           </el-form-item>
           <el-form-item label="专利写好时间" >
-            <el-input v-model="financeFrom.writeTime" style="width: 350px;" />
+            <el-input v-model="financeFrom.writeTime" style="width: 350px;" disabled/>
           </el-form-item>
           <el-form-item label="授权下证时间" >
-            <el-input v-model="financeFrom.authorizationTime" style="width: 350px;" />
+            <el-input v-model="financeFrom.authorizationTime" style="width: 350px;" disabled/>
           </el-form-item>   
-          
+          <el-form-item label="金额百分比" prop="amountPercent">
+            <el-input v-model="financeFrom.amountPercent" style="width: 350px;" />
+          </el-form-item>   
         </el-form>
         
         <div slot="footer" class="dialog-footer">
           <el-button type="text" @click="financeClose()">取消</el-button>
-          <el-button :loading="crud.status.cu === 2" type="primary" @click="$event => goFinish()">完结</el-button>
+          <el-button :loading="crud.status.cu === 2" type="primary" @click="$event => addPatentFinance()">填写</el-button>
+          <el-button :loading="crud.status.cu === 2" type="danger" @click="$event => goFinish()">完结</el-button>
         </div>
       </el-dialog>
       <!--表格渲染-->
@@ -108,6 +111,8 @@
         <el-table-column prop="appearance" label="外观专利" />
         <el-table-column prop="softwareWorks" label="软件著作" />
         <el-table-column prop="copyright" label="版权" />
+        <el-table-column prop="projectAmount" label="金额" />
+        <el-table-column prop="amountPercent" label="金额百分比" />
         <el-table-column prop="progress" label="专利进度" />
         <el-table-column prop="filingTime" label="专利申报时间" />
         <el-table-column prop="writeTime" label="专利写好时间" />
@@ -116,7 +121,7 @@
         <el-table-column prop="forewarnTime" label="年费预警时间" />
         <el-table-column prop="statusName" label="状态" />
         <el-table-column prop="nickName" label="创建者" />
-        <el-table-column prop="createTime" label="添加时间" />
+        <el-table-column prop="createTime" label="签单日期" />
 
         <el-table-column v-if="checkPer(['admin','patent:edit','patent:del'])" label="操作" width="150px" align="center">
           <template slot-scope="scope">
@@ -188,7 +193,8 @@ export default {
         writeTime: '',
         authorizationTime: '',
         patentNum: '',
-        forewarnTime: ''
+        forewarnTime: '',
+        amountPercent:0
       },
       permission: {
         add: ['admin', 'patent:add'],
@@ -312,8 +318,21 @@ export default {
       this.financeFrom.authorizationTime = data.authorizationTime
       this.financeFrom.patentNum = data.patentNum
       this.financeFrom.forewarnTime = data.forewarnTime
+      this.financeFrom.amountPercent= data.amountPercent
       this.financeVisible = true
 
+    },
+    addPatentFinance(){
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          patentSchedule.finance(this.financeFrom).then(() => {
+            this.crud.notify('提交成功', 'success')
+            this.financeVisible = false
+            //刷新表格
+            this.crud.refresh()
+          })
+        }
+      })
     },
     goFinish(){
       patentSchedule.complete(this.financeFrom).then(() => {

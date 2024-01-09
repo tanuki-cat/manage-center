@@ -158,3 +158,12 @@ CREATE TABLE `sys_patent_schedule`
     `update_time`  datetime      DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`schedule_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='项目进度管理';
+
+-- changeset Joy:20240109_1829
+-- comment 修改项目表添加到期时间
+ALTER TABLE `sys_patent`
+    ADD COLUMN `project_amount`  decimal(18,0)  NOT NULL DEFAULT 0 COMMENT '金额' AFTER `patent_status`,
+    ADD COLUMN `amount_percent` int(8) NOT NULL DEFAULT 0 COMMENT '金额百分比' AFTER `project_amount`;
+
+ALTER TABLE `sys_patent_schedule`
+    ADD COLUMN `amount_percent` int(8) NOT NULL DEFAULT 0 COMMENT '金额百分比' AFTER `progress`;

@@ -35,6 +35,7 @@ public class PatentUpdateSerivce {
                 .setPatentId(resources.getId())
                 .setScheduleStatus(PatentScheduleEnum.BUSINESS)
                 .setAssignStatus(1)
+                .setAmountPercent(resources.getAmountPercent())
                 .setNickName(resources.getNickName());
         patentScheduleService.save(schedule);
     }
@@ -43,11 +44,13 @@ public class PatentUpdateSerivce {
      */
     @Transactional(rollbackFor = Exception.class)
     public void assign(PatentScheduleCommand resources) {
+        Patent patent = patentService.getById(resources.getPatentId());
         PatentSchedule schedule = new PatentSchedule()
                 .setPatentId(resources.getPatentId())
                 .setAssignUser(resources.getAssignUser())
                 .setAssignUserId(resources.getAssignUserId())
                 .setScheduleStatus(PatentScheduleEnum.TEAMLEADER)
+                .setAmountPercent(patent.getAmountPercent())
                 .setNickName(resources.getNickName());
         //查询该专利是否有被指派过项目经理，如果有则修改原有记录的指派状态
         List<PatentSchedule> schedules = patentScheduleService.lambdaQuery().eq(PatentSchedule::getPatentId,resources.getPatentId())
@@ -59,13 +62,14 @@ public class PatentUpdateSerivce {
             patentScheduleService.updateBatchById(schedules);
         }
         patentScheduleService.save(schedule);
-        Patent patent = patentService.getById(resources.getPatentId());
+
         patent.setPatentStatus(PatentEnums.INPROGRESS.getValue());
         patentService.updateById(patent);
     }
 
     @Transactional(rollbackFor = Exception.class)
     public void setManager(PatentScheduleCommand command) {
+        Patent patent = patentService.getById(command.getPatentId());
         PatentSchedule schedule = new PatentSchedule()
                 .setPatentId(command.getPatentId())
                 .setScheduleStatus(PatentScheduleEnum.MANAGER)
@@ -75,9 +79,10 @@ public class PatentUpdateSerivce {
                 .setAuthorizationTime(command.getAuthorizationTime())
                 .setPatentNum(command.getPatentNum())
                 .setNickName(command.getNickName())
+                .setAmountPercent(patent.getAmountPercent())
                 .setForewarnTime(command.getForewarnTime());
         patentScheduleService.save(schedule);
-        Patent patent = patentService.getById(command.getPatentId());
+
         patent.setFilingTime(command.getFilingTime());
         patent.setProgress(command.getProgress());
         patent.setWriteTime(command.getWriteTime());
@@ -99,6 +104,7 @@ public class PatentUpdateSerivce {
                 .setAuthorizationTime(patent.getAuthorizationTime())
                 .setPatentNum(patent.getPatentNum())
                 .setNickName(command.getNickName())
+                .setAmountPercent(patent.getAmountPercent())
                 .setForewarnTime(patent.getForewarnTime());
         patentScheduleService.save(schedule);
     }
@@ -116,7 +122,27 @@ public class PatentUpdateSerivce {
                 .setAuthorizationTime(patent.getAuthorizationTime())
                 .setPatentNum(patent.getPatentNum())
                 .setNickName(command.getNickName())
+                .setAmountPercent(patent.getAmountPercent())
                 .setForewarnTime(patent.getForewarnTime());
         patentScheduleService.save(schedule);
+    }
+    @Transactional(rollbackFor = Exception.class)
+    public void finance(PatentScheduleCommand command) {
+        Patent patent = patentService.getById(command.getPatentId());
+        PatentSchedule schedule = new PatentSchedule()
+                .setPatentId(command.getPatentId())
+                .setScheduleStatus(PatentScheduleEnum.FINANCE)
+                .setFilingTime(patent.getFilingTime())
+                .setProgress(patent.getProgress())
+                .setWriteTime(patent.getWriteTime())
+                .setAuthorizationTime(patent.getAuthorizationTime())
+                .setPatentNum(patent.getPatentNum())
+                .setNickName(command.getNickName())
+                .setAmountPercent(command.getAmountPercent())
+                .setForewarnTime(patent.getForewarnTime());
+        patentScheduleService.save(schedule);
+
+        patent.setAmountPercent(command.getAmountPercent());
+        patentService.updateById(patent);
     }
 }

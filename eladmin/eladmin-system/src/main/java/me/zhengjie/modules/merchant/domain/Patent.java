@@ -19,6 +19,8 @@ import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import io.swagger.annotations.ApiModelProperty;
 import cn.hutool.core.bean.copier.CopyOptions;
+
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.io.Serializable;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -83,8 +85,10 @@ public class Patent extends BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "创建者名字")
     private String nickName;
-
-
+    @ApiModelProperty(value = "金额百分比")
+    private Integer amountPercent;
+    @ApiModelProperty(value = "项目金额")
+    private BigDecimal projectAmount;
     public void copy(Patent source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }

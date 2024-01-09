@@ -17,7 +17,7 @@
     <el-button v-permission="permission.leader" icon="el-icon-edit" type="primary" size="mini" @click="patentAdd(data)" v-if="data.scheduleStatus==0">派发专利</el-button>
     <el-button v-permission="permission.leader" icon="el-icon-edit" type="primary" size="mini" @click="patentUpdate(data)" v-if="data.scheduleStatus==1">重新派发</el-button>
     <el-button v-permission="permission.manager" icon="el-icon-edit" type="primary" size="mini" @click="patentManager(data)" v-if="data.scheduleStatus==1||data.scheduleStatus==2">填写或提交财务</el-button>
-    <el-button v-permission="permission.finance" icon="el-icon-edit" type="primary" size="mini" @click="patentFinance(data)" v-if="data.scheduleStatus==3">完结</el-button>
+    <el-button v-permission="permission.finance" icon="el-icon-edit" type="primary" size="mini" @click="patentFinance(data)" v-if="data.scheduleStatus==3">填写或完结</el-button>
   </div>
 </template>
 <script>
