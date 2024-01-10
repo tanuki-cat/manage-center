@@ -8,9 +8,11 @@ import com.mchange.v2.collection.MapEntry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.zhengjie.modules.merchant.domain.Company;
+import me.zhengjie.modules.merchant.domain.Patent;
 import me.zhengjie.modules.merchant.domain.Project;
 import me.zhengjie.modules.merchant.domain.dto.StatisticiansDto;
 import me.zhengjie.modules.merchant.service.CompanyService;
+import me.zhengjie.modules.merchant.service.PatentService;
 import me.zhengjie.modules.merchant.service.ProjectService;
 import me.zhengjie.modules.merchant.service.StatisticiansService;
 import me.zhengjie.utils.DateUtil;
@@ -35,6 +37,7 @@ import java.util.*;
 public class StatisticiansServiceImpl implements StatisticiansService {
     private final ProjectService projectService;
     private final CompanyService companyService;
+    private final PatentService patentService;
 
 
     @Override
@@ -82,13 +85,23 @@ public class StatisticiansServiceImpl implements StatisticiansService {
         //统计项目金额
         BigDecimal projectAmount = projects.stream().reduce(BigDecimal.ZERO, (x,y) -> x.add(y.getProjectAmount()), BigDecimal::add);
         //实际收入项目金额
-        BigDecimal reallyAmount = projects.stream().reduce(BigDecimal.ZERO, (x,y) ->
+        BigDecimal reallyProjectAmount = projects.stream().reduce(BigDecimal.ZERO, (x,y) ->
                  x.add(y.getProjectAmount().multiply(BigDecimal.valueOf(y.getAmountPercent() /100.0)))
         , BigDecimal::add);
+        //统计专利数
+        List<Patent> patents = this.patentService.list();
+        long patentCount = patents.size();
+        //统计专利金额
+        BigDecimal patentAmount = patents.stream().reduce(BigDecimal.ZERO, (x,y) -> x.add(y.getProjectAmount()), BigDecimal::add);
+        //统计专利实际收入金额
+        BigDecimal reallyPatentAmount = patents.stream().reduce(BigDecimal.ZERO, (x,y) ->
+                 x.add(y.getProjectAmount().multiply(BigDecimal.valueOf(y.getAmountPercent() /100.0))),
+                 BigDecimal::add);
         result.put("companyCount",companyCount);
-        result.put("projectCount",projectCount);
-        result.put("projectAmount",projectAmount);
-        result.put("reallyAmount",reallyAmount);
+        result.put("projectCount",projectCount );
+        result.put("patentCount",patentCount);
+        result.put("projectAmount",projectAmount.add( patentAmount));
+        result.put("reallyAmount",reallyProjectAmount.add(reallyPatentAmount));
         return result;
     }
 
@@ -111,14 +124,26 @@ public class StatisticiansServiceImpl implements StatisticiansService {
         //统计项目金额
         BigDecimal projectAmount = projects.stream().reduce(BigDecimal.ZERO, (x,y) -> x.add(y.getProjectAmount()), BigDecimal::add);
         //实际收入项目金额
-        BigDecimal reallyAmount = projects.stream().reduce(BigDecimal.ZERO, (x,y) ->
+        BigDecimal reallyProjectAmount = projects.stream().reduce(BigDecimal.ZERO, (x,y) ->
              x.add(y.getProjectAmount().multiply(BigDecimal.valueOf(y.getAmountPercent()/100.0)))
         ,BigDecimal::add);
+        //统计专利数
+        List<Patent> patents = this.patentService.list(Wrappers.<Patent>lambdaQuery().between( Patent::getCreateTime,start,end));
+        long patentCount = patents.size();
+        //统计专利金额
+        BigDecimal patentAmount = patents.stream().reduce(BigDecimal.ZERO, (x,y) ->
+            x.add(y.getProjectAmount())
+        , BigDecimal::add);
+        //统计实际专利收入金额
+        BigDecimal patentReallyAmount = patents.stream().reduce(BigDecimal.ZERO, (x,y) ->
+            x.add(y.getProjectAmount().multiply(BigDecimal.valueOf(y.getAmountPercent()/100.0)))
+        , BigDecimal::add);
         log.info("公司数:{},项目数:{},项目金额:{}",companyCount,projectCount,projectAmount);
         result.put("companyCount",companyCount);
-        result.put("projectCount",projectCount);
-        result.put("projectAmount",projectAmount);
-        result.put("reallyAmount",reallyAmount);
+        result.put("projectCount",projectCount );
+        result.put("patentCount",patentCount);
+        result.put("projectAmount",projectAmount.add(patentAmount));
+        result.put("reallyAmount",reallyProjectAmount.add(patentReallyAmount));
         return result;
     }
 
@@ -147,11 +172,21 @@ public class StatisticiansServiceImpl implements StatisticiansService {
             //统计项目金额
             BigDecimal projectAmount = projects.stream().reduce(BigDecimal.ZERO, (x,y) -> x.add(y.getProjectAmount()), BigDecimal::add);
             //实际收入项目金额
-            BigDecimal reallyAmount = projects.stream().reduce(BigDecimal.ZERO, (x,y) ->
+            BigDecimal reallyProjectAmount = projects.stream().reduce(BigDecimal.ZERO, (x,y) ->
                 x.add(y.getProjectAmount().multiply(BigDecimal.valueOf(y.getAmountPercent()/100.0)))
             ,BigDecimal::add);
-            weekAmount.add(projectAmount);
-            weekReallyAmount.add(reallyAmount);
+            //统计专利数
+            List<Patent> patents = this.patentService.list(Wrappers.<Patent>lambdaQuery().between( Patent::getCreateTime,start,end));
+            //统计专利金额
+            BigDecimal patentAmount = patents.stream().reduce(BigDecimal.ZERO, (x,y) ->
+                x.add(y.getProjectAmount())
+            , BigDecimal::add);
+            //统计实际专利收入金额
+            BigDecimal patentReallyAmount = patents.stream().reduce(BigDecimal.ZERO, (x,y) ->
+                x.add(y.getProjectAmount().multiply(BigDecimal.valueOf(y.getAmountPercent()/100.0)))
+            , BigDecimal::add);
+            weekAmount.add(projectAmount.add(patentAmount));
+            weekReallyAmount.add(reallyProjectAmount.add(patentReallyAmount));
         }
         result.put("weekArray",weekArray);
         result.put("weekAmount",weekAmount);
