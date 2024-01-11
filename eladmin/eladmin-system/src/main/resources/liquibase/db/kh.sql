@@ -167,3 +167,10 @@ ALTER TABLE `sys_patent`
 
 ALTER TABLE `sys_patent_schedule`
     ADD COLUMN `amount_percent` int(8) NOT NULL DEFAULT 0 COMMENT '金额百分比' AFTER `progress`;
+
+-- changeset Joy:20240111_1904
+-- comment 添加汇款时间字段
+ALTER TABLE `sys_patent_schedule`
+    ADD COLUMN `remittance_time` datetime DEFAULT NULL  COMMENT '汇款时间' AFTER `amount_percent`;
+ALTER TABLE `sys_project_schedule`
+    ADD COLUMN `remittance_time` datetime DEFAULT NULL  COMMENT '汇款时间' AFTER `amount_percent`;

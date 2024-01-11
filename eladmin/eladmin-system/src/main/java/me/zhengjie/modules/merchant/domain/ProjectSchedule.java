@@ -21,6 +21,8 @@ import io.swagger.annotations.ApiModelProperty;
 import cn.hutool.core.bean.copier.CopyOptions;
 import java.sql.Timestamp;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -63,6 +65,8 @@ public class ProjectSchedule extends BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "指派状态",allowableValues = "0:指派,1:指派作废")
     private Integer assignStatus;
+    @ApiModelProperty(value = "汇款时间")
+    private LocalDateTime remittanceTime;
 
     public void copy(ProjectSchedule source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

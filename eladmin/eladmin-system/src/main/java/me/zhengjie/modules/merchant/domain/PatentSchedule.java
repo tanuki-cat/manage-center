@@ -23,6 +23,8 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -83,6 +85,8 @@ public class PatentSchedule extends BaseEntity implements Serializable {
     private String nickName;
     @ApiModelProperty(value = "金额百分比")
     private Integer amountPercent;
+    @ApiModelProperty(value = "汇款时间")
+    private LocalDateTime remittanceTime;
 
     public void copy(PatentSchedule source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

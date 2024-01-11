@@ -93,7 +93,10 @@
           </el-form-item>   
           <el-form-item label="金额百分比" prop="amountPercent">
             <el-input v-model="financeFrom.amountPercent" style="width: 350px;" />
-          </el-form-item>   
+          </el-form-item>
+          <el-form-item label="汇款时间">
+            <el-date-picker v-model="financeFrom.remittanceTime" type="datetime"  style="width: 350px;"  />
+          </el-form-item>
         </el-form>
         
         <div slot="footer" class="dialog-footer">
@@ -194,7 +197,8 @@ export default {
         authorizationTime: '',
         patentNum: '',
         forewarnTime: '',
-        amountPercent:0
+        amountPercent:  0,
+        remittanceTime: ''
       },
       permission: {
         add: ['admin', 'patent:add'],
@@ -319,6 +323,7 @@ export default {
       this.financeFrom.patentNum = data.patentNum
       this.financeFrom.forewarnTime = data.forewarnTime
       this.financeFrom.amountPercent= data.amountPercent
+      this.financeFrom.remittanceTime=''
       this.financeVisible = true
 
     },

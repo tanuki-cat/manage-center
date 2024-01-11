@@ -139,6 +139,7 @@ public class PatentUpdateSerivce {
                 .setPatentNum(patent.getPatentNum())
                 .setNickName(command.getNickName())
                 .setAmountPercent(command.getAmountPercent())
+                .setRemittanceTime(command.getRemittanceTime())
                 .setForewarnTime(patent.getForewarnTime());
         patentScheduleService.save(schedule);
 

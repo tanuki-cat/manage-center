@@ -111,7 +111,9 @@
           <el-form-item label="金额百分比" prop="amountPercent">
             <el-input v-model="financeFrom.amountPercent" style="width: 350px;" />
           </el-form-item>      
-          
+          <el-form-item label="汇款时间" prop="">
+            <el-date-picker v-model="financeFrom.remittanceTime" style="width: 350px;" type="datetime" />
+          </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button type="text" @click="financeClose()">取消</el-button>
@@ -198,7 +200,8 @@ export default {
         companyName: '',
         projectId:'',
         projectName:'',
-        amountPercent:0
+        amountPercent:0,
+        remittanceTime:''
       },
       permission: {
         add: ['admin', 'project:add'],
@@ -325,6 +328,7 @@ export default {
       this.financeFrom.projectId = data.id
       this.financeFrom.projectName =data.projectName
       this.financeFrom.amountPercent=data.amountPercent
+      this.financeFrom.remittanceTime=''
       this.financeVisible = true
     },
     addProjectFinance(){

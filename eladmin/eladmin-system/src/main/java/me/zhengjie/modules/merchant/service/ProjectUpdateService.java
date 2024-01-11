@@ -49,6 +49,7 @@ public class ProjectUpdateService {
                 .setScheduleStatus(ScheduleEnum.FINANCE)
                 .setScheduleDesc("完成")
                 .setAmountPercent(resources.getAmountPercent())
+                .setRemittanceTime(resources.getRemittanceTime())
                 .setNickName(resources.getNickName());
         projectScheduleService.save(schedule);
         Project project = projectService.getById(resources.getProjectId());
