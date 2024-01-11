@@ -64,7 +64,7 @@ public class PatentController {
     @Log("查询patent")
     @ApiOperation("查询patent")
     @PreAuthorize("@el.check('patent:list')")
-    @CheckCreate(roles = {"专利经理"},clazz = PatentQueryCriteria.class,filedMethod = {"setCreateBy","setAssignUser","setAssignUserId"})
+    @CheckCreate(roles = {"专利经理","业务员"},clazz = PatentQueryCriteria.class,filedMethod = {"setCreateBy","setAssignUser","setAssignUserId"})
     public ResponseEntity<PageResult<PatentVO>> queryPatent(PatentQueryCriteria criteria, Page<Object> page){
         return new ResponseEntity<>(patentService.queryAll(criteria,page),HttpStatus.OK);
     }
