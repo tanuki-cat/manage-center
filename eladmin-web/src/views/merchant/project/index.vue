@@ -46,7 +46,38 @@
           <el-button :loading="crud.status.cu === 2" type="primary" @click="crud.submitCU">确认</el-button>
         </div>
       </el-dialog>
-
+ <!--变更业务员-->
+ <el-dialog :close-on-click-modal="false" :visible.sync="editUserVisible" width="520px" :title="变更业务员">
+        <el-form ref="form" :model="editUserFrom"  size="small" label-width="100px">
+          <el-form-item label="公司名称">
+            <el-input v-model="editUserFrom.companyName" style="width: 350px;" disabled />
+          </el-form-item>
+          <el-form-item label="项目名称">
+            <el-input v-model="editUserFrom.projectName" style="width: 350px;" disabled />
+          </el-form-item>
+        
+          <el-form-item label="变更业务员">
+              <el-select
+                v-model="editUserFrom.assignUser"
+                style="width: 178px"
+                placeholder="请选择"
+                prop="content"
+              >
+                <el-option
+                  v-for="item in userList"
+                  :key="item.nickName"
+                  :label="item.nickName"
+                  :value="item.id"
+                  @click.native="selectEditUser(item)"
+                />
+              </el-select>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button type="text" @click="editUserClose()">取消</el-button>
+          <el-button :loading="crud.status.cu === 2" type="primary" @click="$event => editUserForm()">确认</el-button>
+        </div>
+      </el-dialog>
       <!--派发任务-->
       <el-dialog :close-on-click-modal="false" :visible.sync="userVisible" width="520px" :title="派发任务">
         <el-form ref="form" :model="userProjectFrom" :rules="visitRules" size="small" label-width="100px">
@@ -143,6 +174,7 @@
               @upProject="getUserProject"
               @projectManager="getProjectManager"
               @projectFinance="getProjectFinance"
+              @editUser="getEditUser"
             />
           </template>
         </el-table-column>
@@ -178,6 +210,15 @@ export default {
       projectVisible:false,
       //财务
       financeVisible:false,
+      editUserVisible:false,
+      editUserFrom: {
+        companyId: 0,
+        companyName: '',
+        projectId:'',
+        projectName:'',
+        assignUser:[],
+        assignUserId:0
+      },
       userProjectFrom: {
         companyId: 0,
         companyName: '',
@@ -213,7 +254,9 @@ export default {
         //财务
         finance: ['admin', 'project:finance'],
         //详情
-        detail: ['admin', 'project:detail']
+        detail: ['admin', 'project:detail'],
+        //变更业务
+        editUser: ['admin', 'project:editUser']
       },
       rules: {
         scheduleDesc: [
@@ -244,6 +287,23 @@ export default {
     financeClose() {
       this.financeVisible = false
     },
+    editUserClose() {
+      this.editUserVisible = false
+    },
+    getEditUser(data){
+      this.editUserFrom.companyId = data.companyId
+      this.editUserFrom.companyName = data.companyName
+      this.editUserFrom.projectId = data.id
+      this.editUserFrom.projectName =data.projectName
+      this.editUserFrom.assignUser=''
+      this.editUserFrom.assignUserId=0
+      this.editUserVisible = true
+      crudUser.businessList().then(res => {
+        console.log(res)
+        this.userList=res
+      })
+      
+    },
     getUserProject(data) {
       console.log(data)
       this.userProjectFrom.companyId = data.companyId
@@ -263,6 +323,31 @@ export default {
       this.userProjectFrom.assignUserId =data.id
       this.userProjectFrom.assignUser =data.nickName
    
+    },
+    selectEditUser(data) {
+      this.editUserFrom.assignUserId =data.id
+      this.editUserFrom.assignUser =data.nickName   
+    },
+    editUserForm(){
+      if(this.editUserFrom.assignUserId==0){
+        this.$message({
+          message: '请选择业务员',
+          type: 'warning'
+        })
+        return false
+      }
+
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          projectSchedule.editUser(this.editUserFrom).then(() => {
+            this.crud.notify('添加成功', 'success')
+            this.editUserVisible = false
+            //刷新表格
+            this.crud.refresh()
+          })
+        }
+      })
+        
     },
     deleteTag(){
       this.userProjectFrom.assignUser = ''

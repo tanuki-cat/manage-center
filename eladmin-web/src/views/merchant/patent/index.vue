@@ -34,6 +34,35 @@
             <el-button :loading="crud.status.cu === 2" type="primary" @click="$event => addUserPatent()">确认</el-button>
           </div>
         </el-dialog>
+        <!--变更业务员-->
+     <el-dialog :close-on-click-modal="false" :visible.sync="editUserVisible" width="520px" :title="变更业务员">
+        <el-form ref="form" :model="editUserFrom"  size="small" label-width="100px">
+          <el-form-item label="公司名称">
+            <el-input v-model="editUserFrom.companyName" style="width: 350px;" disabled />
+          </el-form-item>
+        
+          <el-form-item label="变更业务员">
+              <el-select
+                v-model="editUserFrom.assignUser"
+                style="width: 178px"
+                placeholder="请选择"
+                prop="content"
+              >
+                <el-option
+                  v-for="item in userList"
+                  :key="item.nickName"
+                  :label="item.nickName"
+                  :value="item.id"
+                  @click.native="selectEditUser(item)"
+                />
+              </el-select>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button type="text" @click="editUserClose()">取消</el-button>
+          <el-button :loading="crud.status.cu === 2" type="primary" @click="$event => editUserForm()">确认</el-button>
+        </div>
+      </el-dialog>
       <!--专利经理-->
       <el-dialog :close-on-click-modal="false" :visible.sync="patentVisible" width="520px" :title="填写专利">
         <el-form ref="form" :model="patentFrom" :rules="rules" size="small" label-width="100px">
@@ -135,6 +164,7 @@
               @upPatent="getUserPatent"
               @patentManager="getPatentManager"
               @patentFinance="getPatentFinance"
+              @editUser="getEditUser"
             />
           </template>
         </el-table-column>
@@ -168,8 +198,16 @@ export default {
       userVisible:false,
       patentVisible:false,
       //财务
-      financeVisible:false,
+      financeVisible:false,      
+      editUserVisible:false,
       userPatentFrom: {
+        companyId: 0,
+        companyName: '',
+        patentId: 0,
+        assignUser:[],
+        assignUserId:0
+      },
+      editUserFrom: {
         companyId: 0,
         companyName: '',
         patentId: 0,
@@ -210,7 +248,9 @@ export default {
         //财务
         finance: ['admin', 'patent:finance'],
         //详情
-        detail: ['admin', 'patent:detail']
+        detail: ['admin', 'patent:detail'],
+        //变更业务
+        editUser: ['admin', 'patent:editUser']
       },
       rules: {
       },
@@ -235,6 +275,22 @@ export default {
     financeClose() {
       this.financeVisible = false
     },
+    editUserClose() {
+      this.editUserVisible = false
+    },
+    getEditUser(data){
+      this.editUserFrom.companyId = data.companyId
+      this.editUserFrom.companyName = data.companyName
+      this.editUserFrom.patentId = data.id
+      this.editUserFrom.assignUser=''
+      this.editUserFrom.assignUserId=0
+      this.editUserVisible = true
+      crudUser.businessList().then(res => {
+        console.log(res)
+        this.userList=res
+      })
+      
+    },
     getUserPatent(data) {
       console.log(data)
       this.userPatentFrom.companyId = data.companyId
@@ -253,9 +309,34 @@ export default {
       this.userPatentFrom.assignUser =data.nickName
    
     },
+    selectEditUser(data) {
+      this.editUserFrom.assignUserId =data.id
+      this.editUserFrom.assignUser =data.nickName   
+    },
     deleteTag(){
       this.userPatentFrom.assignUser = ''
       this.userPatentFrom.assignUserId =0
+    },
+    editUserForm(){
+      if(this.editUserFrom.assignUserId==0){
+        this.$message({
+          message: '请选择业务员',
+          type: 'warning'
+        })
+        return false
+      }
+
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          patentSchedule.editUser(this.editUserFrom).then(() => {
+            this.crud.notify('添加成功', 'success')
+            this.editUserVisible = false
+            //刷新表格
+            this.crud.refresh()
+          })
+        }
+      })
+        
     },
     addUserPatent(){
       if(this.userPatentFrom.assignUserId==0){

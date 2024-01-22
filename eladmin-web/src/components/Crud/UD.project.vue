@@ -18,6 +18,7 @@
     <el-button v-permission="permission.leader" icon="el-icon-edit" type="primary" size="mini" @click="projectUpdate(data)" v-if="data.scheduleStatus==1">重新派发</el-button>
     <el-button v-permission="permission.manager" icon="el-icon-edit" type="primary" size="mini" @click="projectManager(data)" v-if="data.scheduleStatus==1||data.scheduleStatus==2">填写或提交财务</el-button>
     <el-button v-permission="permission.finance" icon="el-icon-edit" type="primary" size="mini" @click="projectFinance(data)" v-if="data.scheduleStatus==3">填写或完结</el-button>
+    <el-button v-permission="permission.editUser" icon="el-icon-edit" type="danger" size="mini" @click="editUser(data)" >变更业务</el-button>
   </div>
 </template>
 <script>
@@ -87,6 +88,9 @@ export default {
     //财务
     projectFinance(data){
       this.$emit('projectFinance' , data)
+    },
+    editUser(data){
+      this.$emit('editUser' , data)
     }
   }
 }
