@@ -52,6 +52,59 @@
         </div>
       </div>
     </el-col>
+  
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+      <div class="card-panel">
+        <div class="card-panel-icon-wrapper icon-people">
+          <svg-icon icon-class="peoples" class-name="card-panel-icon" />
+        </div>
+        <div class="card-panel-description">
+          <div class="card-panel-text">
+            2023年公司数
+          </div>
+          <count-to :start-val="0" :end-val="this.year_2023_companyCount" :duration="2600" class="card-panel-num" />
+        </div>
+      </div>
+    </el-col>
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+      <div class="card-panel">
+        <div class="card-panel-icon-wrapper icon-message">
+          <svg-icon icon-class="message" class-name="card-panel-icon" />
+        </div>
+        <div class="card-panel-description">
+          <div class="card-panel-text">
+            2023年签单数  
+          </div>
+          <count-to :start-val="0" :end-val="this.year_2023_projectCount" :duration="3000" class="card-panel-num" />
+        </div>
+      </div>
+    </el-col>
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+      <div class="card-panel" >
+        <div class="card-panel-icon-wrapper icon-money">
+          <svg-icon icon-class="money" class-name="card-panel-icon" />
+        </div>
+        <div class="card-panel-description">
+          <div class="card-panel-text">
+            2023年签单金额
+          </div>
+          <count-to :start-val="0" :end-val="this.year_2023_projectAmount" :duration="3200" class="card-panel-num" />
+        </div>
+      </div>
+    </el-col>
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+      <div class="card-panel">
+        <div class="card-panel-icon-wrapper icon-shopping">
+          <svg-icon icon-class="money" class-name="card-panel-icon" />
+        </div>
+        <div class="card-panel-description">
+          <div class="card-panel-text">
+            2023年到账数
+          </div>
+          <count-to :start-val="0" :end-val="this.year_2023_reallyAmount" :duration="3600" class="card-panel-num" />
+        </div>
+      </div>
+    </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col"  style="margin-top:50px">
       <div class="card-panel" >
         <div class="card-panel-icon-wrapper icon-people">
@@ -111,7 +164,7 @@
 <script>
 import CountTo from 'vue-count-to'
 //统计
-import {getCountAll,getDayCount} from '@/api/data'
+import {getCountAll,getDayCount,getYearCount} from '@/api/data'
 export default {
   data() {
     return {
@@ -122,7 +175,11 @@ export default {
       day_projectAmount: 0,
       day_projectCount: 0,
       day_companyCount: 0,
-      day_reallyAmount:0
+      day_reallyAmount:0,
+      year_2023_projectAmount: 0,
+      year_2023_projectCount: 0,
+      year_2023_companyCount: 0,
+      year_2023_reallyAmount:0
     }
   },
   components: {
@@ -131,6 +188,7 @@ export default {
   created(){
     this.getCountAll()
     this.getDayCount()
+    this.get2023YearCount()
   },
   methods: {
     handleSetLineChartData(type) {
@@ -151,6 +209,14 @@ export default {
         this.day_projectAmount = res.projectAmount
         this.day_reallyAmount =res.reallyAmount 
         
+      })
+    },
+    get2023YearCount(){
+      getYearCount(2023).then(res=>{
+        this.year_2023_companyCount = res.companyCount
+        this.year_2023_projectCount = res.projectCount
+        this.year_2023_projectAmount = res.projectAmount
+        this.year_2023_reallyAmount =res.reallyAmount
       })
     }
   }
