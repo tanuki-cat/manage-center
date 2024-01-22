@@ -28,4 +28,8 @@ public class PatentQueryCriteria{
     private String createBy;
     private String assignUser;
     private String assignUserId;
+    private String patentTag;
+    private String patentName;
+    private Integer patentStatus;
+    private String companyName;
 }

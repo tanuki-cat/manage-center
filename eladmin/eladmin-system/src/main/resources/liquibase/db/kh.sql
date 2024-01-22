@@ -174,3 +174,10 @@ ALTER TABLE `sys_patent_schedule`
     ADD COLUMN `remittance_time` datetime DEFAULT NULL  COMMENT '汇款时间' AFTER `amount_percent`;
 ALTER TABLE `sys_project_schedule`
     ADD COLUMN `remittance_time` datetime DEFAULT NULL  COMMENT '汇款时间' AFTER `amount_percent`;
+
+-- changeset lychee:20240122_2108
+-- comment 添加标签字段
+ALTER TABLE `sys_patent`
+    ADD COLUMN `patent_tag` varchar(64) DEFAULT NULL  COMMENT '标签' AFTER `amount_percent`;
+ALTER TABLE  `sys_project`
+    ADD COLUMN `project_tag` varchar(64) DEFAULT NULL  COMMENT '标签' AFTER `amount_percent`;

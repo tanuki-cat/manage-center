@@ -9,10 +9,7 @@ import me.zhengjie.modules.merchant.domain.dto.StatisticiansDto;
 import me.zhengjie.modules.merchant.service.StatisticiansService;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -49,6 +46,17 @@ public class StatisticiansController {
     @RequestMapping(value = "/countAll", produces = "application/json;charset=UTF-8", method = { RequestMethod.GET})
     public ResponseEntity<JSONObject> countAll() {
         return ResponseEntity.ok(statisticiansService.countAll());
+    }
+
+
+    @ApiOperation("按年统计公司数、项目数、项目金额数")
+    @AnonymousAccess
+    @GetMapping(value = "/countByYear")
+    public ResponseEntity<JSONObject> countByYear(@RequestParam("year") String year) {
+        if (Strings.isBlank(year)) {
+            year = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy"));
+        }
+        return ResponseEntity.ok(statisticiansService.countByYear(year));
     }
 
     @ApiOperation("统计当天的公司数、项目数、项目金额数")

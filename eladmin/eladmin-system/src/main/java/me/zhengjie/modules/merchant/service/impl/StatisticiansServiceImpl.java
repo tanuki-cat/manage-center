@@ -16,6 +16,7 @@ import me.zhengjie.modules.merchant.service.PatentService;
 import me.zhengjie.modules.merchant.service.ProjectService;
 import me.zhengjie.modules.merchant.service.StatisticiansService;
 import me.zhengjie.utils.DateUtil;
+import me.zhengjie.utils.RedisUtils;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author wangzy
@@ -38,6 +40,8 @@ public class StatisticiansServiceImpl implements StatisticiansService {
     private final ProjectService projectService;
     private final CompanyService companyService;
     private final PatentService patentService;
+    private final RedisUtils redisUtils;
+    private static final String PREFIX_COUNT = "statistics:year:";
 
 
     @Override
@@ -191,6 +195,53 @@ public class StatisticiansServiceImpl implements StatisticiansService {
         result.put("weekArray",weekArray);
         result.put("weekAmount",weekAmount);
         result.put("weekReallyAmount",weekReallyAmount);
+        return result;
+    }
+
+    /**
+     * 按年份统计
+     *
+     * @param year
+     * @return
+     */
+    @Override
+    public JSONObject countByYear(String year) {
+        if (redisUtils.hasKey(PREFIX_COUNT+year)) {
+            return (JSONObject) redisUtils.get(PREFIX_COUNT+year);
+        }
+        String start = year + "-01-01";
+        String end = year + "-12-31";
+        JSONObject result = new JSONObject();
+        //统计公司数
+        long companyCount = this.companyService.count(Wrappers.<Company>lambdaQuery().between( Company::getCreateTime,start,end));
+        //统计项目数
+        List<Project> projects = this.projectService.list(Wrappers.<Project>lambdaQuery().between( Project::getCreateTime,start,end));
+        long projectCount = projects.size();
+        //统计项目金额
+        BigDecimal projectAmount = projects.stream().reduce(BigDecimal.ZERO, (x,y) -> x.add(y.getProjectAmount()), BigDecimal::add);
+        //实际收入项目金额
+        BigDecimal reallyProjectAmount = projects.stream().reduce(BigDecimal.ZERO, (x,y) ->
+                        x.add(y.getProjectAmount().multiply(BigDecimal.valueOf(y.getAmountPercent()/100.0)))
+                ,BigDecimal::add);
+        //统计专利数
+        List<Patent> patents = this.patentService.list(Wrappers.<Patent>lambdaQuery().between( Patent::getCreateTime,start,end));
+        long patentCount = patents.size();
+        //统计专利金额
+        BigDecimal patentAmount = patents.stream().reduce(BigDecimal.ZERO, (x,y) ->
+                        x.add(y.getProjectAmount())
+                , BigDecimal::add);
+        //统计实际专利收入金额
+        BigDecimal patentReallyAmount = patents.stream().reduce(BigDecimal.ZERO, (x,y) ->
+                        x.add(y.getProjectAmount().multiply(BigDecimal.valueOf(y.getAmountPercent()/100.0)))
+                , BigDecimal::add);
+        log.info("公司数:{},项目数:{},项目金额:{}",companyCount,projectCount,projectAmount);
+        result.put("companyCount",companyCount);
+        result.put("projectCount",projectCount );
+        result.put("patentCount",patentCount);
+        result.put("projectAmount",projectAmount.add(patentAmount));
+        result.put("reallyAmount",reallyProjectAmount.add(patentReallyAmount));
+        result.put("year",year);
+        redisUtils.set("statisticiansYear"+year,result,60*60*24, TimeUnit.SECONDS);
         return result;
     }
 }

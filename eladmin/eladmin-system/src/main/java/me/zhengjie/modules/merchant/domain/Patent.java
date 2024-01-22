@@ -89,6 +89,9 @@ public class Patent extends BaseEntity implements Serializable {
     private Integer amountPercent;
     @ApiModelProperty(value = "项目金额")
     private BigDecimal projectAmount;
+
+    @ApiModelProperty(value = "标签")
+    private String patentTag;
     public void copy(Patent source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }

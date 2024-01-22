@@ -28,4 +28,8 @@ public class ProjectQueryCriteria{
     private String createBy;
     private String assignUser;
     private String assignUserId;
+    private String projectName;
+    private Integer projectStatus;
+    private String projectTag;
+    private String companyName;
 }

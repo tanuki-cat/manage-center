@@ -19,6 +19,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import me.zhengjie.base.BaseEntity;
+import me.zhengjie.modules.merchant.domain.Patent;
 import me.zhengjie.modules.merchant.domain.Project;
 import me.zhengjie.modules.merchant.domain.ProjectSchedule;
 import me.zhengjie.modules.merchant.domain.vo.ProjectVO;
@@ -71,6 +72,18 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
         }
         if (Strings.isNotBlank(criteria.getCreateBy())) {
             wrapper.eq(Project::getCreateBy, criteria.getCreateBy());
+        }
+        if (Strings.isNotBlank(criteria.getProjectTag())) {
+            wrapper.eq(Project::getProjectTag, criteria.getProjectTag());
+        }
+        if (Strings.isNotBlank(criteria.getProjectName())) {
+            wrapper.like(Project::getProjectName, criteria.getProjectName());
+        }
+        if (criteria.getProjectStatus() != null) {
+            wrapper.eq(Project::getProjectStatus, criteria.getProjectStatus());
+        }
+        if (Strings.isNotBlank(criteria.getCompanyName())) {
+            wrapper.like(Project::getCompanyName, criteria.getCompanyName());
         }
         if (Objects.nonNull(criteria.getAssignUserId()) && Long.parseLong(criteria.getAssignUserId()) > 0) {
             //当前角色为项目经理时

@@ -34,4 +34,11 @@ public interface StatisticiansService {
      * @return
      */
     JSONObject countByWeek();
+
+    /**
+     * 按年份统计
+     * @param year
+     * @return
+     */
+    JSONObject countByYear(String year);
 }

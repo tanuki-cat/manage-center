@@ -68,6 +68,8 @@ public class Project extends BaseEntity implements Serializable {
     @ApiModelProperty(value = "金额百分比")
     private Integer amountPercent;
 
+    @ApiModelProperty(value = "标签")
+    private String projectTag;
 
 
 
