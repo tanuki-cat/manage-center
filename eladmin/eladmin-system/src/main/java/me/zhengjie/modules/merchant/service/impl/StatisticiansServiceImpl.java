@@ -241,7 +241,7 @@ public class StatisticiansServiceImpl implements StatisticiansService {
         result.put("projectAmount",projectAmount.add(patentAmount));
         result.put("reallyAmount",reallyProjectAmount.add(patentReallyAmount));
         result.put("year",year);
-        redisUtils.set("statisticiansYear"+year,result,60*60*24, TimeUnit.SECONDS);
+        redisUtils.set(PREFIX_COUNT+year,result,60*60*24, TimeUnit.SECONDS);
         return result;
     }
 }
