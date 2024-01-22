@@ -50,6 +50,13 @@ export function transfer(data){
     data
   })
 }
+export function editUser(data){
+  return request({
+    url: 'api/merchant/projectSchedule/changeUser',
+    method: 'post',
+    data
+  })
+}
 export function finance(data){
   return request({
     url: 'api/merchant/projectSchedule/finance',
@@ -65,4 +72,4 @@ export function complete(data){
   })
 }
 
-export default { add, edit, del,details,assign,manager,transfer,finance,complete }
+export default { add, edit, del,details,assign,manager,transfer,finance,complete,editUser}

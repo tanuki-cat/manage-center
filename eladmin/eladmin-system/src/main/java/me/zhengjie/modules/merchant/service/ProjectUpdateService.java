@@ -7,6 +7,8 @@ import me.zhengjie.modules.merchant.domain.ProjectSchedule;
 import me.zhengjie.modules.merchant.domain.vo.ScheduleCommand;
 import me.zhengjie.modules.merchant.enums.ProjectEnums;
 import me.zhengjie.modules.merchant.enums.ScheduleEnum;
+import me.zhengjie.modules.system.domain.User;
+import me.zhengjie.modules.system.service.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +20,7 @@ public class ProjectUpdateService {
 
     private final ProjectService projectService;
     private final ProjectScheduleService projectScheduleService;
+    private final UserService userService;
     @Transactional(rollbackFor = Exception.class)
     public void assign(ScheduleCommand command) {
         ProjectSchedule schedule = new ProjectSchedule()
@@ -71,5 +74,13 @@ public class ProjectUpdateService {
         projectScheduleService.save(schedule);
 
 
+    }
+    @Transactional(rollbackFor = Exception.class)
+    public void setEditUser(ScheduleCommand command) {
+        Project project = projectService.getById(command.getProjectId());
+       User user = userService.getById(command.getAssignUserId());
+        project.setCreateBy(user.getUsername());
+        project.setNickName(user.getNickName());
+        projectService.updateById(project);
     }
 }

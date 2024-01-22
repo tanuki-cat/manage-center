@@ -12,6 +12,8 @@ import me.zhengjie.modules.merchant.enums.PatentEnums;
 import me.zhengjie.modules.merchant.enums.PatentScheduleEnum;
 import me.zhengjie.modules.merchant.enums.ProjectEnums;
 import me.zhengjie.modules.merchant.enums.ScheduleEnum;
+import me.zhengjie.modules.system.domain.User;
+import me.zhengjie.modules.system.service.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +24,7 @@ import java.util.List;
 public class PatentUpdateSerivce {
     private final PatentService patentService;
     private final PatentScheduleService patentScheduleService;
+    private final UserService userService;
 
     /**
      * 创建专利
@@ -144,6 +147,14 @@ public class PatentUpdateSerivce {
         patentScheduleService.save(schedule);
 
         patent.setAmountPercent(command.getAmountPercent());
+        patentService.updateById(patent);
+    }
+    @Transactional(rollbackFor = Exception.class)
+    public void setEditUser(PatentScheduleCommand command) {
+        Patent patent = patentService.getById(command.getPatentId());
+        User user = userService.getById(command.getAssignUserId());
+        patent.setCreateBy(user.getUsername());
+        patent.setNickName(user.getNickName());
         patentService.updateById(patent);
     }
 }

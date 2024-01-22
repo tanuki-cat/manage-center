@@ -144,6 +144,14 @@ public class ProjectScheduleController {
         projectUpdateService.finance(resources);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+    @Log("变更业务")
+    @ApiOperation("变更业务")
+    @PostMapping(value = "/changeUser")
+    public ResponseEntity<Object> changeUserProject(@RequestBody ScheduleCommand resources){
+        resources.setNickName(userService.findById(SecurityUtils.getCurrentUserId()).getNickName());
+        projectUpdateService.setEditUser(resources);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 
 
 }

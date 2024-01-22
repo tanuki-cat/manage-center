@@ -65,4 +65,11 @@ export function complete(data){
     data
   })
 }
-export default { add, edit, del,details,assign,manager,transfer,finance,complete }
+export function editUser(data){
+  return request({
+    url: 'api/merchant/patentSchedule/changeUser',
+    method: 'post',
+    data
+  })
+}
+export default { add, edit, del,details,assign,manager,transfer,finance,complete ,editUser}
