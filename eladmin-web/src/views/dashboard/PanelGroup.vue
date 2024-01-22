@@ -105,7 +105,60 @@
         </div>
       </div>
     </el-col>
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col"  style="margin-top:50px">
+
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+      <div class="card-panel">
+        <div class="card-panel-icon-wrapper icon-people">
+          <svg-icon icon-class="peoples" class-name="card-panel-icon" />
+        </div>
+        <div class="card-panel-description">
+          <div class="card-panel-text">
+            2024年公司数
+          </div>
+          <count-to :start-val="0" :end-val="this.year_2024_companyCount" :duration="2600" class="card-panel-num" />
+        </div>
+      </div>
+    </el-col>
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+      <div class="card-panel">
+        <div class="card-panel-icon-wrapper icon-message">
+          <svg-icon icon-class="message" class-name="card-panel-icon" />
+        </div>
+        <div class="card-panel-description">
+          <div class="card-panel-text">
+            2024年签单数  
+          </div>
+          <count-to :start-val="0" :end-val="this.year_2024_projectCount" :duration="3000" class="card-panel-num" />
+        </div>
+      </div>
+    </el-col>
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+      <div class="card-panel" >
+        <div class="card-panel-icon-wrapper icon-money">
+          <svg-icon icon-class="money" class-name="card-panel-icon" />
+        </div>
+        <div class="card-panel-description">
+          <div class="card-panel-text">
+            2024年签单金额
+          </div>
+          <count-to :start-val="0" :end-val="this.year_2024_projectAmount" :duration="3200" class="card-panel-num" />
+        </div>
+      </div>
+    </el-col>
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+      <div class="card-panel">
+        <div class="card-panel-icon-wrapper icon-shopping">
+          <svg-icon icon-class="money" class-name="card-panel-icon" />
+        </div>
+        <div class="card-panel-description">
+          <div class="card-panel-text">
+            2024年到账数
+          </div>
+          <count-to :start-val="0" :end-val="this.year_2024_reallyAmount" :duration="3600" class="card-panel-num" />
+        </div>
+      </div>
+    </el-col>
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col" >
       <div class="card-panel" >
         <div class="card-panel-icon-wrapper icon-people">
           <svg-icon icon-class="peoples" class-name="card-panel-icon" />
@@ -118,7 +171,7 @@
         </div>
       </div>
     </el-col>
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col" style="margin-top:50px" >
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col" >
       <div class="card-panel" >
         <div class="card-panel-icon-wrapper icon-message">
           <svg-icon icon-class="message" class-name="card-panel-icon" />
@@ -131,7 +184,7 @@
         </div>
       </div>
     </el-col>
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col" style="margin-top:50px">
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col" >
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-money">
           <svg-icon icon-class="money" class-name="card-panel-icon" />
@@ -144,7 +197,7 @@
         </div>
       </div>
     </el-col>
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col" style="margin-top:50px">
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col" >
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-shopping">
           <svg-icon icon-class="money" class-name="card-panel-icon" />
@@ -179,7 +232,11 @@ export default {
       year_2023_projectAmount: 0,
       year_2023_projectCount: 0,
       year_2023_companyCount: 0,
-      year_2023_reallyAmount:0
+      year_2023_reallyAmount:0,
+      year_2024_projectAmount: 0,
+      year_2024_projectCount: 0,
+      year_2024_companyCount: 0,
+      year_2024_reallyAmount:0
     }
   },
   components: {
@@ -189,6 +246,7 @@ export default {
     this.getCountAll()
     this.getDayCount()
     this.get2023YearCount()
+    this.get2024YearCount()
   },
   methods: {
     handleSetLineChartData(type) {
@@ -217,6 +275,14 @@ export default {
         this.year_2023_projectCount = res.projectCount
         this.year_2023_projectAmount = res.projectAmount
         this.year_2023_reallyAmount =res.reallyAmount
+      })
+    },
+    get2024YearCount(){
+      getYearCount(2024).then(res=>{
+        this.year_2024_companyCount = res.companyCount
+        this.year_2024_projectCount = res.projectCount
+        this.year_2024_projectAmount = res.projectAmount
+        this.year_2024_reallyAmount =res.reallyAmount
       })
     }
   }

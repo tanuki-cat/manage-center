@@ -37,3 +37,9 @@ export function getWeekCount() {
     method: 'get'
   })
 }
+export function getYearCount(year){
+  return request({
+    url: 'api/merchant/statisticians/countByYear?year=' + year,
+    method: 'get'
+  })
+}

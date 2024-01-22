@@ -4,6 +4,45 @@
   <div class="app-container">
     <!--工具栏-->
     <div class="head-container">
+      <div v-if="crud.props.searchToggle">
+        <!-- 搜索 -->
+        <el-input v-model="query.companyName" 
+          clearable size="small" 
+          placeholder="输入公司名称进行搜索" 
+          style="width: 230px;"
+          class="filter-item" 
+          @keyup.enter.native="crud.toQuery" 
+        />
+        <el-input v-model="query.projectName" 
+          clearable size="small" 
+          placeholder="输入项目名称进行搜索" 
+          style="width: 200px;"
+          class="filter-item" @keyup.enter.native="crud.toQuery"
+        />
+        <el-input v-model="query.projectTag" 
+          clearable size="small" 
+          placeholder="输入项目类型进行搜索" 
+          style="width: 200px;"
+          class="filter-item" @keyup.enter.native="crud.toQuery"
+        />
+        <el-select
+              v-model="query.projectStatus"
+              clearable
+              size="small"
+              placeholder="状态"
+              class="filter-item"
+              style="width: 90px"
+              @change="crud.toQuery"
+            >
+              <el-option
+                v-for="item in enabledTypeOptions"
+                :key="item.key"
+                :label="item.display_name"
+                :value="item.key"
+              />
+            </el-select>
+        <rrOperation />
+      </div>
       <!--如果想在工具栏加入更多按钮，可以使用插槽方式， slot = 'left' or 'right'-->
       <crudOperation :permission="permission" />
       <!--表单组件-->
@@ -22,23 +61,8 @@
           <el-form-item label="项目金额">
             <el-input v-model="form.projectAmount" style="width: 370px;" />
           </el-form-item>
-          <el-form-item label="项目状态">
-            <el-input v-model="form.projectStatus" style="width: 370px;" />
-          </el-form-item>
-          <el-form-item label="创建者名字">
-            <el-input v-model="form.nickName" style="width: 370px;" />
-          </el-form-item>
-          <el-form-item label="创建者">
-            <el-input v-model="form.createBy" style="width: 370px;" />
-          </el-form-item>
-          <el-form-item label="更新者">
-            <el-input v-model="form.updateBy" style="width: 370px;" />
-          </el-form-item>
-          <el-form-item label="创建日期">
-            <el-input v-model="form.createTime" style="width: 370px;" />
-          </el-form-item>
-          <el-form-item label="更新时间">
-            <el-input v-model="form.updateTime" style="width: 370px;" />
+          <el-form-item label="项目类型">
+            <el-input v-model="form.projectTag" style="width: 370px;" />
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -162,10 +186,11 @@
         <el-table-column prop="userMobile" label="联系人电话" />
         <el-table-column prop="projectAmount" label="项目金额" />
         <el-table-column prop="amountPercent" label="金额百分比" />    
+        <el-table-column prop="projectTag" label="项目类型" />
         <el-table-column prop="statusName" label="项目状态" />
         <el-table-column prop="createTime" label="签单日期" />
         <el-table-column prop="nickName" label="创建者" />
-        <el-table-column v-if="checkPer(['admin','project:edit','project:del'])" label="操作" width="450px" align="center">
+        <el-table-column v-if="checkPer(['admin','project:detail','project:del'])" label="操作" width="450px" align="center">
           <template slot-scope="scope">
             <udOperation
               :data="scope.row"
@@ -201,7 +226,7 @@ export default {
   components: { pagination, crudOperation, rrOperation, udOperation },
   mixins: [presenter(), header(), form(defaultForm), crud()],
   cruds() {
-    return CRUD({ title: 'project', url: 'api/merchant/project', idField: 'id', sort: 'id,desc', crudMethod: { ...crudProject }})
+    return CRUD({ title: '项目', url: 'api/merchant/project', idField: 'id', sort: 'id,desc', crudMethod: { ...crudProject }})
   },
   data() {
     return {
@@ -211,6 +236,11 @@ export default {
       //财务
       financeVisible:false,
       editUserVisible:false,
+      enabledTypeOptions: [
+        { key: '0', display_name: '创建' },
+        { key: '1', display_name: '进行中' },
+        { key: '2', display_name: '完结' }
+      ],
       editUserFrom: {
         companyId: 0,
         companyName: '',

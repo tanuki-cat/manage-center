@@ -72,6 +72,9 @@
           <el-form-item label="联系人电话">
             <el-input v-model="projectFrom.userMobile" style="width: 350px;" maxlength="11" />
           </el-form-item>
+          <el-form-item label="项目类型">
+            <el-input v-model="projectFrom.projectTag" style="width: 350px;" />
+          </el-form-item>
           <el-form-item label="项目金额">
             <el-input v-model="projectFrom.projectAmount" style="width: 350px;" />
           </el-form-item>
@@ -110,6 +113,9 @@
           </el-form-item>
           <el-form-item label="版权">
             <el-input v-model="patentFrom.copyright" style="width: 350px;" />
+          </el-form-item>
+          <el-form-item label="专利类型">
+            <el-input v-model="patentFrom.patentTag" style="width: 350px;" />
           </el-form-item>
           <el-form-item label="金额">
             <el-input v-model="patentFrom.projectAmount" style="width: 350px;" />
@@ -187,6 +193,7 @@ export default {
         companyName: '',
         projectName: '',
         projectDesc: '',
+        projectTag: '',
         projectAmount: 0,
         userName: '',
         userMobile: '',
@@ -203,6 +210,7 @@ export default {
         copyright: '',
         projectAmount: 0,
         amountPercent: 0,
+        patentTag: '',
         createTime: ''
 
       },
@@ -241,6 +249,14 @@ export default {
     getProject(data) {
       this.projectFrom.companyId = data.id
       this.projectFrom.companyName = data.name
+      this.projectFrom.projectName = ''
+      this.projectFrom.projectDesc = ''
+      this.projectFrom.projectTag = ''
+      this.projectFrom.projectAmount = 0
+      this.projectFrom.userName = ''
+      this.projectFrom.userMobile = ''
+      this.projectFrom.amountPercent = 0
+      this.projectFrom.createTime = ''
       this.projectVisible = true
     },
     addProject() {
@@ -259,6 +275,15 @@ export default {
     getPatent(data) {
       this.patentFrom.companyId = data.id
       this.patentFrom.companyName = data.name
+      this.patentFrom.invention = ''
+      this.patentFrom.utilityModel = ''
+      this.patentFrom.appearance = ''
+      this.patentFrom.softwareWorks = ''
+      this.patentFrom.copyright = ''
+      this.patentFrom.projectAmount = 0
+      this.patentFrom.amountPercent = 0
+      this.patentFrom.createTime = ''
+      this.patentFrom.patentTag = ''
       this.patentVisible = true
     },
     addPatent() {

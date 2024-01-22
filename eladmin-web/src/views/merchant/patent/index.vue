@@ -2,6 +2,40 @@
   <div class="app-container">
     <!--工具栏-->
     <div class="head-container">
+     
+      <div v-if="crud.props.searchToggle">
+        <!-- 搜索 -->
+        <el-input v-model="query.companyName" 
+          clearable size="small" 
+          placeholder="输入公司名称进行搜索" 
+          style="width: 230px;"
+          class="filter-item" 
+          @keyup.enter.native="crud.toQuery" 
+        />
+        <el-input v-model="query.patentTag" 
+          clearable size="small" 
+          placeholder="输入专利类型进行搜索" 
+          style="width: 200px;"
+          class="filter-item" @keyup.enter.native="crud.toQuery"
+        />
+        <el-select
+              v-model="query.patentStatus"
+              clearable
+              size="small"
+              placeholder="状态"
+              class="filter-item"
+              style="width: 90px"
+              @change="crud.toQuery"
+            >
+              <el-option
+                v-for="item in enabledTypeOptions"
+                :key="item.key"
+                :label="item.display_name"
+                :value="item.key"
+              />
+            </el-select>
+        <rrOperation />
+      </div>
       <!--如果想在工具栏加入更多按钮，可以使用插槽方式， slot = 'left' or 'right'-->
       <crudOperation :permission="permission" />
       <!--表单组件-->
@@ -134,6 +168,35 @@
           <el-button :loading="crud.status.cu === 2" type="danger" @click="$event => goFinish()">完结</el-button>
         </div>
       </el-dialog>
+      <el-dialog :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="500px">
+        <el-form ref="form" :model="form" :rules="rules" size="small" label-width="80px">   
+          <el-form-item label="公司名称">
+            <el-input v-model="form.companyName" style="width: 370px;" disabled/>
+          </el-form-item>
+          <el-form-item label="发明专利">
+            <el-input v-model="form.invention" style="width: 370px;" />
+          </el-form-item>
+          <el-form-item label="实用新型专利">
+            <el-input v-model="form.utilityModel" style="width: 370px;" />
+          </el-form-item>
+          <el-form-item label="外观专利">
+            <el-input v-model="form.appearance" style="width: 370px;" />
+          </el-form-item>
+          <el-form-item label="软件著作">
+            <el-input v-model="form.softwareWorks" style="width: 370px;" />
+          </el-form-item>
+          <el-form-item label="版权">
+            <el-input v-model="form.copyright" style="width: 370px;" />
+          </el-form-item>     
+          <el-form-item label="专利类型">
+            <el-input v-model="form.patentTag" style="width: 370px;" />
+          </el-form-item>     
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button type="text" @click="crud.cancelCU">取消</el-button>
+          <el-button :loading="crud.status.cu === 2" type="primary" @click="crud.submitCU">确认</el-button>
+        </div>
+      </el-dialog>
       <!--表格渲染-->
       <el-table ref="table" v-loading="crud.loading" :data="crud.data" size="small" style="width: 100%;" @selection-change="crud.selectionChangeHandler">
         <el-table-column type="selection" width="55" />
@@ -143,6 +206,7 @@
         <el-table-column prop="appearance" label="外观专利" />
         <el-table-column prop="softwareWorks" label="软件著作" />
         <el-table-column prop="copyright" label="版权" />
+        <el-table-column prop="patentTag" label="专利类型" />
         <el-table-column prop="projectAmount" label="金额" />
         <el-table-column prop="amountPercent" label="金额百分比" />
         <el-table-column prop="progress" label="专利进度" />
@@ -155,7 +219,7 @@
         <el-table-column prop="nickName" label="创建者" />
         <el-table-column prop="createTime" label="签单日期" />
 
-        <el-table-column v-if="checkPer(['admin','patent:edit','patent:del'])" label="操作" width="150px" align="center">
+        <el-table-column v-if="checkPer(['admin','patent:detail','patent:del'])" label="操作" width="150px" align="center">
           <template slot-scope="scope">
             <udOperation
               :data="scope.row"
@@ -184,13 +248,13 @@ import udOperation from '@crud/UD.patent'
 import pagination from '@crud/Pagination'
 import crudUser from '@/api/system/user'
 import patentSchedule from '@/api/merchant/patentSchedule'
-const defaultForm = { patentId: null, companyId: null, companyName: null, invention: null, utilityModel: null, appearance: null, softwareWorks: null, copyright: null, progress: null, filingTime: null, writeTime: null, authorizationTime: null, patentNum: null, forewarnTime: null, patentStatus: null, nickName: null, createBy: null, updateBy: null, createTime: null, updateTime: null }
+const defaultForm = { patentId: null, companyId: null, companyName: null, invention: null, utilityModel: null, appearance: null, softwareWorks: null, copyright: null, progress: null, filingTime: null, writeTime: null, authorizationTime: null, patentNum: null, forewarnTime: null, patentStatus: null, nickName: null, createBy: null, updateBy: null, createTime: null, updateTime: null,patentTag:null }
 export default {
   name: 'Patent',
   components: { pagination, crudOperation, rrOperation, udOperation },
   mixins: [presenter(), header(), form(defaultForm), crud()],
   cruds() {
-    return CRUD({ title: 'patent', url: 'api/merchant/patent', idField: 'id', sort: 'id,desc', crudMethod: { ...crudPatent }})
+    return CRUD({ title: '专利', url: 'api/merchant/patent', idField: 'id', sort: 'id,desc', crudMethod: { ...crudPatent }})
   },
   data() {
     return {
@@ -200,6 +264,11 @@ export default {
       //财务
       financeVisible:false,      
       editUserVisible:false,
+      enabledTypeOptions: [
+        { key: '0', display_name: '创建' },
+        { key: '1', display_name: '进行中' },
+        { key: '2', display_name: '完结' }
+      ],
       userPatentFrom: {
         companyId: 0,
         companyName: '',
