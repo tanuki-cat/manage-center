@@ -32,4 +32,5 @@ public class PatentQueryCriteria{
     private String patentName;
     private Integer patentStatus;
     private String companyName;
+    private String areas;
 }

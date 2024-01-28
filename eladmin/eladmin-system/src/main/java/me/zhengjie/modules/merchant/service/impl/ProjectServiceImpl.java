@@ -85,6 +85,9 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
         if (Strings.isNotBlank(criteria.getCompanyName())) {
             wrapper.like(Project::getCompanyName, criteria.getCompanyName());
         }
+        if (Strings.isNotBlank(criteria.getAreas())) {
+            wrapper.like(Project::getAreas, criteria.getAreas());
+        }
         if (Objects.nonNull(criteria.getAssignUserId()) && Long.parseLong(criteria.getAssignUserId()) > 0) {
             //当前角色为项目经理时
             List<ProjectSchedule> schedules = this.projectScheduleService.list(Wrappers.<ProjectSchedule>query().lambda()

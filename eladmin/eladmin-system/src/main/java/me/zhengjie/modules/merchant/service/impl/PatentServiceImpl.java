@@ -79,6 +79,9 @@ public class PatentServiceImpl extends ServiceImpl<PatentMapper, Patent> impleme
         if (Strings.isNotBlank(criteria.getCompanyName())) {
             wrapper.like(Patent::getCompanyName, criteria.getCompanyName());
         }
+        if (Strings.isNotBlank(criteria.getAreas())) {
+            wrapper.like(Patent::getAreas, criteria.getAreas());
+        }
         if (Strings.isNotBlank(criteria.getAssignUserId()) && Long.parseLong(criteria.getAssignUserId()) > 0) {
              List<PatentSchedule> patentSchedules = this.patentScheduleService.lambdaQuery()
                     .eq(PatentSchedule::getAssignUserId, criteria.getAssignUserId())
