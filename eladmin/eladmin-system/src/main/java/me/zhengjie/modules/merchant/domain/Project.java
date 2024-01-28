@@ -70,7 +70,8 @@ public class Project extends BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "标签")
     private String projectTag;
-
+    @ApiModelProperty(value = "地区")
+    private String areas;
 
 
     public void copy(Project source){

@@ -25,6 +25,12 @@
           style="width: 200px;"
           class="filter-item" @keyup.enter.native="crud.toQuery"
         />
+        <el-input v-model="query.areas" 
+          clearable size="small" 
+          placeholder="输入地区进行搜索" 
+          style="width: 200px;"
+          class="filter-item" @keyup.enter.native="crud.toQuery"
+        />
         <el-select
               v-model="query.projectStatus"
               clearable
@@ -64,6 +70,9 @@
           <el-form-item label="项目类型">
             <el-input v-model="form.projectTag" style="width: 370px;" />
           </el-form-item>
+          <el-form-item label="地区">
+            <el-input v-model="form.areas" style="width: 370px;" />
+          </el-form-item>  
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button type="text" @click="crud.cancelCU">取消</el-button>
@@ -182,6 +191,7 @@
         <el-table-column prop="companyName" label="公司名称" />
         <el-table-column prop="projectName" label="项目名称" />
         <el-table-column prop="projectDesc" label="项目描述" />
+        <el-table-column prop="areas" label="地区" />
         <el-table-column prop="userName" label="联系人" />
         <el-table-column prop="userMobile" label="联系人电话" />
         <el-table-column prop="projectAmount" label="项目金额" />
@@ -220,7 +230,7 @@ import pagination from '@crud/Pagination'
 import crudUser from '@/api/system/user'
 import projectSchedule from '@/api/merchant/projectSchedule'
 
-const defaultForm = { id: null, companyId: null, companyName: null, projectName: null, projectDesc: null, projectAmount: null, projectStatus: null, nickName: null, createBy: null, updateBy: null, createTime: null, updateTime: null }
+const defaultForm = { id: null, companyId: null, companyName: null, projectName: null, projectDesc: null, projectAmount: null, projectStatus: null, nickName: null, createBy: null, updateBy: null, createTime: null, updateTime: null,areas:null }
 export default {
   name: 'Project',
   components: { pagination, crudOperation, rrOperation, udOperation },

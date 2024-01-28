@@ -18,6 +18,12 @@
           style="width: 200px;"
           class="filter-item" @keyup.enter.native="crud.toQuery"
         />
+        <el-input v-model="query.areas" 
+          clearable size="small" 
+          placeholder="输入地区进行搜索" 
+          style="width: 200px;"
+          class="filter-item" @keyup.enter.native="crud.toQuery"
+        />
         <el-select
               v-model="query.patentStatus"
               clearable
@@ -176,6 +182,9 @@
           <el-form-item label="发明专利">
             <el-input v-model="form.invention" style="width: 370px;" />
           </el-form-item>
+          <el-form-item label="地区">
+            <el-input v-model="form.areas" style="width: 370px;" />
+          </el-form-item>  
           <el-form-item label="实用新型专利">
             <el-input v-model="form.utilityModel" style="width: 370px;" />
           </el-form-item>
@@ -190,7 +199,8 @@
           </el-form-item>     
           <el-form-item label="专利类型">
             <el-input v-model="form.patentTag" style="width: 370px;" />
-          </el-form-item>     
+          </el-form-item>   
+           
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button type="text" @click="crud.cancelCU">取消</el-button>
@@ -202,6 +212,7 @@
         <el-table-column type="selection" width="55" />
         <el-table-column prop="companyName" label="公司名称" />
         <el-table-column prop="invention" label="发明专利" />
+        <el-table-column prop="areas" label="地区" />
         <el-table-column prop="utilityModel" label="实用新型专利" />
         <el-table-column prop="appearance" label="外观专利" />
         <el-table-column prop="softwareWorks" label="软件著作" />
@@ -248,7 +259,7 @@ import udOperation from '@crud/UD.patent'
 import pagination from '@crud/Pagination'
 import crudUser from '@/api/system/user'
 import patentSchedule from '@/api/merchant/patentSchedule'
-const defaultForm = { patentId: null, companyId: null, companyName: null, invention: null, utilityModel: null, appearance: null, softwareWorks: null, copyright: null, progress: null, filingTime: null, writeTime: null, authorizationTime: null, patentNum: null, forewarnTime: null, patentStatus: null, nickName: null, createBy: null, updateBy: null, createTime: null, updateTime: null,patentTag:null }
+const defaultForm = { patentId: null, companyId: null, companyName: null, invention: null, utilityModel: null, appearance: null, softwareWorks: null, copyright: null, progress: null, filingTime: null, writeTime: null, authorizationTime: null, patentNum: null, forewarnTime: null, patentStatus: null, nickName: null, createBy: null, updateBy: null, createTime: null, updateTime: null,patentTag:null,areas:null }
 export default {
   name: 'Patent',
   components: { pagination, crudOperation, rrOperation, udOperation },
