@@ -72,6 +72,9 @@
           <el-form-item label="联系人电话">
             <el-input v-model="projectFrom.userMobile" style="width: 350px;" maxlength="11" />
           </el-form-item>
+          <el-form-item label="地区">
+            <el-input v-model="projectFrom.areas" style="width: 370px;" />
+          </el-form-item>  
           <el-form-item label="项目类型">
             <el-input v-model="projectFrom.projectTag" style="width: 350px;" />
           </el-form-item>
@@ -102,6 +105,9 @@
           <el-form-item label="发明专利">
             <el-input v-model="patentFrom.invention" style="width: 350px;" />
           </el-form-item>
+          <el-form-item label="地区">
+            <el-input v-model="patentFrom.areas" style="width: 370px;" />
+          </el-form-item>  
           <el-form-item label="实用新型专利">
             <el-input v-model="patentFrom.utilityModel" style="width: 350px;"  />
           </el-form-item>
@@ -198,7 +204,8 @@ export default {
         userName: '',
         userMobile: '',
         amountPercent: 0,
-        createTime: ''
+        createTime: '',
+        areas:""
       },
       patentFrom: {
         companyId: 0,
@@ -211,7 +218,8 @@ export default {
         projectAmount: 0,
         amountPercent: 0,
         patentTag: '',
-        createTime: ''
+        createTime: '',
+        areas:""
 
       },
       rules: {

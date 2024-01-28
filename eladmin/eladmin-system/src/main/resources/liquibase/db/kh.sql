@@ -181,3 +181,11 @@ ALTER TABLE `sys_patent`
     ADD COLUMN `patent_tag` varchar(64) DEFAULT NULL  COMMENT '标签' AFTER `amount_percent`;
 ALTER TABLE  `sys_project`
     ADD COLUMN `project_tag` varchar(64) DEFAULT NULL  COMMENT '标签' AFTER `amount_percent`;
+
+
+-- changeset Joy:20240128_2108
+-- comment 添加标签字段
+ALTER TABLE `sys_patent`
+    ADD COLUMN `areas` varchar(64) DEFAULT NULL  COMMENT '区域' AFTER `amount_percent`;
+ALTER TABLE  `sys_project`
+    ADD COLUMN `areas` varchar(64) DEFAULT NULL  COMMENT '区域' AFTER `amount_percent`;
