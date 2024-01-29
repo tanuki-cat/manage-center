@@ -11,6 +11,12 @@
           class="filter-item" 
           @keyup.enter.native="crud.toQuery" 
         />
+        <el-input v-model="query.areas" 
+          clearable size="small" 
+          placeholder="输入地区进行搜索" 
+          style="width: 200px;"
+          class="filter-item" @keyup.enter.native="crud.toQuery"
+        />
         <el-input v-model="query.phone" 
           clearable size="small" 
           placeholder="输入联系人手机进行搜索" 
@@ -35,7 +41,9 @@
           <el-form-item label="联系人手机">
             <el-input v-model="form.userMobile" style="width: 350px;" maxlength="11" />
           </el-form-item>
-         
+          <el-form-item label="地区">
+            <el-input v-model="form.areas" style="width: 370px;" />
+          </el-form-item> 
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button type="text" @click="crud.cancelCU">取消</el-button>
@@ -143,7 +151,8 @@
         @select="crud.selectChange" @select-all="crud.selectAllChange" @selection-change="crud.selectionChangeHandler">
         <el-table-column :selectable="checkboxT" type="selection" width="55" />
         <el-table-column prop="name" label="公司名称" />
-        <el-table-column prop="userName" label="联系人" />
+        <el-table-column prop="areas" label="地区" />
+        <el-table-column prop="userName" label="联系人" />        
         <el-table-column prop="userMobile" label="联系人手机" />
         <el-table-column prop="createTime" label="创建日期" />
         <el-table-column prop="updateTime" label="更新时间" />
@@ -171,7 +180,7 @@ import projectAdd from '@/api/merchant/project'
 import patentAdd from '@/api/merchant/patent'
 import rrOperation from '@crud/RR.operation'
 
-const defaultForm = { id: null, name: null, userName: null, userMobile: null, createBy: null, updateBy: null, createTime: null, updateTime: null }
+const defaultForm = { id: null, name: null, userName: null, userMobile: null, createBy: null, updateBy: null, createTime: null, updateTime: null,areas:null}
 export default {
   name: 'Company',
   components: { pagination, crudOperation, udOperation,rrOperation},

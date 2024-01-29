@@ -48,7 +48,8 @@ public class Company extends BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "公司名称")
     private String name;
-
+    @ApiModelProperty(value = "地区")
+    private String areas;
     @ApiModelProperty(value = "公司联系人")
     private String userName;
 
@@ -62,6 +63,7 @@ public class Company extends BaseEntity implements Serializable {
     @TableField(exist = false)
     @ApiModelProperty(value = "公司业务信息扩展表")
     private CompanyBusinessInfoExt companyBusinessInfoExt;
+
 
     public void copy(Company source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

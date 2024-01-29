@@ -189,3 +189,8 @@ ALTER TABLE `sys_patent`
     ADD COLUMN `areas` varchar(64) DEFAULT NULL  COMMENT '区域' AFTER `amount_percent`;
 ALTER TABLE  `sys_project`
     ADD COLUMN `areas` varchar(64) DEFAULT NULL  COMMENT '区域' AFTER `amount_percent`;
+
+-- changeset Joy:20240129_2108
+-- comment 添加地区
+ALTER TABLE `sys_company`
+    ADD COLUMN `areas` varchar(64) DEFAULT NULL  COMMENT '区域' AFTER `name`;
