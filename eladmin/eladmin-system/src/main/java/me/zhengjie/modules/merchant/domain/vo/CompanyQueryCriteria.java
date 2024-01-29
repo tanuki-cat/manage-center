@@ -31,4 +31,5 @@ public class CompanyQueryCriteria{
     private String phone;
     //创建人
     private String createBy;
+    private String areas;
 }

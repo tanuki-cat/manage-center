@@ -73,6 +73,9 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
         if (Strings.isNotBlank(criteria.getCreateBy())) {
             queryWrapper.eq(Company::getCreateBy, criteria.getCreateBy());
         }
+        if (Strings.isNotBlank(criteria.getAreas())) {
+            queryWrapper.eq(Company::getAreas, criteria.getAreas());
+        }
         queryWrapper.orderByDesc(Company::getCreateTime);
         IPage<Company> companyIPage = this.page(companyPage, queryWrapper);
         return PageUtil.toPage(companyIPage);
