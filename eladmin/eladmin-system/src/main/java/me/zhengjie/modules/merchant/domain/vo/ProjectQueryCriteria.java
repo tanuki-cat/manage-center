@@ -33,4 +33,5 @@ public class ProjectQueryCriteria{
     private String projectTag;
     private String companyName;
     private String areas;
+    private Integer year;
 }

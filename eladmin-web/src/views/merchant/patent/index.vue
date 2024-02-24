@@ -2,25 +2,25 @@
   <div class="app-container">
     <!--工具栏-->
     <div class="head-container">
-     
+
       <div v-if="crud.props.searchToggle">
         <!-- 搜索 -->
-        <el-input v-model="query.companyName" 
-          clearable size="small" 
-          placeholder="输入公司名称进行搜索" 
+        <el-input v-model="query.companyName"
+          clearable size="small"
+          placeholder="输入公司名称进行搜索"
           style="width: 230px;"
-          class="filter-item" 
-          @keyup.enter.native="crud.toQuery" 
+          class="filter-item"
+          @keyup.enter.native="crud.toQuery"
         />
-        <el-input v-model="query.patentTag" 
-          clearable size="small" 
-          placeholder="输入专利类型进行搜索" 
+        <el-input v-model="query.patentTag"
+          clearable size="small"
+          placeholder="输入专利类型进行搜索"
           style="width: 200px;"
           class="filter-item" @keyup.enter.native="crud.toQuery"
         />
-        <el-input v-model="query.areas" 
-          clearable size="small" 
-          placeholder="输入地区进行搜索" 
+        <el-input v-model="query.areas"
+          clearable size="small"
+          placeholder="输入地区进行搜索"
           style="width: 200px;"
           class="filter-item" @keyup.enter.native="crud.toQuery"
         />
@@ -40,6 +40,17 @@
                 :value="item.key"
               />
             </el-select>
+        <!--年份-->
+        <el-date-picker
+          v-model="query.year"
+          type="year"
+          style="width: 115px;height: 30.5px; line-height: 30.5px;position: relative; top: -4px "
+          placeholder="选择年份"
+          value-format="yyyy"
+          format="yyyy 年"
+          @change="crud.toQuery"
+        >
+        </el-date-picker>
         <rrOperation />
       </div>
       <!--如果想在工具栏加入更多按钮，可以使用插槽方式， slot = 'left' or 'right'-->
@@ -51,7 +62,7 @@
             <el-form-item label="公司名称">
               <el-input v-model="userPatentFrom.companyName" style="width: 350px;" disabled />
             </el-form-item>
-          
+
             <el-form-item label="指派人员">
                 <el-select
                   v-model="userPatentFrom.assignUser"
@@ -80,7 +91,7 @@
           <el-form-item label="公司名称">
             <el-input v-model="editUserFrom.companyName" style="width: 350px;" disabled />
           </el-form-item>
-        
+
           <el-form-item label="变更业务员">
               <el-select
                 v-model="editUserFrom.assignUser"
@@ -108,7 +119,7 @@
         <el-form ref="form" :model="patentFrom" :rules="rules" size="small" label-width="100px">
           <el-form-item label="公司名称">
             <el-input v-model="patentFrom.companyName" style="width: 350px;" disabled />
-          </el-form-item>      
+          </el-form-item>
           <el-form-item label="专利数">
             <el-input v-model="patentFrom.patentNum" style="width: 350px;" />
           </el-form-item>
@@ -117,7 +128,7 @@
           </el-form-item>
           <el-form-item label="专利进度" >
             <el-input v-model="patentFrom.progress" style="width: 350px;" />
-          </el-form-item>   
+          </el-form-item>
           <el-form-item label="专利申报时间" >
             <el-input v-model="patentFrom.filingTime" style="width: 350px;" />
           </el-form-item>
@@ -126,14 +137,14 @@
           </el-form-item>
           <el-form-item label="授权下证时间" >
             <el-input v-model="patentFrom.authorizationTime" style="width: 350px;" />
-          </el-form-item>   
-          
+          </el-form-item>
+
         </el-form>
-        
+
         <div slot="footer" class="dialog-footer">
           <el-button type="text" @click="patentClose()">取消</el-button>
           <el-button :loading="crud.status.cu === 2" type="primary" @click="$event => addPatentManager()">填写</el-button>
-          <el-button type="danger" @click="goTransfer()">转交</el-button>       
+          <el-button type="danger" @click="goTransfer()">转交</el-button>
         </div>
       </el-dialog>
       <!--财务-->
@@ -141,7 +152,7 @@
         <el-form ref="form" :model="financeFrom" :rules="rules" size="small" label-width="100px">
           <el-form-item label="公司名称">
             <el-input v-model="financeFrom.companyName" style="width: 350px;" disabled />
-          </el-form-item>      
+          </el-form-item>
           <el-form-item label="专利数">
             <el-input v-model="financeFrom.patentNum" style="width: 350px;" disabled/>
           </el-form-item>
@@ -150,7 +161,7 @@
           </el-form-item>
           <el-form-item label="专利进度" >
             <el-input v-model="financeFrom.progress" style="width: 350px;" disabled/>
-          </el-form-item>   
+          </el-form-item>
           <el-form-item label="专利申报时间" >
             <el-input v-model="financeFrom.filingTime" style="width: 350px;" disabled/>
           </el-form-item>
@@ -159,7 +170,7 @@
           </el-form-item>
           <el-form-item label="授权下证时间" >
             <el-input v-model="financeFrom.authorizationTime" style="width: 350px;" disabled/>
-          </el-form-item>   
+          </el-form-item>
           <el-form-item label="金额百分比" prop="amountPercent">
             <el-input v-model="financeFrom.amountPercent" style="width: 350px;" />
           </el-form-item>
@@ -167,7 +178,7 @@
             <el-date-picker v-model="financeFrom.remittanceTime" type="datetime"  style="width: 350px;"  />
           </el-form-item>
         </el-form>
-        
+
         <div slot="footer" class="dialog-footer">
           <el-button type="text" @click="financeClose()">取消</el-button>
           <el-button :loading="crud.status.cu === 2" type="primary" @click="$event => addPatentFinance()">填写</el-button>
@@ -175,7 +186,7 @@
         </div>
       </el-dialog>
       <el-dialog :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="500px">
-        <el-form ref="form" :model="form" :rules="rules" size="small" label-width="80px">   
+        <el-form ref="form" :model="form" :rules="rules" size="small" label-width="80px">
           <el-form-item label="公司名称">
             <el-input v-model="form.companyName" style="width: 370px;" disabled/>
           </el-form-item>
@@ -184,7 +195,7 @@
           </el-form-item>
           <el-form-item label="地区">
             <el-input v-model="form.areas" style="width: 370px;" />
-          </el-form-item>  
+          </el-form-item>
           <el-form-item label="实用新型专利">
             <el-input v-model="form.utilityModel" style="width: 370px;" />
           </el-form-item>
@@ -196,11 +207,11 @@
           </el-form-item>
           <el-form-item label="版权">
             <el-input v-model="form.copyright" style="width: 370px;" />
-          </el-form-item>     
+          </el-form-item>
           <el-form-item label="专利类型">
             <el-input v-model="form.patentTag" style="width: 370px;" />
-          </el-form-item>   
-           
+          </el-form-item>
+
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button type="text" @click="crud.cancelCU">取消</el-button>
@@ -273,7 +284,7 @@ export default {
       userVisible:false,
       patentVisible:false,
       //财务
-      financeVisible:false,      
+      financeVisible:false,
       editUserVisible:false,
       enabledTypeOptions: [
         { key: '0', display_name: '创建' },
@@ -369,7 +380,7 @@ export default {
         console.log(res)
         this.userList=res
       })
-      
+
     },
     getUserPatent(data) {
       console.log(data)
@@ -378,7 +389,7 @@ export default {
       this.userPatentFrom.patentId = data.id
       this.userPatentFrom.assignUser=''
       this.userPatentFrom.assignUserId=0
-      this.userVisible = true    
+      this.userVisible = true
       crudUser.roleLists().then(res => {
         console.log(res)
         this.userList=res
@@ -387,11 +398,11 @@ export default {
     selectUser(data) {
       this.userPatentFrom.assignUserId =data.id
       this.userPatentFrom.assignUser =data.nickName
-   
+
     },
     selectEditUser(data) {
       this.editUserFrom.assignUserId =data.id
-      this.editUserFrom.assignUser =data.nickName   
+      this.editUserFrom.assignUser =data.nickName
     },
     deleteTag(){
       this.userPatentFrom.assignUser = ''
@@ -416,7 +427,7 @@ export default {
           })
         }
       })
-        
+
     },
     addUserPatent(){
       if(this.userPatentFrom.assignUserId==0){
@@ -435,7 +446,7 @@ export default {
               this.crud.refresh()
           })
         }
-      })      
+      })
     },
     //专利经理
     getPatentManager(data){
@@ -463,7 +474,7 @@ export default {
         }
       })
     },
-    //转交   
+    //转交
     goTransfer(){
       patentSchedule.transfer(this.patentFrom).then(() => {
             this.crud.notify('转交成功', 'success')

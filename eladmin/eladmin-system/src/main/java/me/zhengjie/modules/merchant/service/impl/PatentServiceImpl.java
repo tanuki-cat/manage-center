@@ -58,30 +58,16 @@ public class PatentServiceImpl extends ServiceImpl<PatentMapper, Patent> impleme
     public PageResult<PatentVO> queryAll(PatentQueryCriteria criteria, Page<Object> page){
         LambdaQueryWrapper<Patent> wrapper = new LambdaQueryWrapper<>();
         //设置查询条件
-        if (criteria.getCompanyId() != null && criteria.getCompanyId() > 0) {
-            wrapper.eq(Patent::getCompanyId, criteria.getCompanyId());
-        }
-        if (criteria.getCreateBy() != null) {
-            wrapper.eq(Patent::getCreateBy, criteria.getCreateBy());
-        }
-        if (criteria.getUserName() != null) {
-            wrapper.eq(Patent::getCreateBy, criteria.getUserName());
-        }
-        if (Strings.isNotBlank(criteria.getPatentTag())) {
-            wrapper.eq(Patent::getPatentTag, criteria.getPatentTag());
-        }
-        if (Strings.isNotBlank(criteria.getPatentName())) {
-            wrapper.like(Patent::getInvention, criteria.getPatentName());
-        }
-        if (criteria.getPatentStatus() != null) {
-            wrapper.eq(Patent::getPatentStatus, criteria.getPatentStatus());
-        }
-        if (Strings.isNotBlank(criteria.getCompanyName())) {
-            wrapper.like(Patent::getCompanyName, criteria.getCompanyName());
-        }
-        if (Strings.isNotBlank(criteria.getAreas())) {
-            wrapper.like(Patent::getAreas, criteria.getAreas());
-        }
+        wrapper.eq(Objects.nonNull( criteria.getCompanyId()) && criteria.getCompanyId() > 0, Patent::getCompanyId, criteria.getCompanyId())
+                .eq(Objects.nonNull(criteria.getCreateBy()), Patent::getCreateBy, criteria.getCreateBy())
+                .eq(Objects.nonNull(criteria.getUserName()), Patent::getCreateBy, criteria.getUserName())
+                .eq(Strings.isNotBlank(criteria.getPatentTag()), Patent::getPatentTag, criteria.getPatentTag())
+                .eq(Objects.nonNull(criteria.getPatentStatus()), Patent::getPatentStatus, criteria.getPatentStatus())
+                .like(Strings.isNotBlank(criteria.getCompanyName()), Patent::getCompanyName, criteria.getCompanyName())
+                .like(Strings.isNotBlank(criteria.getPatentName()), Patent::getInvention, criteria.getPatentName())
+                .like(Strings.isNotBlank(criteria.getAreas()), Patent::getAreas, criteria.getAreas())
+                .like(Objects.nonNull(criteria.getYear()), Patent::getCreateTime, criteria.getYear());
+
         if (Strings.isNotBlank(criteria.getAssignUserId()) && Long.parseLong(criteria.getAssignUserId()) > 0) {
              List<PatentSchedule> patentSchedules = this.patentScheduleService.lambdaQuery()
                     .eq(PatentSchedule::getAssignUserId, criteria.getAssignUserId())

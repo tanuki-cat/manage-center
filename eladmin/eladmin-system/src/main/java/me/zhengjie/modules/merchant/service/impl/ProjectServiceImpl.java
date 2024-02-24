@@ -64,30 +64,15 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
         IPage<Project> page1 = new Page<>(page.getCurrent(), page.getSize());
         LambdaQueryWrapper<Project> wrapper = new LambdaQueryWrapper<>();
         //Long companyId is not null
-        if (criteria.getCompanyId() != null && criteria.getCompanyId() > 0) {
-            wrapper.eq(Project::getCompanyId, criteria.getCompanyId());
-        }
-        if (Strings.isNotBlank(criteria.getUserName())) {
-            wrapper.eq(BaseEntity::getCreateBy, criteria.getUserName());
-        }
-        if (Strings.isNotBlank(criteria.getCreateBy())) {
-            wrapper.eq(Project::getCreateBy, criteria.getCreateBy());
-        }
-        if (Strings.isNotBlank(criteria.getProjectTag())) {
-            wrapper.eq(Project::getProjectTag, criteria.getProjectTag());
-        }
-        if (Strings.isNotBlank(criteria.getProjectName())) {
-            wrapper.like(Project::getProjectName, criteria.getProjectName());
-        }
-        if (criteria.getProjectStatus() != null) {
-            wrapper.eq(Project::getProjectStatus, criteria.getProjectStatus());
-        }
-        if (Strings.isNotBlank(criteria.getCompanyName())) {
-            wrapper.like(Project::getCompanyName, criteria.getCompanyName());
-        }
-        if (Strings.isNotBlank(criteria.getAreas())) {
-            wrapper.like(Project::getAreas, criteria.getAreas());
-        }
+        wrapper.eq(Objects.nonNull( criteria.getCompanyId()) && criteria.getCompanyId() > 0, Project::getCompanyId, criteria.getCompanyId())
+                .eq(Strings.isNotBlank(criteria.getUserName()), Project::getCreateBy, criteria.getUserName())
+                .eq(Strings.isNotBlank(criteria.getCreateBy()), Project::getCreateBy, criteria.getCreateBy())
+                .eq(Strings.isNotBlank(criteria.getProjectTag()), Project::getProjectTag, criteria.getProjectTag())
+                .eq(Objects.nonNull(criteria.getProjectStatus()), Project::getProjectStatus, criteria.getProjectStatus())
+                .like(Strings.isNotBlank(criteria.getProjectName()), Project::getProjectName, criteria.getProjectName())
+                .like(Strings.isNotBlank(criteria.getCompanyName()), Project::getCompanyName, criteria.getCompanyName())
+                .like(Strings.isNotBlank(criteria.getAreas()), Project::getAreas, criteria.getAreas())
+                .like(Objects.nonNull(criteria.getYear()), Project::getCreateTime, criteria.getYear());
         if (Objects.nonNull(criteria.getAssignUserId()) && Long.parseLong(criteria.getAssignUserId()) > 0) {
             //当前角色为项目经理时
             List<ProjectSchedule> schedules = this.projectScheduleService.list(Wrappers.<ProjectSchedule>query().lambda()
