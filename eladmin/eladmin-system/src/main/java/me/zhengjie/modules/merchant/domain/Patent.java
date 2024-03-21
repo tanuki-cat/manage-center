@@ -95,6 +95,9 @@ public class Patent extends BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "地区")
     private String areas;
+
+    @ApiModelProperty(value = "专利名称")
+    private String patentName;
     public void copy(Patent source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }

@@ -194,3 +194,8 @@ ALTER TABLE  `sys_project`
 -- comment 添加地区
 ALTER TABLE `sys_company`
     ADD COLUMN `areas` varchar(64) DEFAULT NULL  COMMENT '区域' AFTER `name`;
+
+-- changeset Joy:20240318_2148
+-- comment 添加名称
+ALTER TABLE `sys_patent`
+    ADD COLUMN `patent_name` varchar(255) DEFAULT NULL  COMMENT '专利名称' AFTER `areas`;

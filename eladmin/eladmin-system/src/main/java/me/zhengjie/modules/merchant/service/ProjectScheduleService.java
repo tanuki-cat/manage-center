@@ -98,6 +98,17 @@ public interface ProjectScheduleService extends IService<ProjectSchedule> {
      */
     void transfer(ScheduleCommand command);
     /**
+     * 项目经理填写
+     * @param command
+     */
+    void setManagers(ScheduleCommand command);
+
+    /**
+     * 项目转交项目组长
+     * @param command
+     */
+    void transfers(ScheduleCommand command);
+    /**
      * 财务提交
      * @param resources 提交的资源
      */

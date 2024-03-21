@@ -17,6 +17,7 @@ package me.zhengjie.modules.merchant.rest;
 
 import me.zhengjie.annotation.Log;
 import me.zhengjie.modules.merchant.domain.ProjectSchedule;
+import me.zhengjie.modules.merchant.domain.vo.PatentScheduleCommand;
 import me.zhengjie.modules.merchant.domain.vo.ProjectScheduleVO;
 import me.zhengjie.modules.merchant.domain.vo.ScheduleCommand;
 import me.zhengjie.modules.merchant.service.ProjectScheduleService;
@@ -127,6 +128,22 @@ public class ProjectScheduleController {
         projectScheduleService.transfer(resources);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+    @Log("项目经理继续填写")
+    @ApiOperation("项目经理继续填写")
+    @PostMapping(value = "/managers")
+    public ResponseEntity<Object> managersProject(@RequestBody ScheduleCommand resources){
+        resources.setNickName(userService.findById(SecurityUtils.getCurrentUserId()).getNickName());
+        projectScheduleService.setManagers(resources);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+    @Log("提交业务组长确认")
+    @ApiOperation("提交业务组长确认")
+    @PostMapping(value = "/transfers")
+    public ResponseEntity<Object> transfersProject(@RequestBody ScheduleCommand resources){
+        resources.setNickName(userService.findById(SecurityUtils.getCurrentUserId()).getNickName());
+        projectScheduleService.transfers(resources);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 
     @Log("完成项目")
     @ApiOperation("完成项目")
@@ -152,6 +169,14 @@ public class ProjectScheduleController {
         projectUpdateService.setEditUser(resources);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+    @Log("项目经组长结束")
+    @ApiOperation("项目经组长结束")
+    @PostMapping(value = "/finish")
+    public ResponseEntity<Object> finish(@RequestBody ScheduleCommand resources){
+        resources.setNickName(userService.findById(SecurityUtils.getCurrentUserId()).getNickName());
+        projectUpdateService.finish(resources);
+        return new ResponseEntity<>(HttpStatus.CREATED);
 
+    }
 
 }

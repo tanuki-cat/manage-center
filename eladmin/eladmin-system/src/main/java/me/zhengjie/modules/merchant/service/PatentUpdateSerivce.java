@@ -96,6 +96,31 @@ public class PatentUpdateSerivce {
         patentService.updateById(patent);
     }
     @Transactional(rollbackFor = Exception.class)
+    public void setManagers(PatentScheduleCommand command) {
+        Patent patent = patentService.getById(command.getPatentId());
+        PatentSchedule schedule = new PatentSchedule()
+                .setPatentId(command.getPatentId())
+                .setScheduleStatus(PatentScheduleEnum.TEAMLEADERS)
+                .setFilingTime(command.getFilingTime())
+                .setProgress(command.getProgress())
+                .setWriteTime(command.getWriteTime())
+                .setAuthorizationTime(command.getAuthorizationTime())
+                .setPatentNum(command.getPatentNum())
+                .setNickName(command.getNickName())
+                .setAmountPercent(patent.getAmountPercent())
+                .setForewarnTime(command.getForewarnTime());
+        patentScheduleService.save(schedule);
+
+        patent.setFilingTime(command.getFilingTime());
+        patent.setProgress(command.getProgress());
+        patent.setWriteTime(command.getWriteTime());
+        patent.setAuthorizationTime(command.getAuthorizationTime());
+        patent.setPatentNum(command.getPatentNum());
+        patent.setForewarnTime(command.getForewarnTime());
+
+        patentService.updateById(patent);
+    }
+    @Transactional(rollbackFor = Exception.class)
     public void transfer(PatentScheduleCommand command) {
         Patent patent = patentService.getById(command.getPatentId());
         PatentSchedule schedule = new PatentSchedule()
@@ -112,7 +137,41 @@ public class PatentUpdateSerivce {
         patentScheduleService.save(schedule);
     }
     @Transactional(rollbackFor = Exception.class)
+    public void transfers(PatentScheduleCommand command) {
+        Patent patent = patentService.getById(command.getPatentId());
+        PatentSchedule schedule = new PatentSchedule()
+                .setPatentId(command.getPatentId())
+                .setScheduleStatus(PatentScheduleEnum.MANAGERS)
+                .setFilingTime(patent.getFilingTime())
+                .setProgress(patent.getProgress())
+                .setWriteTime(patent.getWriteTime())
+                .setAuthorizationTime(patent.getAuthorizationTime())
+                .setPatentNum(patent.getPatentNum())
+                .setNickName(command.getNickName())
+                .setAmountPercent(patent.getAmountPercent())
+                .setForewarnTime(patent.getForewarnTime());
+        patentScheduleService.save(schedule);
+    }
+    @Transactional(rollbackFor = Exception.class)
     public void complete(PatentScheduleCommand command) {
+        Patent patent = patentService.getById(command.getPatentId());
+//        patent.setPatentStatus(PatentEnums.COMPLETION.getValue());
+//        patentService.updateById(patent);
+        PatentSchedule schedule = new PatentSchedule()
+                .setPatentId(command.getPatentId())
+                .setScheduleStatus(PatentScheduleEnum.TEAMLEADERS)
+                .setFilingTime(patent.getFilingTime())
+                .setProgress(patent.getProgress())
+                .setWriteTime(patent.getWriteTime())
+                .setAuthorizationTime(patent.getAuthorizationTime())
+                .setPatentNum(patent.getPatentNum())
+                .setNickName(command.getNickName())
+                .setAmountPercent(patent.getAmountPercent())
+                .setForewarnTime(patent.getForewarnTime());
+        patentScheduleService.save(schedule);
+    }
+    @Transactional(rollbackFor = Exception.class)
+    public void finish(PatentScheduleCommand command) {
         Patent patent = patentService.getById(command.getPatentId());
         patent.setPatentStatus(PatentEnums.COMPLETION.getValue());
         patentService.updateById(patent);
@@ -129,6 +188,7 @@ public class PatentUpdateSerivce {
                 .setForewarnTime(patent.getForewarnTime());
         patentScheduleService.save(schedule);
     }
+
     @Transactional(rollbackFor = Exception.class)
     public void finance(PatentScheduleCommand command) {
         Patent patent = patentService.getById(command.getPatentId());

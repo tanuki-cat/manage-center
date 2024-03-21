@@ -5,6 +5,7 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import lombok.Data;
 import me.zhengjie.modules.merchant.domain.PatentSchedule;
 import me.zhengjie.modules.merchant.domain.ProjectSchedule;
+import me.zhengjie.modules.merchant.enums.PatentScheduleEnum;
 import me.zhengjie.modules.merchant.enums.ScheduleEnum;
 
 @Data
@@ -13,6 +14,6 @@ public class PatentScheduleVO extends PatentSchedule {
 
     public PatentScheduleVO(PatentSchedule entity){
         BeanUtil.copyProperties(entity,this, CopyOptions.create().setIgnoreNullValue(true));
-        this.statusName=ScheduleEnum.name(getScheduleStatus().getValue());
+        this.statusName= PatentScheduleEnum.name(getScheduleStatus().getValue());
     }
 }

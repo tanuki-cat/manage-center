@@ -63,6 +63,21 @@ public class ProjectUpdateService {
     @Transactional(rollbackFor = Exception.class)
     public void complete(ScheduleCommand resources) {
         Project project = projectService.getById(resources.getProjectId());
+//        project.setProjectStatus(ProjectEnums..getValue());
+//        projectService.updateById(project);
+        ProjectSchedule schedule = new ProjectSchedule()
+                .setProjectId(resources.getProjectId())
+                .setScheduleStatus(ScheduleEnum.TEAMLEADERS)
+                .setScheduleDesc("转交项目经理")
+                .setAmountPercent(project.getAmountPercent())
+                .setNickName(resources.getNickName());
+        projectScheduleService.save(schedule);
+
+
+    }
+    @Transactional(rollbackFor = Exception.class)
+    public void finish(ScheduleCommand resources) {
+        Project project = projectService.getById(resources.getProjectId());
         project.setProjectStatus(ProjectEnums.COMPLETION.getValue());
         projectService.updateById(project);
         ProjectSchedule schedule = new ProjectSchedule()
@@ -78,7 +93,7 @@ public class ProjectUpdateService {
     @Transactional(rollbackFor = Exception.class)
     public void setEditUser(ScheduleCommand command) {
         Project project = projectService.getById(command.getProjectId());
-       User user = userService.getById(command.getAssignUserId());
+        User user = userService.getById(command.getAssignUserId());
         project.setCreateBy(user.getUsername());
         project.setNickName(user.getNickName());
         projectService.updateById(project);

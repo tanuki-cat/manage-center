@@ -81,7 +81,7 @@ export default {
         console.log(res)
         this.dataList=res;
         const status = res.status>1?res.status:res.status+1
-        this.$refs.jdPatent.getSchedule(status==4?5:status)
+        this.$refs.jdPatent.getSchedule(status==4?7:status==5?4:status==6?5:status)
       })      
     }
   }

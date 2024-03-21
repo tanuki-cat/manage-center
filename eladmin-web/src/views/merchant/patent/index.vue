@@ -85,6 +85,36 @@
             <el-button :loading="crud.status.cu === 2" type="primary" @click="$event => addUserPatent()">确认</el-button>
           </div>
         </el-dialog>
+        <!--完成任务-->
+        <el-dialog :close-on-click-modal="false" :visible.sync="finishVisible" width="520px" :title="完成任务">
+          <el-form ref="form" :model="finishFrom" :rules="visitRules" size="small" label-width="100px">
+            <el-form-item label="公司名称">
+              <el-input v-model="finishFrom.companyName" style="width: 350px;" disabled />
+            </el-form-item>
+            <el-form-item label="专利数">
+            <el-input v-model="finishFrom.patentNum" style="width: 350px;" disabled/>
+          </el-form-item>
+          <el-form-item label="年费预警时间">
+            <el-input v-model="finishFrom.forewarnTime" style="width: 350px;" disabled/>
+          </el-form-item>
+          <el-form-item label="专利进度" >
+            <el-input v-model="finishFrom.progress" style="width: 350px;" disabled/>
+          </el-form-item>
+          <el-form-item label="专利申报时间" >
+            <el-input v-model="finishFrom.filingTime" style="width: 350px;" disabled/>
+          </el-form-item>
+          <el-form-item label="专利写好时间" >
+            <el-input v-model="finishFrom.writeTime" style="width: 350px;" disabled/>
+          </el-form-item>
+          <el-form-item label="授权下证时间" >
+            <el-input v-model="finishFrom.authorizationTime" style="width: 350px;" disabled />
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button type="text" @click="finishClose()">取消</el-button>
+          <el-button :loading="crud.status.cu === 2" type="primary" @click="$event => addPatentComplete()">确认</el-button>
+        </div>
+      </el-dialog>
         <!--变更业务员-->
      <el-dialog :close-on-click-modal="false" :visible.sync="editUserVisible" width="520px" :title="变更业务员">
         <el-form ref="form" :model="editUserFrom"  size="small" label-width="100px">
@@ -147,6 +177,39 @@
           <el-button type="danger" @click="goTransfer()">转交</el-button>
         </div>
       </el-dialog>
+      <!--专利经理-->
+      <el-dialog :close-on-click-modal="false" :visible.sync="patentsVisible" width="520px" :title="填写专利">
+        <el-form ref="form" :model="patentsFrom" :rules="rules" size="small" label-width="100px">
+          <el-form-item label="公司名称">
+            <el-input v-model="patentsFrom.companyName" style="width: 350px;" disabled />
+          </el-form-item>
+          <el-form-item label="专利数">
+            <el-input v-model="patentsFrom.patentNum" style="width: 350px;" />
+          </el-form-item>
+          <el-form-item label="年费预警时间">
+            <el-input v-model="patentsFrom.forewarnTime" style="width: 350px;" />
+          </el-form-item>
+          <el-form-item label="专利进度" >
+            <el-input v-model="patentsFrom.progress" style="width: 350px;" />
+          </el-form-item>
+          <el-form-item label="专利申报时间" >
+            <el-input v-model="patentsFrom.filingTime" style="width: 350px;" />
+          </el-form-item>
+          <el-form-item label="专利写好时间" >
+            <el-input v-model="patentsFrom.writeTime" style="width: 350px;" />
+          </el-form-item>
+          <el-form-item label="授权下证时间" >
+            <el-input v-model="patentsFrom.authorizationTime" style="width: 350px;" />
+          </el-form-item>
+
+        </el-form>
+
+        <div slot="footer" class="dialog-footer">
+          <el-button type="text" @click="patentsClose()">取消</el-button>
+          <el-button :loading="crud.status.cu === 2" type="primary" @click="$event => addPatentManagers()">填写</el-button>
+          <el-button type="danger" @click="goTransfers()">提交组长</el-button>
+        </div>
+      </el-dialog>
       <!--财务-->
       <el-dialog :close-on-click-modal="false" :visible.sync="financeVisible" width="520px" :title="财务">
         <el-form ref="form" :model="financeFrom" :rules="rules" size="small" label-width="100px">
@@ -182,13 +245,16 @@
         <div slot="footer" class="dialog-footer">
           <el-button type="text" @click="financeClose()">取消</el-button>
           <el-button :loading="crud.status.cu === 2" type="primary" @click="$event => addPatentFinance()">填写</el-button>
-          <el-button :loading="crud.status.cu === 2" type="danger" @click="$event => goFinish()">完结</el-button>
+          <el-button :loading="crud.status.cu === 2" type="danger" @click="$event => goFinish()">转交专利经理</el-button>
         </div>
       </el-dialog>
       <el-dialog :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="500px">
         <el-form ref="form" :model="form" :rules="rules" size="small" label-width="80px">
           <el-form-item label="公司名称">
             <el-input v-model="form.companyName" style="width: 370px;" disabled/>
+          </el-form-item>
+          <el-form-item label="专利名称">
+            <el-input v-model="form.patentName" style="width: 370px;" />
           </el-form-item>
           <el-form-item label="发明专利">
             <el-input v-model="form.invention" style="width: 370px;" />
@@ -209,7 +275,21 @@
             <el-input v-model="form.copyright" style="width: 370px;" />
           </el-form-item>
           <el-form-item label="专利类型">
-            <el-input v-model="form.patentTag" style="width: 370px;" />
+           
+            <el-select
+              v-model="form.patentTag"
+              clearable            
+              placeholder="专利类型"
+              class="filter-item"
+              style="width: 370px"
+            >
+              <el-option
+                v-for="item in patentTypeOptions"
+                :key="item.key"
+                :label="item.value"
+                :value="item.key"
+              />
+            </el-select>
           </el-form-item>
 
         </el-form>
@@ -222,6 +302,7 @@
       <el-table ref="table" v-loading="crud.loading" :data="crud.data" size="small" style="width: 100%;" @selection-change="crud.selectionChangeHandler">
         <el-table-column type="selection" width="55" />
         <el-table-column prop="companyName" label="公司名称" />
+        <el-table-column prop="patentName" label="专利名称" />
         <el-table-column prop="invention" label="发明专利" />
         <el-table-column prop="areas" label="地区" />
         <el-table-column prop="utilityModel" label="实用新型专利" />
@@ -251,6 +332,8 @@
               @patentManager="getPatentManager"
               @patentFinance="getPatentFinance"
               @editUser="getEditUser"
+              @patentManagers="getPatentManagers"
+              @patentComplete="getPatentComplete"
             />
           </template>
         </el-table-column>
@@ -283,17 +366,28 @@ export default {
       userList:[],
       userVisible:false,
       patentVisible:false,
+      patentsVisible:false,
       //财务
       financeVisible:false,
       editUserVisible:false,
+      finishVisible:false,
       enabledTypeOptions: [
         { key: '0', display_name: '创建' },
         { key: '1', display_name: '进行中' },
         { key: '2', display_name: '完结' }
       ],
+      //专利类型
+      patentTypeOptions:[
+        {key:  '发明', value :'发明'},
+        {key:  '实用新型', value :'实用新型'},
+        {key:  '外观', value :'外观'},
+        {key:  '软著', value :'软著'},
+        {key:  '版权', value :'版权'},
+        {key:  '商标', value :'商标'}
+      ],
       userPatentFrom: {
         companyId: 0,
-        companyName: '',
+        companyName: '',  
         patentId: 0,
         assignUser:[],
         assignUserId:0
@@ -306,6 +400,28 @@ export default {
         assignUserId:0
       },
       patentFrom: {
+        companyId: 0,
+        companyName: '',
+        patentId: 0,
+        progress: '',
+        filingTime: '',
+        writeTime: '',
+        authorizationTime: '',
+        patentNum: '',
+        forewarnTime: ''
+      },
+      patentsFrom: {
+        companyId: 0,
+        companyName: '',
+        patentId: 0,
+        progress: '',
+        filingTime: '',
+        writeTime: '',
+        authorizationTime: '',
+        patentNum: '',
+        forewarnTime: ''
+      },
+      finishFrom: {
         companyId: 0,
         companyName: '',
         patentId: 0,
@@ -368,6 +484,9 @@ export default {
     },
     editUserClose() {
       this.editUserVisible = false
+    },
+    patentsClose(){
+      this.patentsVisible = false
     },
     getEditUser(data){
       this.editUserFrom.companyId = data.companyId
@@ -483,6 +602,73 @@ export default {
             this.crud.refresh()
       })
     },
+    /********************再次填写****************************/
+    getPatentManagers(data){
+      //清空当前值
+      this.patentsFrom.companyId = data.companyId
+      this.patentsFrom.companyName = data.companyName
+      this.patentsFrom.patentId = data.id
+      this.patentsFrom.progress = ''
+      this.patentsFrom.filingTime = ''
+      this.patentsFrom.writeTime = ''
+      this.patentsFrom.authorizationTime = ''
+      this.patentsFrom.patentNum = ''
+      this.patentsFrom.forewarnTime = ''
+      this.patentsVisible = true
+    },
+    addPatentManagers(){
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          patentSchedule.managers(this.patentsFrom).then(() => {
+            this.crud.notify('提交成功', 'success')
+            this.patentsVisible = false
+            //刷新表格
+            this.crud.refresh()
+          })
+        }
+      })
+    },
+    //转交
+    goTransfers(){
+      patentSchedule.transfers(this.patentsFrom).then(() => {
+            this.crud.notify('提交', 'success')
+            this.patentsVisible = false
+            //刷新表格
+            this.crud.refresh()
+      })
+    },
+
+    /*******************end******************************/
+     /********************组长****************************/
+     getPatentComplete(data){
+      console.log(data)
+      this.finishFrom.companyId = data.companyId
+      this.finishFrom.companyName = data.companyName
+      this.finishFrom.patentId = data.id
+      this.finishFrom.progress = data.progress
+      this.finishFrom.filingTime = data.filingTime
+      this.finishFrom.writeTime = data.writeTime
+      this.finishFrom.authorizationTime = data.authorizationTime
+      this.finishFrom.patentNum = data.patentNum
+      this.finishFrom.forewarnTime = data.forewarnTime
+      this.finishVisible = true
+    },
+    addPatentComplete(){
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          patentSchedule.finish(this.finishFrom).then(() => {
+            this.crud.notify('提交成功', 'success')
+            this.finishVisible = false
+            //刷新表格
+            this.crud.refresh()
+          })
+        }
+      })
+    },
+    finishClose(){
+      this.finishVisible = false
+    },
+    /*******************end******************************/
     //财务
     getPatentFinance(data){
       this.financeFrom.companyId = data.companyId
@@ -510,7 +696,8 @@ export default {
           })
         }
       })
-    },
+    },  
+    //完成
     goFinish(){
       patentSchedule.complete(this.financeFrom).then(() => {
             this.crud.notify('提交成功', 'success')

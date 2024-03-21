@@ -17,8 +17,10 @@
     <el-button v-permission="permission.leader" icon="el-icon-edit" type="primary" size="mini" @click="projectAdd(data)" v-if="data.scheduleStatus==0">派发项目</el-button>
     <el-button v-permission="permission.leader" icon="el-icon-edit" type="primary" size="mini" @click="projectUpdate(data)" v-if="data.scheduleStatus==1">重新派发</el-button>
     <el-button v-permission="permission.manager" icon="el-icon-edit" type="primary" size="mini" @click="projectManager(data)" v-if="data.scheduleStatus==1||data.scheduleStatus==2">填写或提交财务</el-button>
-    <el-button v-permission="permission.finance" icon="el-icon-edit" type="primary" size="mini" @click="projectFinance(data)" v-if="data.scheduleStatus==3">填写或完结</el-button>
+    <el-button v-permission="permission.finance" icon="el-icon-edit" type="primary" size="mini" @click="projectFinance(data)" v-if="data.scheduleStatus==3">填写或转交</el-button>
     <el-button v-permission="permission.editUser" icon="el-icon-edit" type="danger" size="mini" @click="editUser(data)" >变更业务</el-button>
+    <el-button v-permission="permission.manager" icon="el-icon-edit" type="primary" size="mini" @click="projectManagers(data)"  v-if="data.scheduleStatus==5">填写或提交组长</el-button>
+    <el-button v-permission="permission.leader" icon="el-icon-edit" type="primary" size="mini" @click="projectComplete(data)"  v-if="data.scheduleStatus==6">确认完成</el-button>
   </div>
 </template>
 <script>
@@ -91,7 +93,13 @@ export default {
     },
     editUser(data){
       this.$emit('editUser' , data)
-    }
+    },
+    projectManagers(data){
+      this.$emit('projectManagers' , data)
+    },
+    projectComplete(data){
+      this.$emit('projectComplete' , data)
+    },
   }
 }
 </script>

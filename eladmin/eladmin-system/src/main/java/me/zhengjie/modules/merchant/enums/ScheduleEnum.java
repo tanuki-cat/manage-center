@@ -16,7 +16,9 @@ public enum ScheduleEnum implements IEnum<Integer> {
     TEAMLEADER(1),
     MANAGER(2),
     FINANCE(3),
-    COMPLETION(4);
+    COMPLETION(4),
+    TEAMLEADERS(5),
+    MANAGERS(6);
     private final int value;
 
     ScheduleEnum(int value) {
@@ -30,6 +32,8 @@ public enum ScheduleEnum implements IEnum<Integer> {
             case 2 -> MANAGER;
             case 3 -> FINANCE;
             case 4 -> COMPLETION;
+            case 5 -> TEAMLEADERS;
+            case 6 -> MANAGERS;
             default -> throw new IllegalArgumentException();
         };
     }
@@ -41,6 +45,8 @@ public enum ScheduleEnum implements IEnum<Integer> {
             case 2 -> "项目经理填写";
             case 3 -> "财务";
             case 4 -> "完结";
+            case 5 -> "项目经理填写";
+            case 6 -> "项目组长确认";
             default -> "";
         };
     }

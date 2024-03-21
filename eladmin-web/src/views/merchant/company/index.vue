@@ -110,6 +110,9 @@
           <el-form-item label="公司名称">
             <el-input v-model="patentFrom.companyName" style="width: 350px;" disabled />
           </el-form-item>
+          <el-form-item label="专利名称">
+            <el-input v-model="patentFrom.patentName" style="width: 350px;" />
+          </el-form-item>
           <el-form-item label="发明专利">
             <el-input v-model="patentFrom.invention" style="width: 350px;" />
           </el-form-item>
@@ -129,7 +132,21 @@
             <el-input v-model="patentFrom.copyright" style="width: 350px;" />
           </el-form-item>
           <el-form-item label="专利类型">
-            <el-input v-model="patentFrom.patentTag" style="width: 350px;" />
+          
+            <el-select
+              v-model="form.patentTag"
+              clearable            
+              placeholder="专利类型"
+              class="filter-item"
+              style="width: 370px"
+            >
+              <el-option
+                v-for="item in patentTypeOptions"
+                :key="item.key"
+                :label="item.value"
+                :value="item.key"
+              />
+            </el-select>
           </el-form-item>
           <el-form-item label="金额">
             <el-input v-model="patentFrom.projectAmount" style="width: 350px;" />
@@ -195,6 +212,15 @@ export default {
         edit: ['admin', 'company:edit'],
         del: ['admin', 'company:del']
       },
+      //专利类型
+      patentTypeOptions:[
+        {key:  '发明', value :'发明'},
+        {key:  '实用新型', value :'实用新型'},
+        {key:  '外观', value :'外观'},
+        {key:  '软著', value :'软著'},
+        {key:  '版权', value :'版权'},
+        {key:  '商标', value :'商标'}
+      ],
       visitVisible: false,
       projectVisible:false,
       patentVisible: false,
@@ -228,7 +254,8 @@ export default {
         amountPercent: 0,
         patentTag: '',
         createTime: '',
-        areas:""
+        areas:"",
+        patentName:""
 
       },
       rules: {

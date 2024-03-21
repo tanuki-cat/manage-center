@@ -20,7 +20,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-              今日签单数  
+              今日专利数  
           </div>
           <count-to :start-val="0" :end-val="this.day_projectCount" :duration="3000" class="card-panel-num" />
         </div>
@@ -73,7 +73,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            2023年签单数  
+            2023年专利数 
           </div>
           <count-to :start-val="0" :end-val="this.year_2023_projectCount" :duration="3000" class="card-panel-num" />
         </div>
@@ -126,7 +126,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            2024年签单数  
+            2024年专利数 
           </div>
           <count-to :start-val="0" :end-val="this.year_2024_projectCount" :duration="3000" class="card-panel-num" />
         </div>
@@ -178,7 +178,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-              总签单数 
+              总签专利数
           </div>
           <count-to :start-val="0" :end-val="this.projectCount" :duration="3000" class="card-panel-num" />
         </div>

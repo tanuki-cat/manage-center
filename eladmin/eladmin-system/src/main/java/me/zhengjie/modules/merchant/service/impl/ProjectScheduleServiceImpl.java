@@ -71,7 +71,7 @@ public class ProjectScheduleServiceImpl extends ServiceImpl<ProjectScheduleMappe
     @Override
     public ScheduleVO details(Long projectId) {
         List<ProjectSchedule> projectSchedules = this.list(new LambdaQueryWrapper<ProjectSchedule>()
-                .eq(ProjectSchedule::getProjectId, projectId).orderByDesc(ProjectSchedule::getScheduleStatus));
+                .eq(ProjectSchedule::getProjectId, projectId).orderByDesc(ProjectSchedule::getId));
         ScheduleVO scheduleVO = new ScheduleVO();
         scheduleVO.setStatus(projectSchedules.get(0).getScheduleStatus().getValue());
         return scheduleVO;
@@ -154,6 +154,28 @@ public class ProjectScheduleServiceImpl extends ServiceImpl<ProjectScheduleMappe
                 .setProjectId(command.getProjectId())
                 .setScheduleStatus(ScheduleEnum.FINANCE)
                 .setScheduleDesc("完成")
+                .setAmountPercent(command.getAmountPercent())
+                .setNickName(command.getNickName());
+        this.save(schedule);
+
+    }
+    @Override
+    public void setManagers(ScheduleCommand command) {
+        ProjectSchedule schedule = new ProjectSchedule()
+                .setProjectId(command.getProjectId())
+                .setScheduleStatus(ScheduleEnum.TEAMLEADERS)
+                .setScheduleDesc(command.getScheduleDesc())
+                .setAmountPercent(command.getAmountPercent())
+                .setNickName(command.getNickName());
+        this.save(schedule);
+    }
+
+    @Override
+    public void transfers(ScheduleCommand command) {
+        ProjectSchedule schedule = new ProjectSchedule()
+                .setProjectId(command.getProjectId())
+                .setScheduleStatus(ScheduleEnum.MANAGERS)
+                .setScheduleDesc("提交给业务组长")
                 .setAmountPercent(command.getAmountPercent())
                 .setNickName(command.getNickName());
         this.save(schedule);

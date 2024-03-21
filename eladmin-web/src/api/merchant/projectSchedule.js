@@ -71,5 +71,25 @@ export function complete(data){
     data
   })
 }
-
-export default { add, edit, del,details,assign,manager,transfer,finance,complete,editUser}
+export function managers(data){
+  return request({
+    url: 'api/merchant/projectSchedule/managers',
+    method: 'post',
+    data
+  })
+}
+export function transfers(data){
+  return request({
+    url: 'api/merchant/projectSchedule/transfers',
+    method: 'post',
+    data
+  })
+}
+export function finish(data){
+  return request({
+    url: 'api/merchant/projectSchedule/finish',
+    method: 'post',
+    data
+  })
+}
+export default { add, edit, del,details,assign,manager,transfer,finance,complete,editUser,managers,transfers,finish}

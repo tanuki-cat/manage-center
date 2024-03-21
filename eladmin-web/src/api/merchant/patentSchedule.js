@@ -44,9 +44,23 @@ export function manager(data){
     data
   })
 }
+export function managers(data){
+  return request({
+    url: 'api/merchant/patentSchedule/managers',
+    method: 'post',
+    data
+  })
+}
 export function transfer(data){
   return request({
     url: 'api/merchant/patentSchedule/transfer',
+    method: 'post',
+    data
+  })
+}
+export function transfers(data){
+  return request({
+    url: 'api/merchant/patentSchedule/transfers',
     method: 'post',
     data
   })
@@ -72,4 +86,11 @@ export function editUser(data){
     data
   })
 }
-export default { add, edit, del,details,assign,manager,transfer,finance,complete ,editUser}
+export function finish(data){
+  return request({
+    url: 'api/merchant/patentSchedule/finish',
+    method: 'post',
+    data
+  })
+}
+export default { add, edit, del,details,assign,manager,transfer,transfers,finance,complete ,editUser,managers,finish}

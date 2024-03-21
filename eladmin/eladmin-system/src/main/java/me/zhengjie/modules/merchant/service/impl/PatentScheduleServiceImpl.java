@@ -110,7 +110,7 @@ public class PatentScheduleServiceImpl extends ServiceImpl<PatentScheduleMapper,
     @Override
     public ScheduleVO details(Long patentId) {
         List<PatentSchedule> patentSchedules = this.list(new LambdaQueryWrapper<PatentSchedule>()
-                .eq(PatentSchedule::getPatentId, patentId).orderByDesc(PatentSchedule::getScheduleStatus));
+                .eq(PatentSchedule::getPatentId, patentId).orderByDesc(PatentSchedule::getId));
         ScheduleVO scheduleVO = new ScheduleVO();
         scheduleVO.setStatus(patentSchedules.get(0).getScheduleStatus().getValue());
         return scheduleVO;

@@ -147,5 +147,30 @@ public class PatentScheduleController {
         patentUpdateSerivce.setEditUser(resources);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+    @Log("转交专利组长")
+    @ApiOperation("转交专利组长")
+    @PostMapping(value = "/transfers")
+    public ResponseEntity<Object> transfersPatent(@RequestBody PatentScheduleCommand resources){
+        resources.setNickName(userService.findById(SecurityUtils.getCurrentUserId()).getNickName());
+        patentUpdateSerivce.transfers(resources);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+    @Log("专利经理继续填写")
+    @ApiOperation("专利经理继续填写")
+    @PostMapping(value = "/managers")
+    public ResponseEntity<Object> managersPatent(@RequestBody PatentScheduleCommand resources){
+        resources.setNickName(userService.findById(SecurityUtils.getCurrentUserId()).getNickName());
+        patentUpdateSerivce.setManagers(resources);
+        return new ResponseEntity<>(HttpStatus.CREATED);
 
+    }
+    @Log("专利经组长结束")
+    @ApiOperation("专利经组长结束")
+    @PostMapping(value = "/finish")
+    public ResponseEntity<Object> finish(@RequestBody PatentScheduleCommand resources){
+        resources.setNickName(userService.findById(SecurityUtils.getCurrentUserId()).getNickName());
+        patentUpdateSerivce.finish(resources);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+
+    }
 }

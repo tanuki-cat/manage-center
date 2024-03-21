@@ -154,6 +154,24 @@
           <el-button :loading="crud.status.cu === 2" type="primary" @click="$event => addUserProject()">确认</el-button>
         </div>
       </el-dialog>
+         <!--完成任务-->
+         <el-dialog :close-on-click-modal="false" :visible.sync="finishVisible" width="520px" :title="完成任务">
+          <el-form ref="form" :model="finishFrom" :rules="visitRules" size="small" label-width="100px">
+            <el-form-item label="公司名称">
+              <el-input v-model="finishFrom.companyName" style="width: 350px;" disabled />
+            </el-form-item>
+            <el-form-item label="项目名称">
+            <el-input v-model="finishFrom.projectName" style="width: 350px;" disabled />
+          </el-form-item>
+          <el-form-item label="金额百分比">
+            <el-input v-model="finishFrom.amountPercent" style="width: 350px;" disabled />
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button type="text" @click="finishClose()">取消</el-button>
+          <el-button :loading="crud.status.cu === 2" type="primary" @click="$event => addProjectComplete()">确认</el-button>
+        </div>
+      </el-dialog>
         <!--项目经理填写-->
         <el-dialog :close-on-click-modal="false" :visible.sync="projectVisible" width="520px" :title="填写项目">
         <el-form ref="form" :model="projectFrom" :rules="rules" size="small" label-width="100px">
@@ -172,6 +190,26 @@
           <el-button type="text" @click="projectClose()">取消</el-button>
           <el-button :loading="crud.status.cu === 2" type="primary" @click="$event => addProjectManager()">填写</el-button>
           <el-button type="danger" @click="goTransfer()">转交</el-button>
+        </div>
+      </el-dialog>
+         <!--项目经理填写-->
+         <el-dialog :close-on-click-modal="false" :visible.sync="projectsVisible" width="520px" :title="填写项目">
+        <el-form ref="form" :model="projectsFrom" :rules="rules" size="small" label-width="100px">
+          <el-form-item label="公司名称">
+            <el-input v-model="projectsFrom.companyName" style="width: 350px;" disabled />
+          </el-form-item>
+          <el-form-item label="项目名称">
+            <el-input v-model="projectsFrom.projectName" style="width: 350px;" disabled />
+          </el-form-item>
+          <el-form-item label="项目进度" prop="scheduleDesc">
+            <el-input v-model="projectsFrom.scheduleDesc" style="width: 350px;" />
+          </el-form-item>
+
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button type="text" @click="projectsClose()">取消</el-button>
+          <el-button :loading="crud.status.cu === 2" type="primary" @click="$event => addProjectManagers()">填写</el-button>
+          <el-button type="danger" @click="goTransfers()">转交</el-button>
         </div>
       </el-dialog>
          <!--财务填写-->
@@ -193,7 +231,7 @@
         <div slot="footer" class="dialog-footer">
           <el-button type="text" @click="financeClose()">取消</el-button>
           <el-button :loading="crud.status.cu === 2" type="primary" @click="$event => addProjectFinance()">填写</el-button>
-          <el-button type="danger" @click="goFinish()">完结</el-button>
+          <el-button type="danger" @click="goFinish()">转交项目经理</el-button>
         </div>
       </el-dialog>
       <!--表格渲染-->
@@ -221,6 +259,8 @@
               @projectManager="getProjectManager"
               @projectFinance="getProjectFinance"
               @editUser="getEditUser"
+              @projectManagers="getProjectManagers"
+              @projectComplete="getProjectComplete"
             />
           </template>
         </el-table-column>
@@ -254,9 +294,11 @@ export default {
       userList:[],
       userVisible:false,
       projectVisible:false,
+      projectsVisible:false,
       //财务
       financeVisible:false,
       editUserVisible:false,
+      finishVisible:false,
       enabledTypeOptions: [
         { key: '0', display_name: '创建' },
         { key: '1', display_name: '进行中' },
@@ -279,7 +321,22 @@ export default {
         assignUserId:0,
         amountPercent:0
       },
+      finishFrom:{
+        companyId: 0,
+        companyName: '',
+        projectId:'',
+        projectName:'',
+        amountPercent:0
+      },
       projectFrom: {
+        companyId: 0,
+        companyName: '',
+        projectId:'',
+        projectName:'',
+        scheduleDesc:'',
+        amountPercent:0
+      },
+      projectsFrom: {
         companyId: 0,
         companyName: '',
         projectId:'',
@@ -340,6 +397,9 @@ export default {
     },
     editUserClose() {
       this.editUserVisible = false
+    },
+    projectsClose(){
+      this.projectsVisible = false
     },
     getEditUser(data){
       this.editUserFrom.companyId = data.companyId
@@ -456,6 +516,69 @@ export default {
             this.crud.refresh()
       })
     },
+
+/********************再次填写****************************/
+getProjectManagers(data){
+      //清空当前值
+      this.projectsFrom.scheduleDesc=''
+      this.projectsFrom.companyId = data.companyId
+      this.projectsFrom.companyName = data.companyName
+      this.projectsFrom.projectId = data.id
+      this.projectsFrom.projectName =data.projectName
+      this.projectsFrom.amountPercent=data.amountPercent
+      this.projectsVisible = true
+    },
+    addProjectManagers(){
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          projectSchedule.managers(this.projectsFrom).then(() => {
+            this.crud.notify('提交成功', 'success')
+            this.projectsVisible = false
+            //刷新表格
+            this.crud.refresh()
+          })
+        }
+      })
+    },
+    //转交
+    goTransfers(){
+      projectSchedule.transfers(this.projectsFrom).then(() => {
+            this.crud.notify('提交', 'success')
+            this.projectsVisible = false
+            //刷新表格
+            this.crud.refresh()
+      })
+    },
+
+    /*******************end******************************/
+     /********************组长****************************/
+     getProjectComplete(data){
+      console.log(data)
+      this.finishFrom.companyId = data.companyId
+      this.finishFrom.companyName = data.companyName
+      this.finishFrom.projectId = data.id
+      this.finishFrom.projectName =data.projectName
+      this.finishFrom.amountPercent=data.amountPercent
+      this.finishVisible = true
+    },
+    addProjectComplete(){
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          projectSchedule.finish(this.finishFrom).then(() => {
+            this.crud.notify('提交成功', 'success')
+            this.finishVisible = false
+            //刷新表格
+            this.crud.refresh()
+          })
+        }
+      })
+    },
+    finishClose(){
+      this.finishVisible = false
+    },
+    /*******************end******************************/
+
+
     //财务
     getProjectFinance(data){
       //清空当前值

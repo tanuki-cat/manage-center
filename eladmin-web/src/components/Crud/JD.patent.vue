@@ -19,7 +19,9 @@ export default {
         { title: '业务', description: '已完成' },
         { title: '专利组长', description: '已完成' },
         { title: '专利经理', description: '正在进行中' },
-        { title: '财务', description: '未开始' },
+        { title: '财务', description: '未开始' },      
+        { title: '专利经理', description: '未开始' },
+        { title: '专利组长', description: '未开始' },
         { title: '专利完成', description: '未开始' }
       ]
       }

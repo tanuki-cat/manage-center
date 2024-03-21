@@ -17,8 +17,10 @@
     <el-button v-permission="permission.leader" icon="el-icon-edit" type="primary" size="mini" @click="patentAdd(data)" v-if="data.scheduleStatus==0">派发专利</el-button>
     <el-button v-permission="permission.leader" icon="el-icon-edit" type="primary" size="mini" @click="patentUpdate(data)" v-if="data.scheduleStatus==1">重新派发</el-button>
     <el-button v-permission="permission.manager" icon="el-icon-edit" type="primary" size="mini" @click="patentManager(data)" v-if="data.scheduleStatus==1||data.scheduleStatus==2">填写或提交财务</el-button>
-    <el-button v-permission="permission.finance" icon="el-icon-edit" type="primary" size="mini" @click="patentFinance(data)" v-if="data.scheduleStatus==3">填写或完结</el-button>
+    <el-button v-permission="permission.finance" icon="el-icon-edit" type="primary" size="mini" @click="patentFinance(data)" v-if="data.scheduleStatus==3">填写或转交</el-button>
     <el-button v-permission="permission.editUser" icon="el-icon-edit" type="danger" size="mini" @click="editUser(data)" >变更业务</el-button>
+    <el-button v-permission="permission.manager" icon="el-icon-edit" type="primary" size="mini" @click="patentManagers(data)"  v-if="data.scheduleStatus==5">填写或提交组长</el-button>
+    <el-button v-permission="permission.leader" icon="el-icon-edit" type="primary" size="mini" @click="patentComplete(data)"  v-if="data.scheduleStatus==6">确认完成</el-button>
   </div>
 </template>
 <script>
@@ -91,7 +93,13 @@ export default {
     },
     editUser(data){
       this.$emit('editUser' , data)
-    }
+    },
+    patentManagers(data){
+      this.$emit('patentManagers' , data)
+    },
+    patentComplete(data){
+      this.$emit('patentComplete' , data)
+    },
   }
 }
 </script>

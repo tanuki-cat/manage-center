@@ -16,7 +16,9 @@ public enum PatentScheduleEnum implements IEnum<Integer> {
     TEAMLEADER(1),
     MANAGER(2),
     FINANCE(3),
-    COMPLETION(4);
+    COMPLETION(4),
+    TEAMLEADERS(5),
+    MANAGERS(6);
     private final int value;
 
     PatentScheduleEnum(int value) {
@@ -30,16 +32,20 @@ public enum PatentScheduleEnum implements IEnum<Integer> {
             case 2 -> MANAGER;
             case 3 -> FINANCE;
             case 4 -> COMPLETION;
+            case 5 -> TEAMLEADERS;
+            case 6 -> MANAGERS;
             default -> throw new IllegalArgumentException();
         };
     }
 
     public static String name(int value) {
         return switch (value) {
-            case 0 -> "项目创建";
-            case 1 -> "项目组长分配";
-            case 2 -> "项目经理填写";
+            case 0 -> "专利创建";
+            case 1 -> "专利组长分配";
+            case 2 -> "专利经理填写";
             case 3 -> "财务";
+            case 5-> "专利经理填写";
+            case 6-> "专利组长确认";
             case 4 -> "完结";
             default -> "";
         };

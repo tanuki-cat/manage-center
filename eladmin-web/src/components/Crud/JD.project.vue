@@ -20,6 +20,8 @@ export default {
         { title: '项目组', description: '已完成' },
         { title: '项目经理', description: '正在进行中' },
         { title: '财务', description: '未开始' },
+        { title: '项目经理', description: '未开始' },
+        { title: '项目组长', description: '未开始' },
         { title: '项目完成', description: '未开始' }
       ]
       }
