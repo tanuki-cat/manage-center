@@ -79,6 +79,7 @@
             <if test="criteria.createTime != null and criteria.createTime.size() != 0">
                 and u.create_time between #{criteria.createTime[0]} and #{criteria.createTime[1]}
             </if>
+            and u.username != "admin"
         </where>
     </sql>
 
