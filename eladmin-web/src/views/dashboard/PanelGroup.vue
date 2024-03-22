@@ -20,7 +20,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-              今日专利数  
+              今日专利数
           </div>
           <count-to :start-val="0" :end-val="this.day_projectCount" :duration="3000" class="card-panel-num" />
         </div>
@@ -52,7 +52,7 @@
         </div>
       </div>
     </el-col>
-  
+
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-people">
@@ -211,7 +211,7 @@
       </div>
     </el-col>
   </el-row>
-  
+
 </template>
 
 <script>
@@ -263,10 +263,10 @@ export default {
     getDayCount(){
       getDayCount().then(res=>{
         this.day_companyCount = res.companyCount
-        this.day_projectCount = res.projectCount
+        this.day_projectCount = res.patentCount
         this.day_projectAmount = res.projectAmount
-        this.day_reallyAmount =res.reallyAmount 
-        
+        this.day_reallyAmount =res.reallyAmount
+
       })
     },
     get2023YearCount(){
