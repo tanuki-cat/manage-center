@@ -60,9 +60,9 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            2023年公司数
+            {{this.currentYear}}年公司数
           </div>
-          <count-to :start-val="0" :end-val="this.year_2023_companyCount" :duration="2600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="this.year_companyCount" :duration="2600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -73,9 +73,9 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            2023年签单数
+            {{this.currentYear}}年签单数
           </div>
-          <count-to :start-val="0" :end-val="this.year_2023_projectCount" :duration="3000" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="this.year_projectCount" :duration="3000" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -86,9 +86,9 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            2023年签单金额
+            {{this.currentYear}}年签单金额
           </div>
-          <count-to :start-val="0" :end-val="this.year_2023_projectAmount" :duration="3200" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="this.year_projectAmount" :duration="3200" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -99,14 +99,14 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            2023年到账数
+            {{this.currentYear}}年到账数
           </div>
-          <count-to :start-val="0" :end-val="this.year_2023_reallyAmount" :duration="3600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="this.year_reallyAmount" :duration="3600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
 
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+    <!-- <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-people">
           <svg-icon icon-class="peoples" class-name="card-panel-icon" />
@@ -157,7 +157,8 @@
           <count-to :start-val="0" :end-val="this.year_2024_reallyAmount" :duration="3600" class="card-panel-num" />
         </div>
       </div>
-    </el-col>
+    </el-col> -->
+
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col" >
       <div class="card-panel" >
         <div class="card-panel-icon-wrapper icon-people">
@@ -221,6 +222,7 @@ import {getCountAll,getDayCount,getYearCount} from '@/api/data'
 export default {
   data() {
     return {
+      currentYear: new Date().getFullYear(),
       companyCount: 0,
       projectCount: 0,
       projectAmount: 0,
@@ -229,14 +231,14 @@ export default {
       day_projectCount: 0,
       day_companyCount: 0,
       day_reallyAmount:0,
-      year_2023_projectAmount: 0,
-      year_2023_projectCount: 0,
-      year_2023_companyCount: 0,
-      year_2023_reallyAmount:0,
-      year_2024_projectAmount: 0,
-      year_2024_projectCount: 0,
-      year_2024_companyCount: 0,
-      year_2024_reallyAmount:0
+      year_projectAmount: 0,
+      year_projectCount: 0,
+      year_companyCount: 0,
+      year_reallyAmount:0
+      // year_2024_projectAmount: 0,
+      // year_2024_projectCount: 0,
+      // year_2024_companyCount: 0,
+      // year_2024_reallyAmount:0
     }
   },
   components: {
@@ -245,7 +247,7 @@ export default {
   created(){
     this.getCountAll()
     this.getDayCount()
-    this.get2023YearCount()
+    this.getYearCount()
     this.get2024YearCount()
   },
   methods: {
@@ -269,22 +271,24 @@ export default {
 
       })
     },
-    get2023YearCount(){
-      getYearCount(2023).then(res=>{
-        this.year_2023_companyCount = res.companyCount
-        this.year_2023_projectCount = res.projectCount
-        this.year_2023_projectAmount = res.projectAmount
-        this.year_2023_reallyAmount =res.reallyAmount
+    getYearCount(){
+      //获取当前年数据
+      var currentYear = new Date().getFullYear()
+      getYearCount(currentYear).then(res=>{
+        this.year_companyCount = res.companyCount
+        this.year_projectCount = res.projectCount
+        this.year_projectAmount = res.projectAmount
+        this.year_reallyAmount =res.reallyAmount
       })
     },
-    get2024YearCount(){
-      getYearCount(2024).then(res=>{
-        this.year_2024_companyCount = res.companyCount
-        this.year_2024_projectCount = res.projectCount
-        this.year_2024_projectAmount = res.projectAmount
-        this.year_2024_reallyAmount =res.reallyAmount
-      })
-    }
+    // get2024YearCount(){
+    //   getYearCount(2024).then(res=>{
+    //     this.year_2024_companyCount = res.companyCount
+    //     this.year_2024_projectCount = res.projectCount
+    //     this.year_2024_projectAmount = res.projectAmount
+    //     this.year_2024_reallyAmount =res.reallyAmount
+    //   })
+    // }
   }
 
 }
